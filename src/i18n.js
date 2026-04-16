@@ -161,6 +161,9 @@ const resources = {
         close: "Yopish",
         card: "Kartochka",
         table: "Jadval",
+        status: "Status",
+        actions: "Amallar",
+
 
         // ✅ qo‘shildi
         all: "Hammasi",
@@ -224,6 +227,10 @@ const resources = {
         title: "JEK hodimlar",
         searchPlaceholder: "Ism, familiya yoki telefon...",
         areaPlaceholder: "Hudud (barchasi)",
+
+        totalEmployees: "Jami hodimlar",
+        totalActiveEmployees: "Jami faol hodimlar",
+        totalInactiveEmployees: "Jami faol emas hodimlar",
 
         statusAll: "Barchasi",
         statusActive: "Aktiv",
@@ -412,6 +419,8 @@ const resources = {
         view: "View",
         minimal: "minimum",
         close: "Close",
+        status: "Status",
+        actions: "Actions",
 
         // ✅ qo‘shildi
         all: "All",
@@ -475,6 +484,10 @@ const resources = {
         title: "JEK employees",
         searchPlaceholder: "Name, surname or phone...",
         areaPlaceholder: "Area (all)",
+
+        totalEmployees: "Total employees",
+        totalActiveEmployees: "Total active employees",
+        totalInactiveEmployees: "Total inactive employees",
 
         statusAll: "All",
         statusActive: "Active",
@@ -663,6 +676,8 @@ const resources = {
         view: "Просмотр",
         minimal: "минимум",
         close: "Закрыть",
+        status: "Статус",
+        actions: "Действия",
 
         // ✅ qo‘shildi
         all: "Все",
@@ -726,6 +741,10 @@ const resources = {
         title: "Сотрудники ЖЭК",
         searchPlaceholder: "Имя, фамилия или телефон...",
         areaPlaceholder: "Район (все)",
+
+        totalEmployees: "Всего сотрудников",
+        totalActiveEmployees: "Всего активных сотрудников",
+        totalInactiveEmployees: "Всего неактивных сотрудников",
 
         statusAll: "Все",
         statusActive: "Активный",
