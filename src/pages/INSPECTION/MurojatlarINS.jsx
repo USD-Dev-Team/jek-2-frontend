@@ -33,13 +33,12 @@ import {
   Th,
   Td,
   TableContainer,
-  ButtonGroup
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { LayoutGrid, Search, Table2, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { apiAriza } from "../../Services/api/Ariza";
-import { apiJekData } from "../../Services/api/Jekdata";
 import { formatDateTime } from "../../utils/tools/formatDateTime";
 import adress from "../../constants/mahallas.json";
 import { IMAGE_URL } from "../../constants/imageUrl";
@@ -48,16 +47,12 @@ export default function Murojatlar() {
   const { t, i18n } = useTranslation();
   const korishModal = useDisclosure();
 
-
   const lang = i18n.language || "uz";
   const addressData = adress?.[lang] ?? adress?.uz;
 
-
   const tuman = addressData?.addresses ?? {};
-
   const mahalla = addressData?.mahallas ?? {};
 
-  //UI/UX state
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [ariza, setAriza] = useState([]);
@@ -74,7 +69,6 @@ export default function Murojatlar() {
     mahalla: "",
   });
 
-  //Statuses
   const Statuses = {
     "": t("appeals.statusAll"),
     PENDING: t("appeals.status_pending"),
@@ -83,7 +77,7 @@ export default function Murojatlar() {
     REJECTED: t("appeals.status_rejected_user"),
     JEK_REJECTED: t("appeals.status_rejected"),
     JEK_COMPLETED: t("appeals.status_completed"),
-  }
+  };
 
   const cardBg = useColorModeValue("#ffffff", "#0B1C26");
   const cardGradient = useColorModeValue(
@@ -110,13 +104,10 @@ export default function Murojatlar() {
     return mahalla?.[districtKeyUz] || mahalla?.[districtLabelTranslated] || {};
   }, [form.tuman, mahalla, tuman]);
 
-
   const changeForm = (e) => {
     const { name, value } = e.target;
-
     setForm((prev) => {
       const next = { ...prev, [name]: value };
-
       if (name === "tuman") next.mahalla = "";
       return next;
     });
@@ -148,7 +139,6 @@ export default function Murojatlar() {
     korishModal.onOpen();
   };
 
-  //API calls 
   const getAriza = async (text) => {
     try {
       setLoading(true);
@@ -166,18 +156,14 @@ export default function Murojatlar() {
     }
   };
 
-
-  // debounce search
   useEffect(() => {
-    const time = setTimeout(() => {
-      setDebouncedQuery(form.search);
-    }, 500);
+    const time = setTimeout(() => setDebouncedQuery(form.search), 500);
     return () => clearTimeout(time);
   }, [form.search]);
 
-
   useEffect(() => {
     getAriza(debouncedQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     form.startData,
     form.endData,
@@ -208,12 +194,18 @@ export default function Murojatlar() {
   return (
     <Box>
       {/* FILTERS */}
-      <Flex mb={4} alignItems="center" justify={'center'} direction={'column'} gap={3} wrap="wrap" w={'100%'}>
-        <HStack w={'100%'}>
-
-
+      <Flex
+        mb={4}
+        alignItems="center"
+        justify="center"
+        direction="column"
+        gap={3}
+        wrap="wrap"
+        w="100%"
+      >
+        <HStack w="100%">
           {/* SEARCH */}
-          <InputGroup w={'100%'}>
+          <InputGroup w="100%">
             <InputLeftElement pointerEvents="none" ml={2}>
               <Search size={16} />
             </InputLeftElement>
@@ -239,8 +231,8 @@ export default function Murojatlar() {
           </InputGroup>
 
           {/* TUMAN */}
-          <Select w={'100%'} value={form.tuman} name="tuman" onChange={changeForm}>
-            <option value="">{t("common.all") || "Hammasi"}</option>
+          <Select w="100%" value={form.tuman} name="tuman" onChange={changeForm}>
+            <option value="">{t("common.all")}</option>
             {Object.entries(tuman).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -250,13 +242,13 @@ export default function Murojatlar() {
 
           {/* MAHALLA */}
           <Select
-            w={'100%'}
+            w="100%"
             value={form.mahalla}
             name="mahalla"
             onChange={changeForm}
             isDisabled={!form.tuman}
           >
-            <option value="">{t("common.all") || "Hammasi"}</option>
+            <option value="">{t("common.all")}</option>
             {Object.entries(mahallaObj).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -264,6 +256,7 @@ export default function Murojatlar() {
             ))}
           </Select>
 
+          {/* VIEW TOGGLE */}
           <ButtonGroup isAttached variant="outline" size="md">
             <Button
               leftIcon={<LayoutGrid size={16} />}
@@ -284,9 +277,10 @@ export default function Murojatlar() {
             </Button>
           </ButtonGroup>
         </HStack>
-        <HStack w={'100%'}>
+
+        <HStack w="100%">
           {/* STATUS */}
-          <Select w={'100%'} value={form.status} name="status" onChange={changeForm}>
+          <Select w="100%" value={form.status} name="status" onChange={changeForm}>
             {Object.entries(Statuses).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -294,9 +288,9 @@ export default function Murojatlar() {
             ))}
           </Select>
 
-          {/* BOSHLANISH SANA */}
+          {/* START DATE */}
           <Input
-            w={'100%'}
+            w="100%"
             value={form.startData}
             name="startData"
             onChange={changeForm}
@@ -304,9 +298,9 @@ export default function Murojatlar() {
             type="date"
           />
 
-          {/* TUGASH SANA */}
+          {/* END DATE */}
           <Input
-            w={'100%'}
+            w="100%"
             value={form.endData}
             name="endData"
             onChange={changeForm}
@@ -315,181 +309,194 @@ export default function Murojatlar() {
           />
 
           {/* RESET */}
-          <Button
-            w={'100%'}
-            variant={'solidPrimary'}
-            onClick={resetForm}
-          >
+          <Button w="100%" variant="solidPrimary" onClick={resetForm}>
             {t("appeals.clearFilters")}
           </Button>
         </HStack>
       </Flex>
 
       {/* LIST */}
-      {
-        viewMode === "card" ? (
-          <Flex flexDirection="column" gap={3}>
-            {loading ? (
-              <Flex direction="column" gap={3}>
-                {[1, 2, 3, 4, 5, 6].map((e) => (
-                  <Skeleton key={e} h="130px" w="100%" rounded={10} />
-                ))}
-              </Flex>
-            ) : ariza?.length > 0 ? (
-              ariza.map((item) => {
-                const days = calculateDays(item.createdAt, item.completedAt);
+      {viewMode === "card" ? (
+        <Flex flexDirection="column" gap={3}>
+          {loading ? (
+            <Flex direction="column" gap={3}>
+              {[1, 2, 3, 4, 5, 6].map((e) => (
+                <Skeleton key={e} h="130px" w="100%" rounded={10} />
+              ))}
+            </Flex>
+          ) : ariza?.length > 0 ? (
+            ariza.map((item) => {
+              const days = calculateDays(item.createdAt, item.completedAt);
 
-                return (
-                  <Box
-                    key={item.id}
-                    bg={cardBg}
-                    backgroundImage={cardGradient}
-                    border={cardBorder}
-                    borderRadius="16px"
-                    px={7}
-                    py={4}
-                    boxShadow={cardShadow}
-                    transition="0.2s"
-                    _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
-                  >
-                    {/* sizdagi card content (o'zgarmagan) */}
-                    <Flex align="start" justify="space-between">
-                      <HStack alignItems="center">
-                        <Text mb={2} fontWeight="semibold">
-                          {item.request_number}
-                        </Text>
-                        <Text mb={3}>|</Text>
-                        <Badge mb={2} colorScheme={statusColorScheme(item.status)}>
-                          {Statuses[item?.status] || item?.status}
-                        </Badge>
-                      </HStack>
-
-                      <VStack align="end" spacing={1}>
-                        <Text fontWeight="bold">
-                          <span style={{ fontWeight: "normal" }}>Hodim:</span>{" "}
-                          {item?.assigned_jek
-                            ? `${item?.assigned_jek?.first_name} ${item?.assigned_jek?.last_name}`
-                            : "Topilmadi"}
-                        </Text>
-                        <Text fontWeight="bold">
-                          <span style={{ fontWeight: "normal" }}>Davomiyligi:</span>{" "}
-                          {days !== null ? `${days} kun` : "Tugamagan"}
-                        </Text>
-                        <Text fontWeight="bold">
-                          <span style={{ fontWeight: "normal" }}>Hudud:</span>{" "}
-                          {`${item?.address?.district || "-"} , ${item?.address?.neighborhood || "-"}`}
-                        </Text>
-                      </VStack>
-                    </Flex>
-
-                    <Divider mb={3} mt={2} h="1px" bg="gray.200" opacity={0.6} />
-
-                    <Flex alignItems="start" justifyContent="space-between">
-                      <VStack alignItems="start" spacing={1}>
-                        <HStack>
-                          <Text>{item?.user?.full_name}</Text>
-                          <Text>+{item?.user?.phoneNumber}</Text>
-                        </HStack>
-                        <Text>{formatDateTime(item.createdAt)}</Text>
-                      </VStack>
-
-                      <Button onClick={() => openKorishModal(item)}>
-                        {t("common.view")}
-                      </Button>
-                    </Flex>
-                  </Box>
-                );
-              })
-            ) : (
-              <Text color="red.400" fontSize={22}>
-                {t("appeals.notFound")}
-              </Text>
-            )}
-          </Flex>
-        ) : (
-          <TableContainer
-            bg={cardBg}
-            border={cardBorder}
-            borderRadius="16px"
-            boxShadow={cardShadow}
-            overflowX="auto"
-          >
-            <Table size="sm" variant="simple">
-              <Thead position="sticky" top={0} bg={cardBg} zIndex={1}>
-                <Tr>
-                  <Th>№</Th>
-                  <Th>Status</Th>
-                  <Th>Hodim</Th>
-                  <Th>Davomiyligi</Th>
-                  <Th>Hudud</Th>
-                  <Th>Murojaatchi</Th>
-                  <Th>Telefon</Th>
-                  <Th>Yaratilgan</Th>
-                  <Th textAlign="right">Action</Th>
-                </Tr>
-              </Thead>
-
-              <Tbody>
-                {loading ? (
-                  [...Array(6)].map((_, i) => (
-                    <Tr key={i}>
-                      <Td colSpan={9}>
-                        <Skeleton h="28px" w="100%" rounded="md" />
-                      </Td>
-                    </Tr>
-                  ))
-                ) : ariza?.length > 0 ? (
-                  ariza.map((item) => {
-                    const days = calculateDays(item.createdAt, item.completedAt);
-
-                    return (
-                      <Tr key={item.id} _hover={{ bg: rowHoverBg }}>
-                        <Td fontWeight="600">{item.request_number}</Td>
-
-                        <Td>
-                          <Badge colorScheme={statusColorScheme(item.status)}>
-                            {Statuses[item?.status] || item?.status}
-                          </Badge>
-                        </Td>
-
-                        <Td>
-                          {item?.assigned_jek
-                            ? `${item.assigned_jek.first_name} ${item.assigned_jek.last_name}`
-                            : "Topilmadi"}
-                        </Td>
-
-                        <Td>{days !== null ? `${days} kun` : "Tugamagan"}</Td>
-
-                        <Td>
-                          {item?.address?.district || "-"}, {item?.address?.neighborhood || "-"}
-                        </Td>
-
-                        <Td>{item?.user?.full_name || "-"}</Td>
-                        <Td>+{item?.user?.phoneNumber || "-"}</Td>
-                        <Td>{formatDateTime(item.createdAt)}</Td>
-
-                        <Td textAlign="right">
-                          <Button size="sm" onClick={() => openKorishModal(item)}>
-                            {t("common.view")}
-                          </Button>
-                        </Td>
-                      </Tr>
-                    );
-                  })
-                ) : (
-                  <Tr>
-                    <Td colSpan={9}>
-                      <Text color="red.400" fontSize={18}>
-                        {t("appeals.notFound")}
+              return (
+                <Box
+                  key={item.id}
+                  bg={cardBg}
+                  backgroundImage={cardGradient}
+                  border={cardBorder}
+                  borderRadius="16px"
+                  px={7}
+                  py={4}
+                  boxShadow={cardShadow}
+                  transition="0.2s"
+                  _hover={{
+                    transform: "translateY(-3px)",
+                    boxShadow: cardShadowHover,
+                  }}
+                >
+                  <Flex align="start" justify="space-between">
+                    <HStack alignItems="center">
+                      <Text mb={2} fontWeight="semibold">
+                        {item.request_number}
                       </Text>
+                      <Text mb={3}>|</Text>
+                      <Badge mb={2} colorScheme={statusColorScheme(item.status)}>
+                        {Statuses[item?.status] || item?.status}
+                      </Badge>
+                    </HStack>
+
+                    <VStack align="end" spacing={1}>
+                      <Text fontWeight="bold">
+                        <span style={{ fontWeight: "normal" }}>
+                          {t("appeals.employee")}:
+                        </span>{" "}
+                        {item?.assigned_jek
+                          ? `${item?.assigned_jek?.first_name} ${item?.assigned_jek?.last_name}`
+                          : t("common.notFound")}
+                      </Text>
+
+                      <Text fontWeight="bold">
+                        <span style={{ fontWeight: "normal" }}>
+                          {t("appeals.duration")}:
+                        </span>{" "}
+                        {days !== null
+                          ? `${days} ${t("common.day")}`
+                          : t("appeals.notFinished")}
+                      </Text>
+
+                      <Text fontWeight="bold">
+                        <span style={{ fontWeight: "normal" }}>
+                          {t("appeals.area")}:
+                        </span>{" "}
+                        {`${item?.address?.district || "-"} , ${
+                          item?.address?.neighborhood || "-"
+                        }`}
+                      </Text>
+                    </VStack>
+                  </Flex>
+
+                  <Divider mb={3} mt={2} h="1px" bg="gray.200" opacity={0.6} />
+
+                  <Flex alignItems="start" justifyContent="space-between">
+                    <VStack alignItems="start" spacing={1}>
+                      <HStack>
+                        <Text>{item?.user?.full_name}</Text>
+                        <Text>+{item?.user?.phoneNumber}</Text>
+                      </HStack>
+                      <Text>{formatDateTime(item.createdAt)}</Text>
+                    </VStack>
+
+                    <Button onClick={() => openKorishModal(item)}>
+                      {t("common.view")}
+                    </Button>
+                  </Flex>
+                </Box>
+              );
+            })
+          ) : (
+            <Text color="red.400" fontSize={22}>
+              {t("appeals.notFound")}
+            </Text>
+          )}
+        </Flex>
+      ) : (
+        <TableContainer
+          bg={cardBg}
+          border={cardBorder}
+          borderRadius="16px"
+          boxShadow={cardShadow}
+          overflowX="auto"
+        >
+          <Table size="sm" variant="simple">
+            <Thead position="sticky" top={0} bg={cardBg} zIndex={1}>
+              <Tr>
+                <Th>№</Th>
+                <Th>{t("common.status")}</Th>
+                <Th>{t("appeals.employee")}</Th>
+                <Th>{t("appeals.duration")}</Th>
+                <Th>{t("appeals.area")}</Th>
+                <Th>{t("appeals.table.applicant")}</Th>
+                <Th>{t("register.phone")}</Th>
+                <Th>{t("appeals.table.createdAt")}</Th>
+                <Th textAlign="right">{t("common.actions")}</Th>
+              </Tr>
+            </Thead>
+
+            <Tbody>
+              {loading ? (
+                [...Array(6)].map((_, i) => (
+                  <Tr key={i}>
+                    <Td colSpan={9}>
+                      <Skeleton h="28px" w="100%" rounded="md" />
                     </Td>
                   </Tr>
-                )}
-              </Tbody>
-            </Table>
-          </TableContainer>
-        )
-      }
+                ))
+              ) : ariza?.length > 0 ? (
+                ariza.map((item) => {
+                  const days = calculateDays(item.createdAt, item.completedAt);
+
+                  return (
+                    <Tr key={item.id} _hover={{ bg: rowHoverBg }}>
+                      <Td fontWeight="600">{item.request_number}</Td>
+
+                      <Td>
+                        <Badge colorScheme={statusColorScheme(item.status)}>
+                          {Statuses[item?.status] || item?.status}
+                        </Badge>
+                      </Td>
+
+                      <Td>
+                        {item?.assigned_jek
+                          ? `${item.assigned_jek.first_name} ${item.assigned_jek.last_name}`
+                          : t("common.notFound")}
+                      </Td>
+
+                      <Td>
+                        {days !== null
+                          ? `${days} ${t("common.day")}`
+                          : t("appeals.notFinished")}
+                      </Td>
+
+                      <Td>
+                        {item?.address?.district || "-"},{" "}
+                        {item?.address?.neighborhood || "-"}
+                      </Td>
+
+                      <Td>{item?.user?.full_name || "-"}</Td>
+                      <Td>+{item?.user?.phoneNumber || "-"}</Td>
+                      <Td>{formatDateTime(item.createdAt)}</Td>
+
+                      <Td textAlign="right">
+                        <Button size="sm" onClick={() => openKorishModal(item)}>
+                          {t("common.view")}
+                        </Button>
+                      </Td>
+                    </Tr>
+                  );
+                })
+              ) : (
+                <Tr>
+                  <Td colSpan={9}>
+                    <Text color="red.400" fontSize={18}>
+                      {t("appeals.notFound")}
+                    </Text>
+                  </Td>
+                </Tr>
+              )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      )}
 
       {/* KORISH_MODAL */}
       <Modal isOpen={korishModal.isOpen} onClose={korishModal.onClose}>
@@ -509,18 +516,14 @@ export default function Murojatlar() {
 
           <ModalBody>
             <Text mb={2} fontWeight="bold">
-              <span style={{ color: "#778092" }}>
-                {t("appeals.view.status")} :
-              </span>{" "}
+              <span style={{ color: "#778092" }}>{t("appeals.view.status")} :</span>{" "}
               <Badge colorScheme={statusColorScheme(korish?.status)}>
                 {Statuses[korish?.status] || korish?.status}
               </Badge>
             </Text>
 
             <Text mb={2} fontWeight="bold">
-              <span style={{ color: "#778092" }}>
-                {t("appeals.view.type")} :
-              </span>{" "}
+              <span style={{ color: "#778092" }}>{t("appeals.view.type")} :</span>{" "}
               {korish?.description || "-"}
             </Text>
 
@@ -535,23 +538,23 @@ export default function Murojatlar() {
               <span style={{ color: "#778092" }}>
                 {t("appeals.view.endedAt")} :
               </span>{" "}
-              {!korish?.completedAt ? "Tugamagan" : formatDateTime(korish.completedAt)}
+              {!korish?.completedAt
+                ? t("appeals.notFinished")
+                : formatDateTime(korish.completedAt)}
             </Text>
 
             <Divider mb={4} mt={6} />
 
             <Text mb={2} fontWeight="bold">
-              <span style={{ color: "#778092" }}>
-                {t("appeals.view.note")} :
-              </span>{" "}
-              {korish?.note ? korish.note : "Izoh yo'q"}
+              <span style={{ color: "#778092" }}>{t("appeals.view.note")} :</span>{" "}
+              {korish?.note ? korish.note : t("appeals.noNote")}
             </Text>
 
             <Divider mb={4} mt={6} />
 
             <Flex gap={4} align="center">
               <Text fontWeight="bold" color="#778092">
-                Rasm :
+                {t("appeals.photo")} :
               </Text>
 
               <Box border="2px dashed" borderColor="gray.300" borderRadius="xl" p={3}>
@@ -563,7 +566,7 @@ export default function Murojatlar() {
                       ? `${IMAGE_URL}${korish.requestPhotos[0].file_url}`
                       : "/no-image.png"
                   }
-                  alt={korish?.requestPhotos?.length ? "rasm" : "rasm yo'q"}
+                  alt={t("appeals.photo")}
                 />
               </Box>
             </Flex>
@@ -576,6 +579,6 @@ export default function Murojatlar() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box >
+    </Box>
   );
 }

@@ -152,6 +152,8 @@ export default function HodimlarINS() {
     });
   };
 
+  const rowHoverBg = useColorModeValue("gray.50", "whiteAlpha.50");
+
   const resetForm = () => {
     setForm({
       ism: "",
@@ -359,24 +361,24 @@ export default function HodimlarINS() {
 
       {/* STATISTIKA */}
       <Flex gap={5} mb={5} wrap="wrap">
-        <VStack w={{ base: "100%", md: "25%" }} bg="surface" rounded={10} p={5} align="start">
+        <VStack w={'auto'} bg="surface" rounded={10} p={5} align="start">
           <Heading color="warning">{onlyJek.length}</Heading>
-          <Text display="flex" justify="center" gap={2} style={{ fontFamily: "ui-monospace" }}>
-            <Users /> Jami hodimlar :
+          <Text display="flex" justify="center" gap={2}>
+            <Users /> {t("jekEmployees.totalEmployees")} :
           </Text>
         </VStack>
 
-        <VStack w={{ base: "100%", md: "23%" }} bg="surface" rounded={10} p={5} align="start">
+        <VStack w={'auto'} bg="surface" rounded={10} p={5} align="start">
           <Heading color="success">{activeJek}</Heading>
-          <Text display="flex" justify="center" gap={2} style={{ fontFamily: "ui-monospace" }}>
-            <Users /> Jami faol hodimlar :
+          <Text display="flex" justify="center" gap={2}>
+            <Users /> {t("jekEmployees.totalActiveEmployees")} :
           </Text>
         </VStack>
 
-        <VStack w={{ base: "100%", md: "23%" }} bg="surface" rounded={10} p={5} align="start">
+        <VStack w={'auto'} bg="surface" rounded={10} p={5} align="start">
           <Heading color="danger">{noActiveJek}</Heading>
-          <Text display="flex" justify="center" gap={2} style={{ fontFamily: "ui-monospace" }}>
-            <Users /> Jami faol emas hodimlar :
+          <Text display="flex" justify="center" gap={2}>
+            <Users /> {t("jekEmployees.totalInactiveEmployees")} :
           </Text>
         </VStack>
       </Flex>
@@ -412,7 +414,7 @@ export default function HodimlarINS() {
                     <HStack>
                       <Heading fontSize="18px">{`${emp?.first_name} ${emp?.last_name}`}</Heading>
                       <Badge colorScheme={emp?.isActive ? "green" : "red"}>
-                        {emp?.isActive ? "Faol" : "Faol emas"}
+                        {emp?.isActive ? t("jekEmployees.statusActive") : t("jekEmployees.statusInactive")}
                       </Badge>
                     </HStack>
 
@@ -422,11 +424,11 @@ export default function HodimlarINS() {
                         onClick={() => setExpandedId(isExpanded ? null : emp.id)}
                         rightIcon={isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                       >
-                        Tafsilotlar
+                        {t("jekEmployees.details")}
                       </Button>
 
                       <HStack>
-                        <Text>Faol/Faol emas</Text>
+                        <Text>{t("jekEmployees.toggle")}</Text>
                         <Switch
                           isChecked={!!emp?.isActive}
                           onChange={(e) => openConfirm(emp, e.target.checked)}
@@ -439,19 +441,21 @@ export default function HodimlarINS() {
 
                   {/* ASOSIY */}
                   <Text fontWeight="semibold">
-                    <span style={{ fontWeight: "normal" }}>Telefon:</span> +{emp?.phoneNumber || "-"}
+                    <span style={{ fontWeight: "normal" }}>{t("jekEmployees.phone")}:</span>
+                    +{emp?.phoneNumber || "-"}
                   </Text>
                   <Text fontWeight="semibold">
-                    <span style={{ fontWeight: "normal" }}>Hudud:</span> {empDistrict(emp)}, {empMahalla(emp)}
+                    <span style={{ fontWeight: "normal" }}>{t("jekEmployees.areaCol")}:</span>
+                    {empDistrict(emp)}, {empMahalla(emp)}
                   </Text>
 
                   {/* COLLAPSE */}
                   <Collapse in={isExpanded} animateOpacity>
                     <Box mt={3}>
                       <Text fontWeight="bold" mb={2}>
-                        So‘nggi buyurtmalar
+                        {t("jekEmployees.last10")}
                       </Text>
-                      <Text opacity={0.6}>Ma’lumot yo‘q</Text>
+                      <Text opacity={0.6}>{t("jekEmployees.noData")}</Text>
                     </Box>
                   </Collapse>
                 </Box>
@@ -474,11 +478,11 @@ export default function HodimlarINS() {
           <Table size="sm" variant="simple">
             <Thead position="sticky" top={0} bg={cardBg} zIndex={1}>
               <Tr>
-                <Th>F.I.Sh</Th>
-                <Th>Status</Th>
-                <Th>Telefon</Th>
-                <Th>Hudud</Th>
-                <Th textAlign="right">Amallar</Th>
+                <Th>{t("jekEmployees.employee")}</Th>
+                <Th>{t("common.status")}</Th>
+                <Th>{t("jekEmployees.phone")}</Th>
+                <Th>{t("jekEmployees.areaCol")}</Th>
+                <Th textAlign="right">{t("common.actions")}</Th>
               </Tr>
             </Thead>
 
@@ -502,7 +506,7 @@ export default function HodimlarINS() {
 
                         <Td>
                           <Badge colorScheme={emp?.isActive ? "green" : "red"}>
-                            {emp?.isActive ? "Faol" : "Faol emas"}
+                            {emp?.isActive ? t("jekEmployees.statusActive") : t("jekEmployees.statusInactive")}
                           </Badge>
                         </Td>
 
@@ -519,11 +523,11 @@ export default function HodimlarINS() {
                               onClick={() => setExpandedId(isExpanded ? null : emp.id)}
                               rightIcon={isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                             >
-                              Tafsilot
+                              {t("jekEmployees.details")}
                             </Button>
 
                             <HStack>
-                              <Text fontSize="sm">Faol</Text>
+                              {t("jekEmployees.statusActive")}
                               <Switch
                                 isChecked={!!emp?.isActive}
                                 onChange={(e) => openConfirm(emp, e.target.checked)}
@@ -537,11 +541,11 @@ export default function HodimlarINS() {
                       <Tr>
                         <Td colSpan={5} p={0} border="none">
                           <Collapse in={isExpanded} animateOpacity>
-                            <Box p={4} bg={useColorModeValue("gray.50", "whiteAlpha.50")}>
+                            <Box p={4} bg={expandedRowBg}>
                               <Text fontWeight="bold" mb={2}>
-                                So‘nggi buyurtmalar
+                                {t("jekEmployees.last10")}
                               </Text>
-                              <Text opacity={0.7}>Ma’lumot yo‘q</Text>
+                              <Text opacity={0.7}>{t("jekEmployees.noData")}</Text>
                             </Box>
                           </Collapse>
                         </Td>
@@ -553,7 +557,7 @@ export default function HodimlarINS() {
                 <Tr>
                   <Td colSpan={5}>
                     <Text color="red.400" fontSize={18}>
-                      {t("appeals.notFound")}
+                      {t("jekEmployees.notFound")}
                     </Text>
                   </Td>
                 </Tr>
@@ -569,21 +573,21 @@ export default function HodimlarINS() {
         <ModalContent>
           <ModalCloseButton />
 
-          <ModalHeader>{nextActiveValue ? "Faollashtirish" : "O‘chirish"}</ModalHeader>
+          <ModalHeader>{nextActiveValue ? t("jekEmployees.confirmActivateTitle") : t("jekEmployees.confirmDeactivateTitle")}</ModalHeader>
 
           <ModalBody>
-            <Text>Siz ushbu xodim holatini o‘zgartirmoqchimisiz?</Text>
+            <Text>{nextActiveValue ? t("jekEmployees.confirmActivateText") : t("jekEmployees.confirmDeactivateText")}</Text>
 
             <Text mt={3}>
-              Xodim:{" "}
+              {t("jekEmployees.employee")}:{" "}
               <b>{selected ? `${selected.first_name} ${selected.last_name}` : "-"}</b>
             </Text>
           </ModalBody>
 
           <ModalFooter gap={3}>
-            <Button onClick={confirmModal.onClose}>Bekor qilish</Button>
+            <Button onClick={confirmModal.onClose}>{t("common.cancel")}</Button>
             <Button onClick={() => deActivate(selected)} colorScheme="blue" isLoading={saving}>
-              Tasdiqlash
+              {t("common.confirm")}
             </Button>
           </ModalFooter>
         </ModalContent>
