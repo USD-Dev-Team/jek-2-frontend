@@ -1,0 +1,42 @@
+{
+  "register": "Register",
+  "registerSubtitle": "Tizimga bog'lanish uchun ma'lumotlarni kiriting",
+
+  "firstNameField": "Ism",
+  "firstNamePlaceholder": "Ismni kiriting",
+  "firstNameRequired": "Ism kiritilmadi",
+
+  "lastNameField": "Familiya",
+  "lastNamePlaceholder": "Familiya kiriting",
+  "lastNameRequired": "Familiya kiritilmadi",
+
+  "phoneField": "Telefon",
+  "phonePlaceholder": "+998901234567",
+  "phoneRequired": "Telefon raqam kiritilmadi",
+  "phoneInvalid": "Telefon raqam noto‘g‘ri",
+
+  "districtField": "Tuman",
+  "districtPlaceholder": "Tumanni tanlang",
+  "districtRequired": "Tuman tanlanmadi",
+
+  "mahallaField": "Mahalla",
+  "mahallaPlaceholder": "Mahallani tanlang",
+  "mahallaRequired": "Mahalla tanlanmadi",
+
+  "passwordField": "Parol",
+  "passwordPlaceholder": "Parolni kiriting",
+  "passwordRequired": "Parol kiritilmadi",
+  "passwordMinLength": "Parol kamida 8 belgidan iborat bo'lishi kerak",
+
+  "confirmPasswordField": "Parolni tasdiqlang",
+  "confirmPasswordPlaceholder": "Tasdiqni kiriting",
+  "confirmPasswordRequired": "Parol tasdiqlanmadi",
+  "passwordsNotMatch": "Parollar mos kelmadi",
+
+  "createButton": "Yaratish",
+  "haveAccountButton": "Akkaunt bormi? Kirish",
+
+  "loading": "Yuklanmoqda...",
+  "success": "Muvaffaqiyatli ro'yxatdan o'tildi",
+  "systemError": "Tizim xatosi"
+}

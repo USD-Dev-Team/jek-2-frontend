@@ -1,0 +1,39 @@
+import axios from "axios";
+import { $api, BASE_URL } from "../parametres/axios";
+class apiAriza {
+    // static getAll = async (status, page, limit) => {
+    //     const response = await $api.get(`${BASE_URL}/requests/jek/list?status=${status}&page=${page}&limit=${limit}`)
+    //     return response;
+    // }
+    static getFilteredRequest = async (start, end, tuman, mahalla, status, search, page, limit) => {
+        const response = await $api.get(`${BASE_URL}/requests/universal-search`,
+            {
+                params: {
+                    startDate: start,
+                    endDate: end,
+                    district: tuman,
+                    neighborhood: mahalla,
+                    status: status,
+                    search: search,
+                    page: page,
+                    limit: limit
+                }
+            });
+
+        return response;
+    };
+    static Kutilmoqda = async (id) => {
+        const response = await $api.patch(`${BASE_URL}/requests/assign/${id}`)
+        return response;
+    }
+    static Tugatildi = async (id, note, img) => {
+        const response = await $api.patch(`${BASE_URL}/requests/complete/${id}`, { note: note })
+        return response;
+    }
+    // static RadEtish = async (id , reason) => {
+    //     const response = await $api.patch(`${BASE_URL}/requests/reject/${id}` , {reason: reason})
+    //     return response;
+    // }
+}
+
+export { apiAriza };

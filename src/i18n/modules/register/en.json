@@ -1,0 +1,42 @@
+{
+  "register": "Register",
+  "registerSubtitle": "Enter the information to access the system",
+
+  "firstNameField": "First name",
+  "firstNamePlaceholder": "Enter your first name",
+  "firstNameRequired": "First name is required",
+
+  "lastNameField": "Last name",
+  "lastNamePlaceholder": "Enter your last name",
+  "lastNameRequired": "Last name is required",
+
+  "phoneField": "Phone",
+  "phonePlaceholder": "+998901234567",
+  "phoneRequired": "Phone number is required",
+  "phoneInvalid": "Invalid phone number",
+
+  "districtField": "District",
+  "districtPlaceholder": "Select a district",
+  "districtRequired": "District is required",
+
+  "mahallaField": "Neighborhood",
+  "mahallaPlaceholder": "Select a neighborhood",
+  "mahallaRequired": "Neighborhood is required",
+
+  "passwordField": "Password",
+  "passwordPlaceholder": "Enter your password",
+  "passwordRequired": "Password is required",
+  "passwordMinLength": "Password must be at least 8 characters",
+
+  "confirmPasswordField": "Confirm password",
+  "confirmPasswordPlaceholder": "Enter confirmation",
+  "confirmPasswordRequired": "Password confirmation is required",
+  "passwordsNotMatch": "Passwords do not match",
+
+  "createButton": "Create",
+  "haveAccountButton": "Already have an account? Sign in",
+
+  "loading": "Loading...",
+  "success": "Successfully registered",
+  "systemError": "System error"
+}

@@ -1,0 +1,40 @@
+{
+  "menuDashboard": "Dashboard",
+  "menuAppeals": "Murojaatlar",
+
+  "breadcrumbDashboard": "Dashboard",
+
+  "totalAppeals": "Jami murojaatlar",
+  "completed": "Bajarilgan",
+  "inProgress": "Jarayonda",
+  "rejected": "Rad etilgan",
+
+  "selectDistrict": "Tumanni tanlang",
+
+  "yearlyAppeals": "Yillik murojaatlar",
+  "todayMonthlyDailyActivity": "Bugungi oylik kunlik aktivlik",
+  "monthlyAndTodayActivity": "Oylik va bugungi aktivlik",
+  "statusDistribution": "Holat taqsimoti",
+
+  "legendMonthlyActivity": "Oylik aktivlik",
+  "legendToday": "Bugungi kun",
+
+  "status_completed": "Bajarilgan",
+  "status_inProgress": "Jarayonda",
+  "status_rejected": "Rad etilgan",
+
+  "months": {
+    "jan": "Yan",
+    "feb": "Fev",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Iyun",
+    "jul": "Iyul",
+    "aug": "Avg",
+    "sep": "Sen",
+    "oct": "Okt",
+    "nov": "Noy",
+    "dec": "Dek"
+  }
+}

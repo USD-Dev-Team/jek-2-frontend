@@ -1,0 +1,40 @@
+{
+  "menuDashboard": "Дашборд",
+  "menuAppeals": "Обращения",
+
+  "breadcrumbDashboard": "Дашборд",
+
+  "totalAppeals": "Всего обращений",
+  "completed": "Выполнено",
+  "inProgress": "В процессе",
+  "rejected": "Отклонено",
+
+  "selectDistrict": "Выберите район",
+
+  "yearlyAppeals": "Годовые обращения",
+  "todayMonthlyDailyActivity": "Активность за сегодня/месяц/день",
+  "monthlyAndTodayActivity": "Месячная и сегодняшняя активность",
+  "statusDistribution": "Распределение статусов",
+
+  "legendMonthlyActivity": "Месячная активность",
+  "legendToday": "Сегодня",
+
+  "status_completed": "Выполнено",
+  "status_inProgress": "В процессе",
+  "status_rejected": "Отклонено",
+
+  "months": {
+    "jan": "Янв",
+    "feb": "Фев",
+    "mar": "Мар",
+    "apr": "Апр",
+    "may": "Май",
+    "jun": "Июн",
+    "jul": "Июл",
+    "aug": "Авг",
+    "sep": "Сен",
+    "oct": "Окт",
+    "nov": "Ноя",
+    "dec": "Дек"
+  }
+}

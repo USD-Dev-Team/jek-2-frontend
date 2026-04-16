@@ -1,0 +1,40 @@
+{
+  "menuDashboard": "Dashboard",
+  "menuAppeals": "Appeals",
+
+  "breadcrumbDashboard": "Dashboard",
+
+  "totalAppeals": "Total appeals",
+  "completed": "Completed",
+  "inProgress": "In progress",
+  "rejected": "Rejected",
+
+  "selectDistrict": "Select a district",
+
+  "yearlyAppeals": "Yearly appeals",
+  "todayMonthlyDailyActivity": "Today's monthly/daily activity",
+  "monthlyAndTodayActivity": "Monthly and today's activity",
+  "statusDistribution": "Status distribution",
+
+  "legendMonthlyActivity": "Monthly activity",
+  "legendToday": "Today",
+
+  "status_completed": "Completed",
+  "status_inProgress": "In progress",
+  "status_rejected": "Rejected",
+
+  "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
+  }
+}

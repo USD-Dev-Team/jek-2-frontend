@@ -1,0 +1,20 @@
+{
+  "login": "Kirish",
+  "loginSubtitle": "Tizimga kirish uchun ma'lumotlarni kiriting",
+  "loginField": "Login",
+  "loginPlaceholder": "Loginni kiriting",
+  "loginRequired": "Login kiritilmadi",
+  "passwordField": "Parol",
+  "passwordPlaceholder": "Parolni kiriting",
+  "passwordRequired": "Parol kiritilmadi",
+  "passwordMinLength": "Parol kamita 8 belgidan iborat bo'lishi kerak",
+  "noAccount": "Akkaunt yo'qmi?",
+  "forgotPassword": "Parolni unutdingizmi?",
+  "loginButton": "Kirish",
+  "loading": "Yuklanmoqda...",
+  "success": "Muvaffaqiyatli",
+  "welcomeBoss": "Muvaffaqiyatli, Hush kelibsiz Boss!",
+  "successWarehouse": "Muvaffaqiyatli",
+  "roleError": "Role mos kelmadi",
+  "systemError": "Tizim xatosi"
+}

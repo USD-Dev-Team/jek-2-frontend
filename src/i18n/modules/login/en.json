@@ -1,0 +1,20 @@
+{
+  "login": "Login",
+  "loginSubtitle": "Enter your credentials to sign in",
+  "loginField": "Login",
+  "loginPlaceholder": "Enter your login",
+  "loginRequired": "Login is required",
+  "passwordField": "Password",
+  "passwordPlaceholder": "Enter your password",
+  "passwordRequired": "Password is required",
+  "passwordMinLength": "Password must be at least 8 characters",
+  "noAccount": "Don't have an account?",
+  "forgotPassword": "Forgot password?",
+  "loginButton": "Sign In",
+  "loading": "Loading...",
+  "success": "Successfully",
+  "welcomeBoss": "Successfully, Welcome Boss!",
+  "successWarehouse": "Successfully",
+  "roleError": "Role mismatch",
+  "systemError": "System error"
+}

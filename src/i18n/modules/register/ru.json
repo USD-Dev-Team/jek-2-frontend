@@ -1,0 +1,42 @@
+{
+  "register": "Регистрация",
+  "registerSubtitle": "Введите данные для доступа к системе",
+
+  "firstNameField": "Имя",
+  "firstNamePlaceholder": "Введите имя",
+  "firstNameRequired": "Имя не введено",
+
+  "lastNameField": "Фамилия",
+  "lastNamePlaceholder": "Введите фамилию",
+  "lastNameRequired": "Фамилия не введена",
+
+  "phoneField": "Телефон",
+  "phonePlaceholder": "+998901234567",
+  "phoneRequired": "Номер телефона не введён",
+  "phoneInvalid": "Неверный номер телефона",
+
+  "districtField": "Район",
+  "districtPlaceholder": "Выберите район",
+  "districtRequired": "Район не выбран",
+
+  "mahallaField": "Махалля",
+  "mahallaPlaceholder": "Выберите махаллю",
+  "mahallaRequired": "Махалля не выбрана",
+
+  "passwordField": "Пароль",
+  "passwordPlaceholder": "Введите пароль",
+  "passwordRequired": "Пароль не введён",
+  "passwordMinLength": "Пароль должен быть не менее 8 символов",
+
+  "confirmPasswordField": "Подтвердите пароль",
+  "confirmPasswordPlaceholder": "Введите подтверждение",
+  "confirmPasswordRequired": "Подтверждение пароля не введено",
+  "passwordsNotMatch": "Пароли не совпадают",
+
+  "createButton": "Создать",
+  "haveAccountButton": "Есть аккаунт? Войти",
+
+  "loading": "Загрузка...",
+  "success": "Регистрация прошла успешно",
+  "systemError": "Системная ошибка"
+}

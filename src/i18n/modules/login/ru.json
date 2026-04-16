@@ -1,0 +1,20 @@
+{
+  "login": "Вход",
+  "loginSubtitle": "Введите свои учетные данные для входа",
+  "loginField": "Логин",
+  "loginPlaceholder": "Введите логин",
+  "loginRequired": "Логин не введен",
+  "passwordField": "Пароль",
+  "passwordPlaceholder": "Введите пароль",
+  "passwordRequired": "Пароль не введен",
+  "passwordMinLength": "Пароль должен содержать не менее 8 символов",
+  "noAccount": "Нет аккаунта?",
+  "forgotPassword": "Забыли пароль?",
+  "loginButton": "Войти",
+  "loading": "Загрузка...",
+  "success": "Успешно",
+  "welcomeBoss": "Успешно, Добро пожаловать, Босс!",
+  "successWarehouse": "Успешно",
+  "roleError": "Несоответствие ролей",
+  "systemError": "Ошибка системы"
+}
