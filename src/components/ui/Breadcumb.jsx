@@ -4,12 +4,13 @@ import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 
 export default function Breadcumb() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const loc = useLocation();
 
-  const pathnames = useMemo(
-    () => loc.pathname.split("/").filter(Boolean),
-    [loc.pathname]
+  // URL prefixlarni breadcrumbda ko‘rsatmaymiz
+  const hiddenSegments = useMemo(
+    () => new Set(["inspection", "jek", "government"]),
+    []
   );
 
   const segmentToKey = {
@@ -19,30 +20,36 @@ export default function Breadcumb() {
     hodimlar: "nav.jekEmployees",
   };
 
+  const crumbs = useMemo(() => {
+    const raw = loc.pathname.split("/").filter(Boolean);
+
+    return raw
+      .map((segment, index) => ({
+        segment,
+        to: "/" + raw.slice(0, index + 1).join("/"), // link to‘g‘ri qoladi
+      }))
+      .filter(({ segment }) => {
+        const normalized = decodeURIComponent(segment).toLowerCase();
+        return !hiddenSegments.has(normalized);
+      });
+  }, [loc.pathname, hiddenSegments]);
+
   const getLabel = (segment) => {
     const normalized = decodeURIComponent(segment).toLowerCase();
     const key = segmentToKey[normalized];
-
     if (key) return t(key);
-
-    // agar boshqa segment bo‘lsa (id, subpage) shuni chiqaradi
-    const decoded = decodeURIComponent(segment);
-    return decoded;
+    return decodeURIComponent(segment);
   };
 
   return (
     <Breadcrumb p={3}>
-      {pathnames.map((segment, index) => {
-        const to = "/" + pathnames.slice(0, index + 1).join("/");
-
-        return (
-          <BreadcrumbItem fontSize="20px" fontWeight="bold" key={to}>
-            <BreadcrumbLink as={Link} to={to}>
-              {getLabel(segment)}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        );
-      })}
+      {crumbs.map(({ segment, to }) => (
+        <BreadcrumbItem fontSize="20px" fontWeight="bold" key={to}>
+          <BreadcrumbLink as={Link} to={to}>
+            {getLabel(segment)}
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      ))}
     </Breadcrumb>
   );
 }
