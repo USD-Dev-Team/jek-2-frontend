@@ -45,11 +45,7 @@ export default function Header() {
       <Breadcumb />
 
       <HStack gap={5}>
-        <IconButton
-          aria-label="Notifications"
-          icon={<BellDot size={25} />}
-          variant="ghost"
-        />
+        
 
         <Select
           value={currentLang}

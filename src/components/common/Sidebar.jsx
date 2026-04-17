@@ -77,8 +77,8 @@ export default function Sidebar({ collapsed, links = [], role, end = false }) {
           borderRadius="full"
           borderRightRadius={0}
           onClick={() => setCollapsed()}
-          bg="darkblue"
-          _hover={{ bg: "gray.500", color: "surface" }}
+          bg="darklue"
+          _hover={{ bg: "gray.500", color: "darklue" }}
           color={"text"}
         >
           {collapsed ? <ChevronRight /> : <ChevronLeft />}
