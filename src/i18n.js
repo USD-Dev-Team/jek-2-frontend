@@ -15,6 +15,19 @@ const resources = {
         language: "Til",
         noAccount: "Akkaunt yo'qmi?",
         forgotPassword: "Parolni unutdingizmi?",
+
+        placeholders: { phone: "Nomerni kiriting", password: "Parolni kiriting" },
+        errors: {
+          loginRequired: "Login kiritilmadi",
+          passwordRequired: "Parol kiritilmadi",
+          passwordMin: "Parol kamida {{min}} belgidan iborat bo'lishi kerak"
+        },
+        toasts: {
+          success: "Muvaffaqiyatli",
+          welcomeBoss: "Muvaffaqiyatli, hush kelibsiz!",
+          roleMismatch: "Role mos kelmadi",
+          systemError: "Tizim xatosi"
+        }
       },
 
       register: {
@@ -62,8 +75,8 @@ const resources = {
           passwordCase: "Parolda katta va kichik harf bo‘lishi shart",
 
           confirmRequired: "Tasdiq kiritilmadi!",
-          confirmMatch: "Tasdiq parol bilan bir xil bo'lishi kerak",
-        },
+          confirmMatch: "Tasdiq parol bilan bir xil bo'lishi kerak"
+        }
       },
 
       dashboard: {
@@ -93,7 +106,7 @@ const resources = {
           rank: "#",
           employee: "Hodim",
           region: "Hudud",
-          done: "Bajarildi",
+          done: "Bajarildi"
         },
 
         region: {
@@ -101,7 +114,7 @@ const resources = {
           samarkand: "Samarqand",
           fergana: "Farg‘ona",
           andijan: "Andijon",
-          bukhara: "Buxoro",
+          bukhara: "Buxoro"
         },
 
         months: {
@@ -116,7 +129,7 @@ const resources = {
           sep: "Sen",
           oct: "Okt",
           nov: "Noy",
-          dec: "Dek",
+          dec: "Dek"
         },
 
         weeklyHeatmap: "Haftalik faollik xaritasi",
@@ -135,15 +148,15 @@ const resources = {
           sun: "Ya",
           low: "Kam",
           high: "Ko'p",
-          countSuffix: "ta",
-        },
+          countSuffix: "ta"
+        }
       },
 
       nav: {
         dashboard: "Boshqaruv paneli",
         appeals: "Murojaatlar",
         employees: "Hodimlar",
-        jekEmployees: "JEK hodimlari",
+        jekEmployees: "JEK hodimlari"
       },
 
       common: {
@@ -163,18 +176,18 @@ const resources = {
         table: "Jadval",
         status: "Status",
         actions: "Amallar",
+        loading: "Yuklanmoqda...",
 
-
-        // ✅ qo‘shildi
         all: "Hammasi",
         day: "kun",
         notFound: "Topilmadi",
 
+        // agar biror joyda common.languages ishlatilsa ham ishlaydi
         languages: {
           uz: "O'zbekcha",
           en: "English",
-          ru: "Русский",
-        },
+          ru: "Русский"
+        }
       },
 
       appeals: {
@@ -210,10 +223,9 @@ const resources = {
           type: "Murojaat turi",
           startedAt: "Boshlangan sana",
           endedAt: "Tugagan sana",
-          note: "Tavsif",
+          note: "Tavsif"
         },
 
-        // ✅ qo‘shildi (Murojatlar.jsx uchun)
         clearFilters: "Filterlarni tozalash",
         employee: "Hodim",
         duration: "Davomiyligi",
@@ -221,6 +233,10 @@ const resources = {
         notFinished: "Tugamagan",
         noNote: "Izoh yo'q",
         photo: "Rasm",
+        table: {
+          applicant: "Arizachi",
+          createdAt: "Yaratilgan sana"
+        }
       },
 
       jekEmployees: {
@@ -256,9 +272,17 @@ const resources = {
 
         employee: "Hodim",
         noData: "Ma'lumot yo'q",
-        notFound: "Hodim topilmadi",
+        notFound: "Hodim topilmadi"
       },
-    },
+
+      // ✅ root languages (Login menu uchun)
+      languages: {
+        uz: "O'zbekcha",
+        en: "English",
+        ru: "Русский",
+        short: { uz: "O'z", en: "En", ru: "Ru" }
+      }
+    }
   },
 
   en: {
@@ -266,13 +290,26 @@ const resources = {
       login: {
         title: "Login",
         subtitle: "Enter your credentials",
-        login: "Username",
+        login: "Phone number",
         password: "Password",
         button: "Sign in",
         loading: "Loading...",
         language: "Language",
         noAccount: "Don't have an account?",
         forgotPassword: "Forgot password?",
+
+        placeholders: { phone: "Enter phone number", password: "Enter password" },
+        errors: {
+          loginRequired: "Phone number is required",
+          passwordRequired: "Password is required",
+          passwordMin: "Password must be at least {{min}} characters"
+        },
+        toasts: {
+          success: "Successfully",
+          welcomeBoss: "Successfully, welcome!",
+          roleMismatch: "Role did not match",
+          systemError: "System error"
+        }
       },
 
       register: {
@@ -320,8 +357,8 @@ const resources = {
           passwordCase: "Password must include uppercase and lowercase letters",
 
           confirmRequired: "Confirmation is required",
-          confirmMatch: "Confirmation must match the password",
-        },
+          confirmMatch: "Confirmation must match the password"
+        }
       },
 
       dashboard: {
@@ -351,7 +388,7 @@ const resources = {
           rank: "#",
           employee: "Employee",
           region: "Region",
-          done: "Done",
+          done: "Done"
         },
 
         region: {
@@ -359,7 +396,7 @@ const resources = {
           samarkand: "Samarkand",
           fergana: "Fergana",
           andijan: "Andijan",
-          bukhara: "Bukhara",
+          bukhara: "Bukhara"
         },
 
         months: {
@@ -374,7 +411,7 @@ const resources = {
           sep: "Sep",
           oct: "Oct",
           nov: "Nov",
-          dec: "Dec",
+          dec: "Dec"
         },
 
         weeklyHeatmap: "Weekly activity heatmap",
@@ -393,15 +430,15 @@ const resources = {
           sun: "Sun",
           low: "Low",
           high: "High",
-          countSuffix: "items",
-        },
+          countSuffix: "items"
+        }
       },
 
       nav: {
         dashboard: "Dashboard",
         appeals: "Appeals",
         employees: "Employees",
-        jekEmployees: "JEK employees",
+        jekEmployees: "JEK employees"
       },
 
       common: {
@@ -421,8 +458,8 @@ const resources = {
         close: "Close",
         status: "Status",
         actions: "Actions",
+        loading: "Loading...",
 
-        // ✅ qo‘shildi
         all: "All",
         day: "day(s)",
         notFound: "Not found",
@@ -430,8 +467,8 @@ const resources = {
         languages: {
           uz: "Uzbek",
           en: "English",
-          ru: "Russian",
-        },
+          ru: "Russian"
+        }
       },
 
       appeals: {
@@ -467,10 +504,9 @@ const resources = {
           type: "Request type",
           startedAt: "Start date",
           endedAt: "End date",
-          note: "Description",
+          note: "Description"
         },
 
-        // ✅ qo‘shildi (Murojatlar.jsx uchun)
         clearFilters: "Clear filters",
         employee: "Employee",
         duration: "Duration",
@@ -478,6 +514,10 @@ const resources = {
         notFinished: "Not finished",
         noNote: "No note",
         photo: "Photo",
+        table: {
+          applicant: "Applicant",
+          createdAt: "Created at"
+        }
       },
 
       jekEmployees: {
@@ -513,9 +553,16 @@ const resources = {
 
         employee: "Employee",
         noData: "No data",
-        notFound: "Employee not found",
+        notFound: "Employee not found"
       },
-    },
+
+      languages: {
+        uz: "Uzbek",
+        en: "English",
+        ru: "Russian",
+        short: { uz: "UZ", en: "EN", ru: "RU" }
+      }
+    }
   },
 
   ru: {
@@ -523,13 +570,26 @@ const resources = {
       login: {
         title: "Вход",
         subtitle: "Введите данные",
-        login: "Логин",
+        login: "Номер телефона",
         password: "Пароль",
         button: "Войти",
         loading: "Загрузка...",
         language: "Язык",
         noAccount: "Нет аккаунта?",
         forgotPassword: "Забыли пароль?",
+
+        placeholders: { phone: "Введите номер телефона", password: "Введите пароль" },
+        errors: {
+          loginRequired: "Номер телефона не введён",
+          passwordRequired: "Пароль не введён",
+          passwordMin: "Пароль должен быть не менее {{min}} символов"
+        },
+        toasts: {
+          success: "Успешно",
+          welcomeBoss: "Успешно, добро пожаловать!",
+          roleMismatch: "Роль не совпала",
+          systemError: "Системная ошибка"
+        }
       },
 
       register: {
@@ -577,8 +637,8 @@ const resources = {
           passwordCase: "Пароль должен содержать большие и маленькие буквы",
 
           confirmRequired: "Подтверждение не введено",
-          confirmMatch: "Подтверждение должно совпадать с паролем",
-        },
+          confirmMatch: "Подтверждение должно совпадать с паролем"
+        }
       },
 
       dashboard: {
@@ -608,7 +668,7 @@ const resources = {
           rank: "№",
           employee: "Сотрудник",
           region: "Регион",
-          done: "Выполнено",
+          done: "Выполнено"
         },
 
         region: {
@@ -616,7 +676,7 @@ const resources = {
           samarkand: "Самарканд",
           fergana: "Фергана",
           andijan: "Андижан",
-          bukhara: "Бухара",
+          bukhara: "Бухара"
         },
 
         months: {
@@ -631,7 +691,7 @@ const resources = {
           sep: "Сен",
           oct: "Окт",
           nov: "Ноя",
-          dec: "Дек",
+          dec: "Дек"
         },
 
         weeklyHeatmap: "Тепловая карта недели",
@@ -650,19 +710,19 @@ const resources = {
           sun: "Вс",
           low: "Мало",
           high: "Много",
-          countSuffix: "шт.",
-        },
+          countSuffix: "шт."
+        }
       },
 
       nav: {
         dashboard: "Панель",
         appeals: "Обращения",
         employees: "Сотрудники",
-        jekEmployees: "Сотрудники ЖЭК",
+        jekEmployees: "Сотрудники ЖЭК"
       },
 
       common: {
-        card: "Карточки",
+        card: "Карточка",
         table: "Таблица",
         theme: "Тема",
         logout: "Выход",
@@ -678,8 +738,8 @@ const resources = {
         close: "Закрыть",
         status: "Статус",
         actions: "Действия",
+        loading: "Загрузка...",
 
-        // ✅ qo‘shildi
         all: "Все",
         day: "дн.",
         notFound: "Не найдено",
@@ -687,8 +747,8 @@ const resources = {
         languages: {
           uz: "Узбекский",
           en: "Английский",
-          ru: "Русский",
-        },
+          ru: "Русский"
+        }
       },
 
       appeals: {
@@ -724,10 +784,9 @@ const resources = {
           type: "Тип обращения",
           startedAt: "Дата начала",
           endedAt: "Дата окончания",
-          note: "Описание",
+          note: "Описание"
         },
 
-        // ✅ qo‘shildi (Murojatlar.jsx uchun)
         clearFilters: "Очистить фильтры",
         employee: "Сотрудник",
         duration: "Длительность",
@@ -735,6 +794,11 @@ const resources = {
         notFinished: "Не завершено",
         noNote: "Нет комментария",
         photo: "Фото",
+
+        table: {
+          applicant: "Заявитель",
+          createdAt: "Дата создания"
+        },
       },
 
       jekEmployees: {
@@ -770,10 +834,17 @@ const resources = {
 
         employee: "Сотрудник",
         noData: "Нет данных",
-        notFound: "Сотрудник не найден",
+        notFound: "Сотрудник не найден"
       },
-    },
-  },
+
+      languages: {
+        uz: "Узбекский",
+        en: "Английский",
+        ru: "Русский",
+        short: { uz: "UZ", en: "EN", ru: "RU" }
+      }
+    }
+  }
 };
 
 const savedLng = localStorage.getItem("lng");
@@ -783,7 +854,7 @@ i18n.use(initReactI18next).init({
   lng: savedLng || "uz",
   fallbackLng: "uz",
   supportedLngs: ["uz", "en", "ru"],
-  interpolation: { escapeValue: false },
+  interpolation: { escapeValue: false }
 });
 
 i18n.on("languageChanged", (lng) => {

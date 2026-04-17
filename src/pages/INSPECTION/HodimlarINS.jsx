@@ -34,6 +34,8 @@ import {
   Th,
   Thead,
   Tr,
+  Grid,
+  SimpleGrid,
 } from "@chakra-ui/react";
 
 import {
@@ -232,11 +234,15 @@ export default function HodimlarINS() {
 
   const empDistrict = (emp) => emp?.addresses?.[0]?.address?.district || "-";
   const empMahalla = (emp) => emp?.addresses?.[0]?.address?.neighborhood || "-";
+  const maxRow = hodim?.length
+  console.log(maxRow);
+
+
 
   return (
-    <Box>
+    <Box mb={10}>
       {/* FILTERS */}
-      <Flex mb={4} alignItems="center" justify={'center'} direction={'column'} gap={3} wrap="wrap" w={'100%'}>
+      <Flex mb={4} alignItems="center" justify={'center'} direction={'column'} my={5} gap={3} wrap="wrap" w={'100%'}>
         <HStack w={'100%'}>
           {/* ISM */}
           <InputGroup w={'100%'}>
@@ -361,21 +367,54 @@ export default function HodimlarINS() {
 
       {/* STATISTIKA */}
       <Flex gap={5} mb={5} wrap="wrap">
-        <VStack w={'auto'} bg="surface" rounded={10} p={5} align="start">
+        <VStack
+          w={'auto'}
+          bg={cardBg}
+          backgroundImage={cardGradient}
+          border={cardBorder}
+          borderRadius="16px"
+          align="start"
+          p={5}
+          boxShadow={cardShadow}
+          transition="0.2s"
+          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+        >
           <Heading color="warning">{onlyJek.length}</Heading>
           <Text display="flex" justify="center" gap={2}>
             <Users /> {t("jekEmployees.totalEmployees")} :
           </Text>
         </VStack>
 
-        <VStack w={'auto'} bg="surface" rounded={10} p={5} align="start">
+        <VStack
+          w={'auto'}
+          bg={cardBg}
+          backgroundImage={cardGradient}
+          border={cardBorder}
+          borderRadius="16px"
+          align="start"
+          p={5}
+          boxShadow={cardShadow}
+          transition="0.2s"
+          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+        >
           <Heading color="success">{activeJek}</Heading>
           <Text display="flex" justify="center" gap={2}>
             <Users /> {t("jekEmployees.totalActiveEmployees")} :
           </Text>
         </VStack>
 
-        <VStack w={'auto'} bg="surface" rounded={10} p={5} align="start">
+        <VStack
+          w={'auto'}
+          bg={cardBg}
+          backgroundImage={cardGradient}
+          border={cardBorder}
+          borderRadius="16px"
+          align="start"
+          p={5}
+          boxShadow={cardShadow}
+          transition="0.2s"
+          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+        >
           <Heading color="danger">{noActiveJek}</Heading>
           <Text display="flex" justify="center" gap={2}>
             <Users /> {t("jekEmployees.totalInactiveEmployees")} :
@@ -385,13 +424,13 @@ export default function HodimlarINS() {
 
       {/* LIST */}
       {viewMode === "card" ? (
-        <Flex direction="column" gap={3}>
+        <Flex wrap={'wrap'} gap={3}>
           {loading ? (
-            <Flex direction="column" gap={3}>
-              {[1, 2, 3, 4, 5, 6].map((e) => (
-                <Skeleton key={e} h="130px" w="100%" rounded={10} />
+            <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} h="170px" borderRadius="16px" />
               ))}
-            </Flex>
+            </SimpleGrid>
           ) : onlyJek.length > 0 ? (
             onlyJek.map((emp) => {
               const isExpanded = expandedId === emp.id;
@@ -405,6 +444,7 @@ export default function HodimlarINS() {
                   borderRadius="16px"
                   px={7}
                   py={4}
+                  w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.66%'}
                   boxShadow={cardShadow}
                   transition="0.2s"
                   _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
@@ -416,24 +456,6 @@ export default function HodimlarINS() {
                       <Badge colorScheme={emp?.isActive ? "green" : "red"}>
                         {emp?.isActive ? t("jekEmployees.statusActive") : t("jekEmployees.statusInactive")}
                       </Badge>
-                    </HStack>
-
-                    <HStack>
-                      <Button
-                        size="sm"
-                        onClick={() => setExpandedId(isExpanded ? null : emp.id)}
-                        rightIcon={isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                      >
-                        {t("jekEmployees.details")}
-                      </Button>
-
-                      <HStack>
-                        <Text>{t("jekEmployees.toggle")}</Text>
-                        <Switch
-                          isChecked={!!emp?.isActive}
-                          onChange={(e) => openConfirm(emp, e.target.checked)}
-                        />
-                      </HStack>
                     </HStack>
                   </Flex>
 
@@ -449,6 +471,25 @@ export default function HodimlarINS() {
                     {empDistrict(emp)}, {empMahalla(emp)}
                   </Text>
 
+                  <Divider my={3} />
+                  <HStack>
+                    <Button
+                      size="sm"
+                      onClick={() => setExpandedId(isExpanded ? null : emp.id)}
+                      rightIcon={isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    >
+                      {t("jekEmployees.details")}
+                    </Button>
+
+                    <HStack>
+                      <Text>{t("jekEmployees.toggle")}</Text>
+                      <Switch
+                        isChecked={!!emp?.isActive}
+                        onChange={(e) => openConfirm(emp, e.target.checked)}
+                      />
+                    </HStack>
+                  </HStack>
+
                   {/* COLLAPSE */}
                   <Collapse in={isExpanded} animateOpacity>
                     <Box mt={3}>
@@ -462,8 +503,8 @@ export default function HodimlarINS() {
               );
             })
           ) : (
-            <Text color="red.400" fontSize={22}>
-              {t("appeals.notFound")}
+            <Text my={3} mx={'auto'} color="text" fontSize={23}>
+              {t("jekEmployees.notFound")}
             </Text>
           )}
         </Flex>
@@ -473,6 +514,7 @@ export default function HodimlarINS() {
           border={cardBorder}
           borderRadius="16px"
           boxShadow={cardShadow}
+          backgroundImage={cardGradient}
           overflowX="auto"
         >
           <Table size="sm" variant="simple">
@@ -482,7 +524,7 @@ export default function HodimlarINS() {
                 <Th>{t("common.status")}</Th>
                 <Th>{t("jekEmployees.phone")}</Th>
                 <Th>{t("jekEmployees.areaCol")}</Th>
-                <Th textAlign="right">{t("common.actions")}</Th>
+                <Th textAlign="center">{t("common.actions")}</Th>
               </Tr>
             </Thead>
 
@@ -556,7 +598,7 @@ export default function HodimlarINS() {
               ) : (
                 <Tr>
                   <Td colSpan={5}>
-                    <Text color="red.400" fontSize={18}>
+                    <Text my={3} textAlign={'center'} color="text" fontSize={23}>
                       {t("jekEmployees.notFound")}
                     </Text>
                   </Td>

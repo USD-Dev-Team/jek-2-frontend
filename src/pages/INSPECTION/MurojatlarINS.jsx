@@ -34,6 +34,8 @@ import {
   Td,
   TableContainer,
   ButtonGroup,
+  Grid,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { LayoutGrid, Search, Table2, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -58,11 +60,11 @@ export default function Murojatlar() {
   const [ariza, setAriza] = useState([]);
   const [korish, setKorish] = useState(null);
 
-  const today = new Date().toISOString().split("T")[0];
+
 
   const [form, setForm] = useState({
-    startData: today,
-    endData: today,
+    startData: null,
+    endData: null,
     status: "",
     search: "",
     tuman: "",
@@ -115,8 +117,8 @@ export default function Murojatlar() {
 
   const resetForm = () => {
     setForm({
-      startData: today,
-      endData: today,
+      startData: null,
+      endData: null,
       status: "",
       search: "",
       tuman: "",
@@ -163,7 +165,6 @@ export default function Murojatlar() {
 
   useEffect(() => {
     getAriza(debouncedQuery);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     form.startData,
     form.endData,
@@ -191,11 +192,18 @@ export default function Murojatlar() {
 
   const rowHoverBg = useColorModeValue("gray.50", "whiteAlpha.50");
 
+  const maxRow = ariza?.length
+
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(15)
+  const [totalPages, setTotalPages] = useState(1)
+
+
   return (
     <Box>
       {/* FILTERS */}
       <Flex
-        mb={4}
+        my={5}
         alignItems="center"
         justify="center"
         direction="column"
@@ -317,13 +325,13 @@ export default function Murojatlar() {
 
       {/* LIST */}
       {viewMode === "card" ? (
-        <Flex flexDirection="column" gap={3}>
+        <Flex wrap={'wrap'} gap={3}>
           {loading ? (
-            <Flex direction="column" gap={3}>
-              {[1, 2, 3, 4, 5, 6].map((e) => (
-                <Skeleton key={e} h="130px" w="100%" rounded={10} />
+            <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} h="335px" borderRadius="16px" />
               ))}
-            </Flex>
+            </SimpleGrid>
           ) : ariza?.length > 0 ? (
             ariza.map((item) => {
               const days = calculateDays(item.createdAt, item.completedAt);
@@ -337,6 +345,7 @@ export default function Murojatlar() {
                   borderRadius="16px"
                   px={7}
                   py={4}
+                  w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.66%'}
                   boxShadow={cardShadow}
                   transition="0.2s"
                   _hover={{
@@ -344,7 +353,8 @@ export default function Murojatlar() {
                     boxShadow: cardShadowHover,
                   }}
                 >
-                  <Flex align="start" justify="space-between">
+
+                  <VStack align={'start'}>
                     <HStack alignItems="center">
                       <Text mb={2} fontWeight="semibold">
                         {item.request_number}
@@ -355,7 +365,7 @@ export default function Murojatlar() {
                       </Badge>
                     </HStack>
 
-                    <VStack align="end" spacing={1}>
+                    <VStack align="start" spacing={1}>
                       <Text fontWeight="bold">
                         <span style={{ fontWeight: "normal" }}>
                           {t("appeals.employee")}:
@@ -378,14 +388,15 @@ export default function Murojatlar() {
                         <span style={{ fontWeight: "normal" }}>
                           {t("appeals.area")}:
                         </span>{" "}
-                        {`${item?.address?.district || "-"} , ${
-                          item?.address?.neighborhood || "-"
-                        }`}
+                        {`${item?.address?.district || "-"} , ${item?.address?.neighborhood || "-"
+                          }`}
                       </Text>
                     </VStack>
-                  </Flex>
+                  </VStack>
 
-                  <Divider mb={3} mt={2} h="1px" bg="gray.200" opacity={0.6} />
+
+
+                  <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
 
                   <Flex alignItems="start" justifyContent="space-between">
                     <VStack alignItems="start" spacing={1}>
@@ -395,16 +406,16 @@ export default function Murojatlar() {
                       </HStack>
                       <Text>{formatDateTime(item.createdAt)}</Text>
                     </VStack>
-
-                    <Button onClick={() => openKorishModal(item)}>
-                      {t("common.view")}
-                    </Button>
                   </Flex>
+                  <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
+                  <Button onClick={() => openKorishModal(item)}>
+                    {t("common.view")}
+                  </Button>
                 </Box>
               );
             })
           ) : (
-            <Text color="red.400" fontSize={22}>
+            <Text my={3} mx={'auto'} color="text" fontSize={23}>
               {t("appeals.notFound")}
             </Text>
           )}
@@ -416,6 +427,7 @@ export default function Murojatlar() {
           borderRadius="16px"
           boxShadow={cardShadow}
           overflowX="auto"
+          backgroundImage={cardGradient}
         >
           <Table size="sm" variant="simple">
             <Thead position="sticky" top={0} bg={cardBg} zIndex={1}>
@@ -487,7 +499,7 @@ export default function Murojatlar() {
               ) : (
                 <Tr>
                   <Td colSpan={9}>
-                    <Text color="red.400" fontSize={18}>
+                    <Text my={3} textAlign={'center'} color="text" fontSize={18}>
                       {t("appeals.notFound")}
                     </Text>
                   </Td>
@@ -497,6 +509,27 @@ export default function Murojatlar() {
           </Table>
         </TableContainer>
       )}
+
+      {/*PAGINATION */}
+      <Flex mb={10} mt={5} justifyContent="center" alignItems="center" gap={3}>
+        <Button
+          onClick={() => setPage(prev => prev - 1)}
+          isDisabled={page === 1}
+        >
+          Prev
+        </Button>
+
+        <Text>
+          {page} / {totalPages}
+        </Text>
+
+        <Button
+          onClick={() => setPage(prev => prev + 1)}
+          isDisabled={page === totalPages}
+        >
+          Next
+        </Button>
+      </Flex>
 
       {/* KORISH_MODAL */}
       <Modal isOpen={korishModal.isOpen} onClose={korishModal.onClose}>
@@ -552,22 +585,40 @@ export default function Murojatlar() {
 
             <Divider mb={4} mt={6} />
 
-            <Flex gap={4} align="center">
-              <Text fontWeight="bold" color="#778092">
+            <Flex gap={4} align="start">
+              <Text fontWeight="bold" color="#778092" minW="70px">
                 {t("appeals.photo")} :
               </Text>
 
-              <Box border="2px dashed" borderColor="gray.300" borderRadius="xl" p={3}>
-                <Image
-                  borderRadius="lg"
-                  w={150}
-                  src={
-                    korish?.requestPhotos?.length
-                      ? `${IMAGE_URL}${korish.requestPhotos[0].file_url}`
-                      : "/no-image.png"
-                  }
-                  alt={t("appeals.photo")}
-                />
+              <Box flex="1" overflowX="auto" overflowY="hidden" pb="2">
+                <HStack spacing={3} align="stretch" w="max-content">
+                  {korish?.requestPhotos?.length ? (
+                    korish.requestPhotos.map((r) => (
+                      <Box
+                        key={r.id}
+                        flexShrink={0}
+                        w="180px"
+                        h="240px"
+                        border="2px dashed"
+                        borderColor="gray.300"
+                        borderRadius="xl"
+                        p={2}
+                        bg="transparent"
+                      >
+                        <Image
+                          w="100%"
+                          h="100%"
+                          borderRadius="lg"
+                          objectFit="contain"
+                          src={r?.file_url ? `${IMAGE_URL}${r.file_url}` : "/no-image.png"}
+                          alt={t("appeals.photo")}
+                        />
+                      </Box>
+                    ))
+                  ) : (
+                    <Text color="gray.500">{t("appeals.notFound")}</Text>
+                  )}
+                </HStack>
               </Box>
             </Flex>
           </ModalBody>
