@@ -44,8 +44,8 @@ export default function Murojatlar() {
 
   //UX states
   const [form, setForm] = useState({
-    startData: new Date().toISOString().split("T")[0],
-    endData: new Date().toISOString().split("T")[0],
+    startData: null,
+    endData: null,
     status: '' || null,
     search: ""
   })
@@ -141,8 +141,8 @@ export default function Murojatlar() {
   //RESETFORM
   const resetForm = () => {
     setForm({
-      startData: new Date().toISOString().split("T")[0],
-      endData: new Date().toISOString().split("T")[0],
+      startData: null,
+      endData: null,
       status: '',
       search: ""
     });
