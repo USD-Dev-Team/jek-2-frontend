@@ -38,7 +38,7 @@ export default function Sidebar({ collapsed, links = [], role, end = false }) {
       position="fixed"
       w={collapsed ? "70px" : "220px"}
       minH="100vh"
-      bg="surface"
+      bg="darkblue"
       color="text"
       direction="column"
       justify="space-between"
@@ -77,7 +77,7 @@ export default function Sidebar({ collapsed, links = [], role, end = false }) {
           borderRadius="full"
           borderRightRadius={0}
           onClick={() => setCollapsed()}
-          bg="surface"
+          bg="darkblue"
           _hover={{ bg: "gray.500", color: "surface" }}
           color={"text"}
         >

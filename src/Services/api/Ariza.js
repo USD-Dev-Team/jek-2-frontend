@@ -26,10 +26,25 @@ class apiAriza {
         const response = await $api.patch(`${BASE_URL}/requests/assign/${id}`)
         return response;
     }
-    static Tugatildi = async (id, note, img) => {
-        const response = await $api.patch(`${BASE_URL}/requests/complete/${id}`, { note: note })
-        return response;
-    }
+    static Tugatildi = async (id, note, file) => {
+    const formData = new FormData();
+
+    formData.append("note", note);
+    formData.append("photos", file); // 🔥 MUHIM
+
+    const response = await $api.patch(
+        `${BASE_URL}/requests/complete/${id}`,
+        formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        }
+    );
+
+    return response;
+}
+
     // static RadEtish = async (id , reason) => {
     //     const response = await $api.patch(`${BASE_URL}/requests/reject/${id}` , {reason: reason})
     //     return response;
