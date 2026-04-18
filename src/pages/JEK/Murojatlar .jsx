@@ -1,5 +1,5 @@
 import { Badge, Box, Button, ButtonGroup, Checkbox, Divider, useColorModeValue, Flex, Heading, HStack, Icon, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Skeleton, Table, TableContainer, Tbody, Td, Text, Textarea, Th, Thead, Tr, useDisclosure, VStack, SimpleGrid } from '@chakra-ui/react'
-import { LayoutGrid, Search, Table2, Trash2, UploadCloud, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, LayoutGrid, Search, Table2, Trash2, UploadCloud, X } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { apiAriza } from '../../Services/api/Ariza'
 import { formatDateTime } from '../../utils/tools/formatDateTime'
@@ -61,6 +61,8 @@ export default function Murojatlar() {
       const res = await apiAriza.getFilteredRequest(
         form.startData,
         form.endData,
+        // form.startData.value ? form.startData : null,
+        // form.endData.value ? form.endData : null,
         Cookies.get('district'),
         Cookies.get('neighborhood'),
         form.status,
@@ -147,7 +149,7 @@ export default function Murojatlar() {
   //RESETFORM
   const resetForm = () => {
     setForm({
-      startData: null,
+      startData: null || '',
       endData: null,
       status: '',
       search: ""
@@ -208,7 +210,14 @@ export default function Murojatlar() {
 
   return (
     <div>
-      <Flex my={5} alignItems={'center'} justifyContent={'space-between'} gap={5}>
+      <Flex
+        my={5}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+        gap={5} bg={cardBg}
+        p={5}
+        rounded={'16px'}
+        backgroundImage={cardGradient}>
         {/* SEARCH */}
         <InputGroup w={'40%'}>
           <InputLeftElement ml={2} w={'25px'} as={Search} />
@@ -394,7 +403,10 @@ export default function Murojatlar() {
               )
             })
             : (form.search.trim() || ariza.status !== form.status || ariza.createdAt !== form.startData || ariza.completedAt !== form.endData
-              ? <Text color={'red'} fontSize={22}>{t("appeals.notFound")}</Text>
+              ? (
+
+                <Text my={3} mx={'auto'} color="text" fontSize={18}>{t("appeals.notFound")}</Text>
+              )
               : ''))}
         </Flex>
       ) :
@@ -500,7 +512,7 @@ export default function Murojatlar() {
                 ) : (
                   <Tr>
                     <Td colSpan={9}>
-                      <Text color="red.400" fontSize={18}>
+                      <Text my={3} textAlign={'center'} color="text" fontSize={18}>
                         {t("appeals.notFound")}
                       </Text>
                     </Td>
@@ -512,25 +524,31 @@ export default function Murojatlar() {
       }
 
       {/*PAGINATION */}
-      <Flex mb={10} mt={5} justifyContent="center" alignItems="center" gap={3}>
-        <Button
-          onClick={() => setPage(prev => prev - 1)}
-          isDisabled={page === 1}
-        >
-          Prev
-        </Button>
+      {totalPages > 0 ? (
+        <Flex mb={10} mt={5} justifyContent="center" alignItems="center" gap={3}>
+          <Button
+            onClick={() => setPage(prev => prev - 1)}
+            isDisabled={page === 1}
+          >
+            <ChevronLeft />
+          </Button>
 
-        <Text>
-          {page} / {totalPages}
-        </Text>
+          <Text>
+            {page} / {totalPages}
+          </Text>
 
-        <Button
-          onClick={() => setPage(prev => prev + 1)}
-          isDisabled={page === totalPages}
-        >
-          Next
-        </Button>
-      </Flex>
+          <Button
+            onClick={() => setPage(prev => prev + 1)}
+            isDisabled={page === totalPages}
+          >
+            <ChevronRight />
+          </Button>
+        </Flex>
+      )
+        :
+        (
+      ''
+    )}
 
       {/*PENDING_MODAL */}
       <Modal isOpen={pendingModal.isOpen} onClose={pendingModal.onClose} isCentered>

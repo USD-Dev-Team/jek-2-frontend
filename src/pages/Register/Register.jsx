@@ -156,7 +156,7 @@ export default function Register() {
   const langLabel = langMap[i18n.language] ?? (i18n.language || "").toUpperCase();
 
   return (
-    <Flex minH="100vh" align="center" justify="center" bg="bg" px={4}>
+    <Flex minH="100vh" align="center" justify="center" bg="bg" px={4} my={10}>
       <Box
         as="form"
         onSubmit={handleSubmit}

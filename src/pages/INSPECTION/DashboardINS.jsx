@@ -419,7 +419,7 @@ export default function Dashboard() {
   }, [data]);
 
   return (
-    <Box mt={3}>
+    <Box mt={3} mb={10}>
       <Box {...cardShell} mb={4} opacity={loading ? 0.7 : 1}>
         <Stack direction={{ base: "column", lg: "row" }} justify="space-between" spacing={4}>
           <Box>
