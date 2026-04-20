@@ -1,15 +1,17 @@
-import { Badge, Box, Button, ButtonGroup, Checkbox, Divider, useColorModeValue, Flex, Heading, HStack, Icon, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Skeleton, Table, TableContainer, Tbody, Td, Text, Textarea, Th, Thead, Tr, useDisclosure, VStack, SimpleGrid } from '@chakra-ui/react'
-import { LayoutGrid, Search, Table2, Trash2, UploadCloud, X } from 'lucide-react'
+import { Badge, Box, Button, ButtonGroup, Checkbox, Divider, useColorModeValue, Flex, Heading, HStack, Icon, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Skeleton, Table, TableContainer, Tbody, Td, Text, Textarea, Th, Thead, Tr, useDisclosure, VStack, SimpleGrid, IconButton } from '@chakra-ui/react'
+import { ChevronLeft, ChevronRight, LayoutGrid, Maximize2, Search, Table2, Trash2, UploadCloud, X } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { apiAriza } from '../../Services/api/Ariza'
 import { formatDateTime } from '../../utils/tools/formatDateTime'
 import { useTranslation } from "react-i18next";
 import { IMAGE_URL } from '../../constants/imageUrl'
 import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router'
 
 
 export default function Murojatlar() {
   const { t } = useTranslation();
+  const navigate = useNavigate
 
   const Statuses = {
     '': t("appeals.statusAll"),
@@ -59,8 +61,8 @@ export default function Murojatlar() {
     try {
       setLoading(true)
       const res = await apiAriza.getFilteredRequest(
-        form.startData,
-        form.endData,
+        form.startData || null,
+        form.endData || null,
         Cookies.get('district'),
         Cookies.get('neighborhood'),
         form.status,
@@ -91,64 +93,64 @@ export default function Murojatlar() {
     setPage(1)
   }, [form.status, form.startData, form.endData, debouncedQwery])
 
-  //openPendingModal
-  const openPendingModal = (item) => {
-    korishModal.onClose()
-    pendingModal.onOpen()
-    setSavingAriza(item)
-  }
+  // //openPendingModal
+  // const openPendingModal = (item) => {
+  //   korishModal.onClose()
+  //   pendingModal.onOpen()
+  //   setSavingAriza(item)
+  // }
 
-  //Kutilmoqda
-  const Kutilmoqda = async () => {
-    try {
-      setSave(true)
-      const res = await apiAriza.Kutilmoqda(savingAriza.id)
-      pendingModal.onClose()
-      korishModal.onClose()
-      getAriza()
-      setSavingAriza(null)
-    } finally {
-      setSave(false)
-    }
-  }
+  // //Kutilmoqda
+  // const Kutilmoqda = async () => {
+  //   try {
+  //     setSave(true)
+  //     const res = await apiAriza.Kutilmoqda(savingAriza.id)
+  //     pendingModal.onClose()
+  //     korishModal.onClose()
+  //     getAriza()
+  //     setSavingAriza(null)
+  //   } finally {
+  //     setSave(false)
+  //   }
+  // }
 
-  //Tugatildi
-  const Tugatildi = async () => {
-    try {
-      setSave(true);
-      await apiAriza.Tugatildi(savingAriza.id, comment, selectedFile);
+  // //Tugatildi
+  // const Tugatildi = async () => {
+  //   try {
+  //     setSave(true);
+  //     await apiAriza.Tugatildi(savingAriza.id, comment, selectedFile);
 
-      tugatishModal.onClose();
-      setSavingAriza(null);
-      getAriza();
-      setComment("");
-      setSelectedFile(null);
-      setImage(null);
-      if (fileRef.current) fileRef.current.value = "";
-    } finally {
-      setSave(false);
-    }
-  };
+  //     tugatishModal.onClose();
+  //     setSavingAriza(null);
+  //     getAriza();
+  //     setComment("");
+  //     setSelectedFile(null);
+  //     setImage(null);
+  //     if (fileRef.current) fileRef.current.value = "";
+  //   } finally {
+  //     setSave(false);
+  //   }
+  // };
 
-  //openKorishModal
-  const openKorishModal = (item) => {
-    const needAriza = ariza.find((i) => i.id === item.id)
-    setKorish(needAriza)
-    korishModal.onOpen()
-  }
+  // //openKorishModal
+  // const openKorishModal = (item) => {
+  //   const needAriza = ariza.find((i) => i.id === item.id)
+  //   setKorish(needAriza)
+  //   korishModal.onOpen()
+  // }
 
-  //handleFIle
-  const handleFile = (file) => {
-    if (!file) return;
-    setSelectedFile(file);
-    setImage(URL.createObjectURL(file));
-  };
+  // //handleFIle
+  // const handleFile = (file) => {
+  //   if (!file) return;
+  //   setSelectedFile(file);
+  //   setImage(URL.createObjectURL(file));
+  // };
 
   //RESETFORM
   const resetForm = () => {
     setForm({
-      startData: null,
-      endData: null,
+      startData: '',
+      endData: '',
       status: '',
       search: ""
     });
@@ -208,7 +210,14 @@ export default function Murojatlar() {
 
   return (
     <div>
-      <Flex my={5} alignItems={'center'} justifyContent={'space-between'} gap={5}>
+      <Flex
+        my={5}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+        gap={5} bg={cardBg}
+        p={5}
+        rounded={'16px'}
+        backgroundImage={cardGradient}>
         {/* SEARCH */}
         <InputGroup w={'40%'}>
           <InputLeftElement ml={2} w={'25px'} as={Search} />
@@ -394,7 +403,10 @@ export default function Murojatlar() {
               )
             })
             : (form.search.trim() || ariza.status !== form.status || ariza.createdAt !== form.startData || ariza.completedAt !== form.endData
-              ? <Text color={'red'} fontSize={22}>{t("appeals.notFound")}</Text>
+              ? (
+
+                <Text my={3} mx={'auto'} color="text" fontSize={18}>{t("appeals.notFound")}</Text>
+              )
               : ''))}
         </Flex>
       ) :
@@ -449,50 +461,16 @@ export default function Murojatlar() {
                         <Td>+{item?.user?.phoneNumber || "-"}</Td>
                         <Td>{formatDateTime(item.createdAt)}</Td>
 
-                        <Td textAlign="right">
-                          <HStack>
-                            {item.status === 'PENDING' &&
-                              <HStack>
-                                <Button
-                                  onClick={() => openKorishModal(item)}
-                                  bg={'blue.600'}
-                                  color='white'
-                                  _hover={{ bg: 'blue.400' }}
-                                >
-                                  {/* {t("common.startWork")} */}
-                                  {t("common.view")}
-                                </Button>
-                              </HStack>
-                            }
-
-                            {item.status === 'IN_PROGRESS' &&
-                              <HStack>
-                                <Button
-                                  bg={'green.600'}
-                                  _hover={{ bg: 'green.500' }}
-                                  onClick={() => {
-                                    tugatishModal.onOpen()
-                                    setSavingAriza(item)
-                                  }}
-                                  color='white'
-                                >
-                                  {t("common.finish")}
-                                </Button>
-                              </HStack>
-                            }
-
-                            {(item.status === 'JEK_COMPLETED' || item.status === 'COMPLETED' || item.status === 'REJECTED') &&
+                        <Td textAlign="right">  
                               <HStack>
                                 <Button
                                   onClick={() => {
-                                    openKorishModal(item)
+                                    
                                   }}
                                 >
                                   {t("common.view")}
                                 </Button>
                               </HStack>
-                            }
-                          </HStack>
                         </Td>
                       </Tr>
                     );
@@ -500,7 +478,7 @@ export default function Murojatlar() {
                 ) : (
                   <Tr>
                     <Td colSpan={9}>
-                      <Text color="red.400" fontSize={18}>
+                      <Text my={3} textAlign={'center'} color="text" fontSize={18}>
                         {t("appeals.notFound")}
                       </Text>
                     </Td>
@@ -512,28 +490,34 @@ export default function Murojatlar() {
       }
 
       {/*PAGINATION */}
-      <Flex mb={10} mt={5} justifyContent="center" alignItems="center" gap={3}>
-        <Button
-          onClick={() => setPage(prev => prev - 1)}
-          isDisabled={page === 1}
-        >
-          Prev
-        </Button>
+      {totalPages > 0 ? (
+        <Flex mb={10} mt={5} justifyContent="center" alignItems="center" gap={3}>
+          <Button
+            onClick={() => setPage(prev => prev - 1)}
+            isDisabled={page === 1}
+          >
+            <ChevronLeft />
+          </Button>
 
-        <Text>
-          {page} / {totalPages}
-        </Text>
+          <Text>
+            {page} / {totalPages}
+          </Text>
 
-        <Button
-          onClick={() => setPage(prev => prev + 1)}
-          isDisabled={page === totalPages}
-        >
-          Next
-        </Button>
-      </Flex>
+          <Button
+            onClick={() => setPage(prev => prev + 1)}
+            isDisabled={page === totalPages}
+          >
+            <ChevronRight />
+          </Button>
+        </Flex>
+      )
+        :
+        (
+          ''
+        )}
 
-      {/*PENDING_MODAL */}
-      <Modal isOpen={pendingModal.isOpen} onClose={pendingModal.onClose} isCentered>
+      {/* PENDING_MODAL */}
+      {/* <Modal isOpen={pendingModal.isOpen} onClose={pendingModal.onClose} isCentered>
         <ModalOverlay />
         <ModalContent display={'flex'} alignItems={'center'} flexDirection={'column'} maxW={'25vw'}>
           <ModalBody>
@@ -550,10 +534,10 @@ export default function Murojatlar() {
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
 
       {/*TUGATISH_MODAL */}
-      <Modal isOpen={tugatishModal.isOpen} onClose={tugatishModal.onClose} isCentered size="lg">
+      {/* <Modal isOpen={tugatishModal.isOpen} onClose={tugatishModal.onClose} isCentered size="lg">
         <ModalOverlay />
         <ModalContent borderRadius="2xl">
           <ModalHeader>{t("appeals.finishTitle")}</ModalHeader>
@@ -562,7 +546,7 @@ export default function Murojatlar() {
           <ModalBody>
             <VStack spacing={5}>
               {/* Upload area */}
-              <Box
+              {/* <Box
                 w="100%"
                 p={6}
                 border="2px dashed"
@@ -612,10 +596,10 @@ export default function Murojatlar() {
                   accept="image/*"
                   onChange={(e) => handleFile(e.target.files?.[0])}
                 />
-              </Box>
+              </Box> */}
 
               {/* Comment */}
-              <Box w="100%">
+              {/* <Box w="100%">
                 <Text mb={2} fontWeight="medium">
                   {t("appeals.commentLabel")} <span style={{ color: 'red' }}>*</span>
                 </Text>
@@ -630,9 +614,9 @@ export default function Murojatlar() {
                 </Text>
               </Box>
             </VStack>
-          </ModalBody>
+          </ModalBody> */}
 
-          <ModalFooter >
+          {/* <ModalFooter >
             <Button variant="outlinePrimary" mr={3} onClick={tugatishModal.onClose}>
               {t("common.cancel")}
             </Button>
@@ -645,13 +629,13 @@ export default function Murojatlar() {
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */} 
       {/* KORISH_MODAL */}
-      <Modal isOpen={korishModal.isOpen} onClose={korishModal.onClose}>
+      {/* <Modal isOpen={korishModal.isOpen} onClose={korishModal.onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalCloseButton />
           <ModalHeader>
+            <IconButton position={'absolute'} right={'20px'} icon={<Maximize2 size={'15px'} />} />
             <Text>{korish?.request_number}</Text>
             <Heading fontSize={'30px'} mb={0}>{korish?.user?.full_name}</Heading>
             <Text fontSize={'17px'} fontWeight={'light'} mb={3}>+{korish?.user?.phoneNumber}</Text>
@@ -665,9 +649,10 @@ export default function Murojatlar() {
               </Badge>
             </Text>
 
-            <Text mb={2} fontWeight={'bold'}>
-              <span style={{ color: '#778092' }}>{t("appeals.view.type")} :</span> {korish?.description}
-            </Text>
+            <VStack align={'start'} mb={2} >
+              <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.view.type")} :</span>
+              <Text fontWeight={'bold'}>{korish?.description}</Text>
+            </VStack>
 
             <Text mb={2} fontWeight={'bold'}>
               <span style={{ color: '#778092' }}>{t("appeals.view.startedAt")} :</span> {formatDateTime(korish?.createdAt)}
@@ -720,7 +705,7 @@ export default function Murojatlar() {
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
 
 
     </div >

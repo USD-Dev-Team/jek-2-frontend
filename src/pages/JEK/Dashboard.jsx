@@ -99,7 +99,7 @@ export default function Dashboard() {
       const res = await apiDashboard.DataGet(
         YEAR,
         Cookies.get("district"),
-        Cookies.get("user_id"),
+       null,
         Cookies.get("neighborhood")
       );
       setData(res?.data ?? null);
@@ -387,7 +387,7 @@ export default function Dashboard() {
   );
 
   return (
-    <Box mt={3}>
+    <Box mt={3} mb={10}>
       {/* KPI */}
       <Flex gap={3} mb={4}>
         {statCards.map((card) => (

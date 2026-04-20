@@ -242,7 +242,15 @@ export default function HodimlarINS() {
   return (
     <Box mb={10}>
       {/* FILTERS */}
-      <Flex mb={4} alignItems="center" justify={'center'} direction={'column'} my={5} gap={3} wrap="wrap" w={'100%'}>
+      <Flex
+        my={5}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+        gap={5} bg={cardBg}
+        p={5}
+        rounded={'16px'}
+        backgroundImage={cardGradient}
+      >
         <HStack w={'100%'}>
           {/* ISM */}
           <InputGroup w={'100%'}>
