@@ -27,23 +27,27 @@ class apiAriza {
         return response;
     }
     static Tugatildi = async (id, note, file) => {
-    const formData = new FormData();
+        const formData = new FormData();
 
-    formData.append("note", note);
-    formData.append("photos", file); // 🔥 MUHIM
+        formData.append("note", note);
+        formData.append("photos", file); // 🔥 MUHIM
 
-    const response = await $api.patch(
-        `${BASE_URL}/requests/complete/${id}`,
-        formData,
-        {
-            headers: {
-                "Content-Type": "multipart/form-data"
+        const response = await $api.patch(
+            `${BASE_URL}/requests/complete/${id}`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
             }
-        }
-    );
+        );
 
-    return response;
-}
+        return response;
+    }
+    static Muammo = async (id) => {
+        const response = await $api.get(`${BASE_URL}/requests/request/${id}`)
+        return response;
+    }
 
     // static RadEtish = async (id , reason) => {
     //     const response = await $api.patch(`${BASE_URL}/requests/reject/${id}` , {reason: reason})

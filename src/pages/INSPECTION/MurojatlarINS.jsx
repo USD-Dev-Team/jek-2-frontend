@@ -44,10 +44,12 @@ import { apiAriza } from "../../Services/api/Ariza";
 import { formatDateTime } from "../../utils/tools/formatDateTime";
 import adress from "../../constants/mahallas.json";
 import { IMAGE_URL } from "../../constants/imageUrl";
+import { useNavigate } from "react-router";
 
 export default function Murojatlar() {
   const { t, i18n } = useTranslation();
   const korishModal = useDisclosure();
+  const navigate = useNavigate()
 
   const lang = i18n.language || "uz";
   const addressData = adress?.[lang] ?? adress?.uz;
@@ -59,6 +61,8 @@ export default function Murojatlar() {
   const [loading, setLoading] = useState(false);
   const [ariza, setAriza] = useState([]);
   const [korish, setKorish] = useState(null);
+
+
 
 
 
@@ -408,7 +412,7 @@ export default function Murojatlar() {
                     </VStack>
                   </Flex>
                   <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
-                  <Button onClick={() => openKorishModal(item)}>
+                  <Button onClick={() => navigate(`${item?.id}`)}>
                     {t("common.view")}
                   </Button>
                 </Box>
@@ -489,7 +493,7 @@ export default function Murojatlar() {
                       <Td>{formatDateTime(item.createdAt)}</Td>
 
                       <Td textAlign="right">
-                        <Button size="sm" onClick={() => openKorishModal(item)}>
+                        <Button size="sm" onClick={() => navigate(`${item?.id}`)}>
                           {t("common.view")}
                         </Button>
                       </Td>
