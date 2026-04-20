@@ -220,7 +220,7 @@ const resources = {
         notFound: "Ariza mavjud emas",
         view: {
           status: "Holat",
-          type: "Murojaat turi",
+          type: "Murojaat xati",
           startedAt: "Boshlangan sana",
           endedAt: "Tugagan sana",
           note: "Tavsif"

@@ -1,5 +1,6 @@
 import Dashboard from "../pages/JEK/Dashboard";
 import Home from "../pages/JEK/Home";
+import Muammolar from "../pages/JEK/Muammolar";
 import Murojatlar from "../pages/JEK/Murojatlar ";
 
 const JekRoutes = [
@@ -17,6 +18,11 @@ const JekRoutes = [
         name:"murojat",
         path:'Murojatlar',
         element:<Murojatlar />
+    },
+    {
+        name:"Muammo",
+        path:'Murojatlar/:id',
+        element:<Muammolar />
     },
    
 ];
