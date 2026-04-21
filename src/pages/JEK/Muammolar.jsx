@@ -185,24 +185,35 @@ export default function Muammolar() {
             >
                 <Flex pb={10} w={'100%'} alignItems={'start'} justifyContent={'space-between'}>
                     <VStack w={'100%'} align={'start'} gap={1}>
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>Murojaatchi</span>
-                        <Text>{problem?.user?.full_name}</Text>
+                        <span style={{ color: '#778092', fontWeight: 'bold' }}>
+                            {t("appeals.applicant")}
+                        </span>                        <Text>{problem?.user?.full_name}</Text>
                         <Text>{formatPhone(problem?.user?.phoneNumber)}</Text>
                         <Divider w={'300px'} my={3} />
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>Manzil</span>
-                        <Text>{problem?.address?.district} , {problem?.address?.neighborhood}</Text>
-                        <Text><span style={{ color: '#778092' }}>Bino raqami : </span>{problem?.address?.building_number}</Text>
-                        <Text><span style={{ color: '#778092' }}>Honadon raqami : </span>{problem?.address?.apartment_number}</Text>
-                    </VStack>
+                        <span style={{ color: '#778092', fontWeight: 'bold' }}>
+                            {t("appeals.area")}
+                        </span>                        <Text>{problem?.address?.district} , {problem?.address?.neighborhood}</Text>
+                        <Text>
+                            <span style={{ color: '#778092' }}>
+                                {t("appeals.buildingNumber")}:
+                            </span>{" "}
+                            {problem?.address?.building_number}
+                        </Text>
+                        <Text>
+                            <span style={{ color: '#778092' }}>
+                                {t("appeals.apartmentNumber")}:
+                            </span>{" "}
+                            {problem?.address?.apartment_number}
+                        </Text>                    </VStack>
                     <VStack w={'100%'} align={'start'} gap={1}>
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>Biriktirilgan xodim</span>
+                        <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.employee")}</span>
                         <Text>{problem?.assigned_jek?.first_name} {problem?.assigned_jek?.last_name}</Text>
                         <Divider w={'300px'} mt={10} mb={3} />
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>Boshlangan sana</span>
+                        <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.view.startedAt")}</span>
                         <Text>{formatDateTime(problem?.createdAt)}</Text>
                         {
                             problem?.completedAt && <>
-                                <span style={{ color: '#778092', fontWeight: 'bold' }}>Tugatilgan sana</span>
+                                <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.view.endedAt")}</span>
                                 <Text>{formatDateTime(problem?.completedAt)}</Text>
                             </>
                         }
@@ -226,7 +237,7 @@ export default function Muammolar() {
                                     _hover={{ bg: 'yellow.600' }}
                                     onClick={() => pendingModal.onOpen()}
                                 >
-                                    Ishni boshlash
+                                    {t("appeals.view.endedAt")}
                                 </Button>
                             }
                             {
@@ -236,7 +247,7 @@ export default function Muammolar() {
                                     _hover={{ bg: "blue.800" }}
                                     onClick={() => tugatishModal.onOpen()}
                                 >
-                                    Tugatish
+                                    {t("common.finish")}
                                 </Button>
                             }
                             {
@@ -252,7 +263,7 @@ export default function Muammolar() {
                                     _hover={{ bg: "red.800" }}
                                     onClick={() => pendingModal.onOpen()}
                                 >
-                                    Qayta ko'rib chiqish
+                                    {t("appeals.review")}
                                 </Button>
                             }</>}
 
@@ -289,20 +300,20 @@ export default function Muammolar() {
                                 />
                             ))
                         ) : (
-                            <Text color={'#778092'} fontWeight='bold' >Rasm mavjud emas</Text>
+                            <Text color={'#778092'} fontWeight='bold' >{t("appeals.noPhoto")}</Text>
                         )}
                     </HStack>
                 </Box>
                 <Divider mb={10} />
                 <Flex align={'start'} direction={'column'} gap={50}>
                     <VStack align={'start'}>
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>Murajaat xati(Foyd.)</span>
+                        <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.userLetter")}</span>
                         <Text>{problem?.description}</Text>
                     </VStack>
                     {
                         problem?.note && <>
                             <VStack align={'start'}>
-                                <span style={{ color: '#778092', fontWeight: 'bold' }}>Izoh(JEK)</span>
+                                <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.jekNote")}</span>
                                 <Text>{problem?.note}</Text>
                             </VStack>
                         </>

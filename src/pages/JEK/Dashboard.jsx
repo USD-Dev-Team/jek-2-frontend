@@ -99,7 +99,7 @@ export default function Dashboard() {
       const res = await apiDashboard.DataGet(
         YEAR,
         Cookies.get("district"),
-       null,
+        null,
         Cookies.get("neighborhood")
       );
       setData(res?.data ?? null);

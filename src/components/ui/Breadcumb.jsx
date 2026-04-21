@@ -18,6 +18,7 @@ export default function Breadcumb() {
     appeals: "nav.appeals",
     murojatlar: "nav.appeals",
     hodimlar: "nav.jekEmployees",
+    account: "nav.account",
   };
 
   const crumbs = useMemo(() => {

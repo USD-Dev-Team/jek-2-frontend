@@ -360,7 +360,11 @@ export default function Murojatlar() {
                           </Badge>
                         </Td>
 
-                        <Td>{days !== null ? `${days} kun` : "Tugamagan"}</Td>
+                        <Td>
+                          {days !== null
+                            ? `${days} ${t("common.day")}`
+                            : t("appeals.notFinished")}
+                        </Td>
 
                         <Td>{item?.user?.full_name || "-"}</Td>
                         <Td>+{item?.user?.phoneNumber || "-"}</Td>

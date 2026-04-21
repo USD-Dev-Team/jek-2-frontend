@@ -52,9 +52,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import adress from "../../constants/mahallas.json";
 import { useTranslation } from "react-i18next";
 import { apiJekData } from "../../Services/api/Jekdata";
+import { useNavigate } from "react-router";
 
 export default function HodimlarINS() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate()
 
   // Select value doim string bo'ladi: "", "true", "false"
   const Statuses = {
@@ -235,8 +237,6 @@ export default function HodimlarINS() {
   const empDistrict = (emp) => emp?.addresses?.[0]?.address?.district || "-";
   const empMahalla = (emp) => emp?.addresses?.[0]?.address?.neighborhood || "-";
   const maxRow = hodim?.length
-  console.log(maxRow);
-
 
 
   return (
@@ -244,8 +244,7 @@ export default function HodimlarINS() {
       {/* FILTERS */}
       <Flex
         my={5}
-        alignItems={'center'}
-        justifyContent={'space-between'}
+        direction={'column'}
         gap={5} bg={cardBg}
         p={5}
         rounded={'16px'}
@@ -483,30 +482,20 @@ export default function HodimlarINS() {
                   <HStack>
                     <Button
                       size="sm"
-                      onClick={() => setExpandedId(isExpanded ? null : emp.id)}
-                      rightIcon={isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                      onClick={() => navigate(`${emp.id}`)}
                     >
                       {t("jekEmployees.details")}
                     </Button>
+                    <Text>
+                      {t("jekEmployees.toggle")}
+                    </Text>
 
-                    <HStack>
-                      <Text>{t("jekEmployees.toggle")}</Text>
-                      <Switch
-                        isChecked={!!emp?.isActive}
-                        onChange={(e) => openConfirm(emp, e.target.checked)}
-                      />
-                    </HStack>
+                    <Switch
+                      isChecked={!!emp?.isActive}
+                      onChange={(e) => openConfirm(emp, e.target.checked)}
+                    />
+
                   </HStack>
-
-                  {/* COLLAPSE */}
-                  <Collapse in={isExpanded} animateOpacity>
-                    <Box mt={3}>
-                      <Text fontWeight="bold" mb={2}>
-                        {t("jekEmployees.last10")}
-                      </Text>
-                      <Text opacity={0.6}>{t("jekEmployees.noData")}</Text>
-                    </Box>
-                  </Collapse>
                 </Box>
               );
             })
@@ -570,8 +559,7 @@ export default function HodimlarINS() {
                           <HStack justify="flex-end">
                             <Button
                               size="sm"
-                              onClick={() => setExpandedId(isExpanded ? null : emp.id)}
-                              rightIcon={isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                              onClick={() => navigate(`${emp.id}`)}
                             >
                               {t("jekEmployees.details")}
                             </Button>
@@ -584,20 +572,6 @@ export default function HodimlarINS() {
                               />
                             </HStack>
                           </HStack>
-                        </Td>
-                      </Tr>
-
-                      {/* Expanded row */}
-                      <Tr>
-                        <Td colSpan={5} p={0} border="none">
-                          <Collapse in={isExpanded} animateOpacity>
-                            <Box p={4} bg={expandedRowBg}>
-                              <Text fontWeight="bold" mb={2}>
-                                {t("jekEmployees.last10")}
-                              </Text>
-                              <Text opacity={0.7}>{t("jekEmployees.noData")}</Text>
-                            </Box>
-                          </Collapse>
                         </Td>
                       </Tr>
                     </React.Fragment>

@@ -30,6 +30,36 @@ class apiJekData {
 
         return response;
     }
+    static getById = async (id) => {
+        const response = await $api.get(`${BASE_URL}/admins/find/${id}`)
+        return response;
+    }
+    static profil = async (id, first_name, last_name, phoneNumber) => {
+        const response = await $api.patch(`${BASE_URL}/admins/update/profile/${id}`, {
+
+            id,
+            first_name,
+            last_name,
+            phoneNumber
+        })
+        return response;
+    }
+    static parol = async (id, password, passwordConfirm) => {
+        const response = await $api.patch(`${BASE_URL}/admins/change/password/${id}`, {
+            id,
+            password,
+            passwordConfirm
+        })
+        return response;
+    }
+    static mahalla = async (id, district, neighborhood) => {
+        const response = await $api.post(`${BASE_URL}/addresses/assign/${id}`, {
+            id,
+            district,
+            neighborhood
+        })
+        return response;
+    }
 
 
 }

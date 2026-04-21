@@ -156,7 +156,8 @@ const resources = {
         dashboard: "Boshqaruv paneli",
         appeals: "Murojaatlar",
         employees: "Hodimlar",
-        jekEmployees: "JEK hodimlari"
+        jekEmployees: "JEK hodimlari",
+        role: "Rol",
       },
 
       common: {
@@ -164,6 +165,8 @@ const resources = {
         logout: "Chiqish",
         search: "Qidirish",
         cancel: "Bekor qilish",
+        createdAt: "Yaratilgan",
+        updatedAt: "O'zgartirilgan",
         confirm: "Tasdiqlash",
         yesStart: "Ha, Boshlash",
         startWork: "Ishni Boshlash",
@@ -177,6 +180,7 @@ const resources = {
         status: "Status",
         actions: "Amallar",
         loading: "Yuklanmoqda...",
+        role: "Rol",
 
         all: "Hammasi",
         day: "kun",
@@ -217,6 +221,15 @@ const resources = {
         rejectReasonLabel: "Rad etish sababi",
         rejectReasonPlaceholder: "Rad etish sababini batafsil yozing...",
 
+        applicant: "Murojaatchi",
+        buildingNumber: "Bino raqami",
+        apartmentNumber: "Honadon raqami",
+        waitingUser: "Foydalanuvchi tomonidan tasdiqlanishi kutilmoqda",
+        review: "Qayta ko'rib chiqish",
+        noPhoto: "Rasm mavjud emas",
+        userLetter: "Murojaat xati (Foyd.)",
+        jekNote: "Izoh (JEK)",
+
         notFound: "Ariza mavjud emas",
         view: {
           status: "Holat",
@@ -240,6 +253,9 @@ const resources = {
       },
 
       jekEmployees: {
+        toggle: "Aktiv / Nofaol",
+        addAddress: "Manzil kiritish",
+        addAddressTitle: "Hodimga mahalla qo'shish",
         title: "JEK hodimlar",
         searchPlaceholder: "Ism, familiya yoki telefon...",
         areaPlaceholder: "Hudud (barchasi)",
@@ -272,7 +288,17 @@ const resources = {
 
         employee: "Hodim",
         noData: "Ma'lumot yo'q",
-        notFound: "Hodim topilmadi"
+        notFound: "Hodim topilmadi",
+        addressSingle: "Tegishli manzil",
+        addressPlural: "Tegishli manzillar",
+        noAddress: "Manzil mavjud emas",
+        editProfile: "Ma'lumot o'zgartirish",
+        changePassword: "Parol o'zgartirish",
+        editProfileTitle: "Hodim ma'lumotlarini o'zgartirish",
+        changePasswordTitle: "Hodim parolini o'zgartirish",
+        newPassword: "Yangi parol...",
+        confirmNewPassword: "Yangi parolni tasdiqlang...",
+
       },
 
       // ✅ root languages (Login menu uchun)
@@ -430,7 +456,8 @@ const resources = {
           sun: "Sun",
           low: "Low",
           high: "High",
-          countSuffix: "items"
+          countSuffix: "items",
+          account: "Account",
         }
       },
 
@@ -442,6 +469,9 @@ const resources = {
       },
 
       common: {
+        createdAt: "Created",
+        updatedAt: "Updated",
+        role: "Role",
         card: "Card",
         table: "Table",
         theme: "Theme",
@@ -499,6 +529,14 @@ const resources = {
         rejectReasonPlaceholder: "Describe the reason for rejection...",
 
         notFound: "No requests found",
+        applicant: "Applicant",
+        buildingNumber: "Building number",
+        apartmentNumber: "Apartment number",
+        waitingUser: "Waiting for user confirmation",
+        review: "Review again",
+        noPhoto: "No photo available",
+        userLetter: "User request letter",
+        jekNote: "JEK note",
         view: {
           status: "Status",
           type: "Request type",
@@ -521,6 +559,17 @@ const resources = {
       },
 
       jekEmployees: {
+        createdAt: "Created",
+        updatedAt: "Updated",
+        addressSingle: "Assigned address",
+        addressPlural: "Assigned addresses",
+        noAddress: "No address available",
+        editProfile: "Edit information",
+        changePassword: "Change password",
+        editProfileTitle: "Edit employee information",
+        changePasswordTitle: "Change employee password",
+        newPassword: "New password...",
+        confirmNewPassword: "Confirm new password...",
         title: "JEK employees",
         searchPlaceholder: "Name, surname or phone...",
         areaPlaceholder: "Area (all)",
@@ -718,10 +767,14 @@ const resources = {
         dashboard: "Панель",
         appeals: "Обращения",
         employees: "Сотрудники",
-        jekEmployees: "Сотрудники ЖЭК"
+        jekEmployees: "Сотрудники ЖЭК",
+        account: "Аккаунт",
       },
 
       common: {
+        createdAt: "Создано",
+        updatedAt: "Обновлено",
+        role: "Роль",
         card: "Карточка",
         table: "Таблица",
         theme: "Тема",
@@ -799,9 +852,26 @@ const resources = {
           applicant: "Заявитель",
           createdAt: "Дата создания"
         },
+        applicant: "Заявитель",
+        buildingNumber: "Номер здания",
+        apartmentNumber: "Номер квартиры",
+        waitingUser: "Ожидается подтверждение пользователя",
+        review: "Пересмотреть",
+        noPhoto: "Фото отсутствует",
+        userLetter: "Обращение (Польз.)",
+        jekNote: "Комментарий (ЖЭК)",
       },
 
       jekEmployees: {
+        addressSingle: "Закреплённый адрес",
+        addressPlural: "Закреплённые адреса",
+        noAddress: "Адрес отсутствует",
+        editProfile: "Редактировать данные",
+        changePassword: "Изменить пароль",
+        editProfileTitle: "Редактирование данных сотрудника",
+        changePasswordTitle: "Изменение пароля сотрудника",
+        newPassword: "Новый пароль...",
+        confirmNewPassword: "Подтвердите новый пароль...",
         title: "Сотрудники ЖЭК",
         searchPlaceholder: "Имя, фамилия или телефон...",
         areaPlaceholder: "Район (все)",
@@ -824,6 +894,9 @@ const resources = {
         details: "Подробнее",
         toggle: "Актив/Неактив",
         last10: "Последние 10 обращений",
+        toggle: "Активный / Неактивный",
+        addAddress: "Добавить адрес",
+        addAddressTitle: "Добавить махаллю сотруднику",
 
         confirmDeactivateTitle: "Сделать сотрудника неактивным",
         confirmDeactivateText:

@@ -143,13 +143,13 @@ export default function Sidebar({ collapsed, links = [], role, end = false }) {
             <Flex alignItems={"center"}>
               <MenuButton
                 onClick={() => {
-                  const path =
-                    role === "JEK"
-                      ? "/account"
-                      : role === "seller"
-                        ? "/cafe/account"
-                        : "/ombor/account";
-                  navigate(path);
+                  // const path =
+                  //role === "JEK"
+                  //  ? "/account"
+                  //  : role === "seller"
+                  //    ? "/cafe/account"
+                  //    : "/ombor/account";
+                  navigate('Account');
                 }}
                 w="100%"
                 cursor={collapsed ? "pointer" : "default"}
