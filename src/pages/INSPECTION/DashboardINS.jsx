@@ -95,9 +95,8 @@ export default function Dashboard() {
   const { t, i18n } = useTranslation();
   const c = useChartColors();
 
-  const [dateFrom, setDateFrom] = useState("2026-01-01");
-  const [dateTo, setDateTo] = useState("2026-12-31");
-
+  const [yearInput, setYearInput] = useState("2026");
+  const [debouncedYear, setDebouncedYear] = useState("");
   const [selectedTumanKey, setSelectedTumanKey] = useState("");
   const [selectedMahallaKey, setSelectedMahallaKey] = useState("");
 
@@ -117,17 +116,26 @@ export default function Dashboard() {
   const selectedMahallaLabel = mahallaObj?.[selectedMahallaKey] || "";
 
   const YEAR = useMemo(() => {
-    const y = new Date(dateFrom).getFullYear();
-    return Number.isFinite(y) ? y : 2026;
-  }, [dateFrom]);
+    const y = debouncedYear.trim();
 
+    if (/^\d{4}$/.test(y)) {
+      return Number(y);
+    }
+
+    return null;
+  }, [debouncedYear]);
   const getDashboardINS = useCallback(async () => {
+    if (!YEAR) return; // ❗ invalid bo‘lsa API chaqirmaydi
+
     try {
       setLoading(true);
 
-      const districtParam = selectedTumanKey
-      const neighborhoodParam = selectedMahallaKey
-      const res = await apiDashboard.DataGet(YEAR, districtParam, '', neighborhoodParam);
+      const res = await apiDashboard.DataGet(
+        YEAR,
+        selectedTumanKey,
+        '',
+        selectedMahallaKey
+      );
 
       setData(res?.data ?? null);
     } finally {
@@ -138,6 +146,13 @@ export default function Dashboard() {
   useEffect(() => {
     getDashboardINS();
   }, [getDashboardINS]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedYear(yearInput.trim());
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [yearInput]);
 
   const statusMap = useMemo(() => {
     const arr = data?.statuses ?? [];
@@ -444,21 +459,16 @@ export default function Dashboard() {
           <HStack spacing={3} flexWrap="wrap" justify={{ base: "flex-start", lg: "flex-end" }}>
             <Box minW="170px">
               <Text fontSize="xs" color={c.textMuted} mb={1}>
-                {t("appeals.startDate")}
+                Yil
               </Text>
               <Input
                 size="sm"
-                type="date"
-                value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
+                type="number"
+                value={yearInput}
+                rounded={'10px'}
+                placeholder="Yilni kiriting"
+                onChange={(e) => setYearInput(e.target.value)}
               />
-            </Box>
-
-            <Box minW="170px">
-              <Text fontSize="xs" color={c.textMuted} mb={1}>
-                {t("appeals.endDate")}
-              </Text>
-              <Input size="sm" type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
             </Box>
 
             <Box minW="220px">

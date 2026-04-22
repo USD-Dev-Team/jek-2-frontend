@@ -14,6 +14,7 @@ import GovernmentRoutes from './routes/GovernmentRoutes'
 import "./i18n";
 import InspectionRoutes from './routes/InspectionRoutes'
 import InspectiontLoyout from './layouts/InspectionLoyout'
+import Profile from './pages/JEK/Profile'
 
 function App() {
   return (

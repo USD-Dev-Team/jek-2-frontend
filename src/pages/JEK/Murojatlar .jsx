@@ -60,7 +60,7 @@ export default function Murojatlar() {
         Cookies.get('neighborhood'),
         form.status,
         text,
-        page - 1,
+        page,
         limit
       )
 
@@ -79,13 +79,24 @@ export default function Murojatlar() {
   }, [form.search])
 
   useEffect(() => {
-    getAriza(debouncedQwery)
-  }, [form.startData, form.endData, form.status, debouncedQwery, page])
+    getAriza(debouncedQwery);
+  }, [
+    page,
+    limit,
+    form.status,
+    form.startData,
+    form.endData,
+    debouncedQwery
+  ]);
 
   useEffect(() => {
-    setPage(1)
-  }, [form.status, form.startData, form.endData, debouncedQwery])
-
+    setPage(1);
+  }, [
+    form.status,
+    form.startData,
+    form.endData,
+    debouncedQwery
+  ]);
   //RESETFORM
   const resetForm = () => {
     setForm({
@@ -360,7 +371,11 @@ export default function Murojatlar() {
                           </Badge>
                         </Td>
 
-                        <Td>{days !== null ? `${days} kun` : "Tugamagan"}</Td>
+                        <Td>
+                          {days !== null
+                            ? `${days} ${t("common.day")}`
+                            : t("appeals.notFinished")}
+                        </Td>
 
                         <Td>{item?.user?.full_name || "-"}</Td>
                         <Td>+{item?.user?.phoneNumber || "-"}</Td>
@@ -398,19 +413,21 @@ export default function Murojatlar() {
       {totalPages > 0 ? (
         <Flex mb={10} mt={5} justifyContent="center" alignItems="center" gap={3}>
           <Button
-            onClick={() => setPage(prev => prev - 1)}
+            onClick={() => setPage(prev => Math.max(prev - 1, 1))}
             isDisabled={page === 1}
           >
             <ChevronLeft />
           </Button>
 
           <Text>
-            {page} / {totalPages}
+            {page} / {totalPages || 1}
           </Text>
 
           <Button
-            onClick={() => setPage(prev => prev + 1)}
-            isDisabled={page === totalPages}
+            onClick={() =>
+              setPage(prev => Math.min(prev + 1, totalPages || 1))
+            }
+            isDisabled={page === totalPages || totalPages === 0}
           >
             <ChevronRight />
           </Button>

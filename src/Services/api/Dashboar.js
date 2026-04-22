@@ -2,14 +2,23 @@ import axios from "axios";
 import { $api, BASE_URL } from "../parametres/axios";
 class apiDashboard {
     static DataGet = async (yil, tuman, adId, mahalla) => {
+        const params = {
+            year: yil,
+            adminId: adId
+        };
+
+        if (tuman) {
+            params.district = tuman;
+        }
+
+        if (mahalla) {
+            params.neighborhood = mahalla;
+        }
+
         const response = await $api.get(`${BASE_URL}/statistics/general`, {
-            params: {
-                year: yil,
-                district: tuman,
-                adminId: adId,
-                neighborhood: mahalla
-            }
-        })
+            params
+        });
+
         return response;
     }
     // static getAll = async () => {
