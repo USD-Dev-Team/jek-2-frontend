@@ -13,7 +13,17 @@ class apiJekData {
         const response = await $api.patch(`${BASE_URL}/admins/update/status/${id}`, payload)
         return response;
     }
-    static getFilterJek = async (ism, familiya, tuman, mahalla, number, isActive) => {
+    static getFilterJek = async (
+        ism,
+        familiya,
+        tuman,
+        mahalla,
+        number,
+        isActive,
+        page = 1,
+        limit = 1000000000000000,
+        role
+    ) => {
 
         const params = {}
 
@@ -23,6 +33,11 @@ class apiJekData {
         if (mahalla) params.neighborhood = mahalla
         if (number) params.phoneNumber = number
         if (isActive !== "") params.isActive = isActive
+
+        params.page = page
+        params.limit = limit
+        if (role) params.role = role
+
 
         const response = await $api.get(`${BASE_URL}/admins/filter-list`, {
             params

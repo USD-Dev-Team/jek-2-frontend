@@ -74,7 +74,7 @@ export default function JekMalumoti() {
 
     const getStatistics = async () => {
         try {
-            const res = await apiDashboard.DataGet(2026, null, null, null);
+            const res = await apiDashboard.DataGet(2026, null, id, null);
             setStatData(res.data);
         } catch (e) {
             console.log(e.response?.data);

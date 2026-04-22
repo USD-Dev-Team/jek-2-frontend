@@ -9,7 +9,7 @@ const links = [
   { labelKey: "nav.dashboard", to: "/Government/Dashboard", icon: LayoutDashboard },
   { labelKey: "nav.appeals", to: "/Government/Murojatlar", icon: MessageSquare },
   { labelKey: "JEK Hodimlari", to: "/Government/Hodimlar", icon: Users },
-  { labelKey: "Inspeksiya Hodimlari", to: "/Government/Inspectionslar", icon: User },
+  { labelKey: "Inspeksiya Hodimlari", to: "/Government/Inspectionlar", icon: User },
 ];
 
 export default function GovernmentLoyout() {

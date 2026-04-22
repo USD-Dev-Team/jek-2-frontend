@@ -158,6 +158,7 @@ const resources = {
         employees: "Hodimlar",
         jekEmployees: "JEK hodimlari",
         role: "Rol",
+        account:'Akaunt'
       },
 
       common: {
@@ -465,7 +466,8 @@ const resources = {
         dashboard: "Dashboard",
         appeals: "Appeals",
         employees: "Employees",
-        jekEmployees: "JEK employees"
+        jekEmployees: "JEK employees",
+        account:'Account'
       },
 
       common: {

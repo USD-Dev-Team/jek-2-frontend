@@ -37,7 +37,7 @@ import {
   Grid,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { LayoutGrid, Search, Table2, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, LayoutGrid, Search, Table2, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { apiAriza } from "../../Services/api/Ariza";
@@ -62,7 +62,9 @@ export default function Murojatlar() {
   const [ariza, setAriza] = useState([]);
   const [korish, setKorish] = useState(null);
 
-
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(15)
+  const [totalPages, setTotalPages] = useState(1)
 
 
 
@@ -145,18 +147,24 @@ export default function Murojatlar() {
     korishModal.onOpen();
   };
 
-  const getAriza = async (text) => {
+  const getAriza = async (text, currentPage = page) => {
     try {
       setLoading(true);
+
       const res = await apiAriza.getFilteredRequest(
         form.startData,
         form.endData,
         form.tuman,
         form.mahalla,
         form.status,
-        text
+        text,
+        currentPage,
+        limit
       );
-      setAriza(res.data.data);
+
+      setAriza(res?.data?.data || []);
+      setTotalPages(res?.data?.meta?.totalPages || 1);
+
     } finally {
       setLoading(false);
     }
@@ -168,7 +176,19 @@ export default function Murojatlar() {
   }, [form.search]);
 
   useEffect(() => {
-    getAriza(debouncedQuery);
+    getAriza(debouncedQuery, page);
+  }, [
+    page,
+    limit,
+    form.startData,
+    form.endData,
+    form.tuman,
+    form.mahalla,
+    form.status,
+    debouncedQuery,
+  ]);
+  useEffect(() => {
+    setPage(1);
   }, [
     form.startData,
     form.endData,
@@ -198,9 +218,7 @@ export default function Murojatlar() {
 
   const maxRow = ariza?.length
 
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(15)
-  const [totalPages, setTotalPages] = useState(1)
+
 
 
   return (
@@ -515,25 +533,33 @@ export default function Murojatlar() {
       )}
 
       {/*PAGINATION */}
-      <Flex mb={10} mt={5} justifyContent="center" alignItems="center" gap={3}>
-        <Button
-          onClick={() => setPage(prev => prev - 1)}
-          isDisabled={page === 1}
-        >
-          Prev
-        </Button>
+      {totalPages > 0 ? (
+        <Flex mb={10} mt={5} justifyContent="center" alignItems="center" gap={3}>
+          <Button
+            onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+            isDisabled={page === 1}
+          >
+            <ChevronLeft />
+          </Button>
 
-        <Text>
-          {page} / {totalPages}
-        </Text>
+          <Text>
+            {page} / {totalPages || 1}
+          </Text>
 
-        <Button
-          onClick={() => setPage(prev => prev + 1)}
-          isDisabled={page === totalPages}
-        >
-          Next
-        </Button>
-      </Flex>
+          <Button
+            onClick={() =>
+              setPage(prev => Math.min(prev + 1, totalPages || 1))
+            }
+            isDisabled={page === totalPages || totalPages === 0}
+          >
+            <ChevronRight />
+          </Button>
+        </Flex>
+      )
+        :
+        (
+          ''
+        )}
 
       {/* KORISH_MODAL */}
       <Modal isOpen={korishModal.isOpen} onClose={korishModal.onClose}>

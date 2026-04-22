@@ -154,11 +154,15 @@ export default function Profile() {
                             <span style={{ color: '#778092', fontWeight: 'bold' }}>
                                 {t("jekEmployees.employee")}
                             </span>
+                            <Text>
+                                {param?.first_name} {param?.last_name}
+                            </Text>
 
                             <Text>
                                 <span style={{ color: '#778092' }}>{t("common.role")}: </span>
                                 {param?.role}
                             </Text>
+
 
                             <Text>
                                 <span style={{ color: '#778092' }}>{t("common.status")}: </span>
@@ -172,22 +176,13 @@ export default function Profile() {
 
                         <VStack flex="1" minW="260px" align={'start'} gap={1}>
                             <span style={{ color: '#778092', fontWeight: 'bold' }}>
-                                {t("jekEmployees.employee")}
+                                {adLenght === 1
+                                    ? t("jekEmployees.addressSingle")
+                                    : t("jekEmployees.addressPlural")}
                             </span>
 
-                            <Text>
-                                <span style={{ color: '#778092' }}>{t("common.role")}: </span>
-                                {param?.role}
-                            </Text>
-
-                            <Text>
-                                <span style={{ color: '#778092' }}>{t("common.status")}: </span>
-                                <Badge colorScheme={param?.isActive ? "green" : "red"}>
-                                    {param?.isActive
-                                        ? t("jekEmployees.statusActive")
-                                        : t("jekEmployees.statusInactive")}
-                                </Badge>
-                            </Text>                            {param?.addresses && param.addresses.length > 0 ? (
+                            
+                            {param?.addresses && param.addresses.length > 0 ? (
                                 param.addresses.map((item) => (
                                     <VStack key={item.id} align={'start'} gap={1} w="100%">
                                         <Text>
@@ -196,7 +191,9 @@ export default function Profile() {
                                     </VStack>
                                 ))
                             ) : (
-                                <Text color="#778092">Manzil mavjud emas</Text>
+                                <Text color="#778092">
+                                {t("jekEmployees.noAddress")}
+                            </Text>
                             )}
                         </VStack>
 
