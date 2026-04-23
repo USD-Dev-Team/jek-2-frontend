@@ -238,8 +238,8 @@ export default function HodimlarINS() {
         }
     };
 
-    const empDistrict = (emp) => emp?.addresses?.[0]?.address?.district || "-";
-    const empMahalla = (emp) => emp?.addresses?.[0]?.address?.neighborhood || "-";
+    const empDistrict = (emp) => emp?.addresses?.[0]?.address?.district || "Biriktrilmagan";
+    const empMahalla = (emp) => emp?.addresses?.[0]?.address?.neighborhood;
     const maxRow = hodim?.length
 
 
@@ -479,7 +479,7 @@ export default function HodimlarINS() {
                                     </Text>
                                     <Text fontWeight="semibold">
                                         <span style={{ fontWeight: "normal" }}>{t("jekEmployees.areaCol")}:</span>
-                                        {empDistrict(emp)}, {empMahalla(emp)}
+                                        {empDistrict(emp)} {empMahalla(emp)}
                                     </Text>
 
                                     <Divider my={3} />
@@ -490,15 +490,6 @@ export default function HodimlarINS() {
                                         >
                                             {t("jekEmployees.details")}
                                         </Button>
-                                        <Text>
-                                            {t("jekEmployees.toggle")}
-                                        </Text>
-
-                                        <Switch
-                                            isChecked={!!emp?.isActive}
-                                            onChange={(e) => openConfirm(emp, e.target.checked)}
-                                        />
-
                                     </HStack>
                                 </Box>
                             );

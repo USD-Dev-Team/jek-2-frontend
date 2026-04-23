@@ -14,6 +14,7 @@ import { apiJekData } from '../../Services/api/Jekdata'
 import { useTranslation } from 'react-i18next'
 import { formatDateTime } from '../../utils/tools/formatDateTime'
 import { apiDashboard } from '../../Services/api/Dashboar'
+import Cookies from 'js-cookie'
 
 export default function JekMalumoti() {
     const { id } = useParams()
@@ -43,6 +44,9 @@ export default function JekMalumoti() {
 
     const confirmModal = useDisclosure();
     const [nextActiveValue, setNextActiveValue] = useState(null);
+
+    const role = Cookies.get('role')
+    const notAllowed = ['INSPECTION'].includes(param?.role)
 
     // YANGI: qaysi panel ochiq
     const [activePanel, setActivePanel] = useState(null) // 'profil' | 'parol' | 'mahalla' | null
@@ -231,18 +235,23 @@ export default function JekMalumoti() {
                                     {param?.isActive ? t("jekEmployees.statusActive") : t("jekEmployees.statusInactive")}
                                 </Badge>
                             </Text>
-                            <HStack>
-                                <Text>{t("jekEmployees.toggle")}</Text>
-                                <Switch isChecked={!!param?.isActive} onChange={(e) => openConfirm(param, e.target.checked)} />
-                            </HStack>
+                            {notAllowed ? '' :
+
+                                <HStack>
+                                    <Text>{t("jekEmployees.toggle")}</Text>
+                                    <Switch isChecked={!!param?.isActive} onChange={(e) => openConfirm(param, e.target.checked)} />
+                                </HStack>
+                            }
                         </VStack>
 
                         <VStack flex="1" minW="260px" align={'start'} gap={1}>
-                            <span style={{ color: '#778092', fontWeight: 'bold' }}>
-                                {adLenght === 1
-                                    ? t("jekEmployees.addressSingle")
-                                    : t("jekEmployees.addressPlural")}
-                            </span>
+                            {notAllowed ? '' :
+                                <span style={{ color: '#778092', fontWeight: 'bold' }}>
+                                    {adLenght === 1
+                                        ? t("jekEmployees.addressSingle")
+                                        : t("jekEmployees.addressPlural")}
+                                </span>
+                            }
 
                             {param?.addresses?.map((item) => (
                                 <VStack key={item.address.id} align={'start'} gap={1} w="100%">
@@ -258,96 +267,100 @@ export default function JekMalumoti() {
                                 </VStack>
                             ))}
                         </VStack>
+                        {notAllowed ? '' :
 
-                        <VStack align={'end'} spacing={3} minW="220px">
-                            <Button w="210px" rounded="12px" variant={activePanel === 'profil' ? 'solidPrimary' : 'outline'} onClick={() => togglePanel('profil')}>
-                                {t("jekEmployees.editProfile")}
-                            </Button>
-                            <Button w="210px" rounded="12px" variant={activePanel === 'parol' ? 'solidPrimary' : 'outline'} onClick={() => togglePanel('parol')}>
-                                {t("jekEmployees.editProfile")}
-                            </Button>
-                            <Button w="210px" rounded="12px" variant={activePanel === 'mahalla' ? 'solidPrimary' : 'outline'} onClick={() => togglePanel('mahalla')}>
-                                {t("jekEmployees.addAddress")}
-                            </Button>
-                        </VStack>
+                            <VStack align={'end'} spacing={3} minW="220px">
+                                <Button w="210px" rounded="12px" variant={activePanel === 'profil' ? 'solidPrimary' : 'outline'} onClick={() => togglePanel('profil')}>
+                                    {t("jekEmployees.editProfile")}
+                                </Button>
+                                <Button w="210px" rounded="12px" variant={activePanel === 'parol' ? 'solidPrimary' : 'outline'} onClick={() => togglePanel('parol')}>
+                                    {t("jekEmployees.editProfile")}
+                                </Button>
+                                <Button w="210px" rounded="12px" variant={activePanel === 'mahalla' ? 'solidPrimary' : 'outline'} onClick={() => togglePanel('mahalla')}>
+                                    {t("jekEmployees.addAddress")}
+                                </Button>
+                            </VStack>
+                        }
                     </HStack>
 
                     <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={8}>
+                        {notAllowed ? '' : <>
+                            {/* JAMI */}
+                            <Box
+                                p={6}
+                                borderRadius="18px"
+                                bg={cardBg}
+                                border={cardBorder}
+                                boxShadow={cardShadow}
+                                transition="0.2s"
 
-                        {/* JAMI */}
-                        <Box
-                            p={6}
-                            borderRadius="18px"
-                            bg={cardBg}
-                            border={cardBorder}
-                            boxShadow={cardShadow}
-                            transition="0.2s"
+                            >
+                                <Text fontSize="12px" color="gray.500" mb={2}>
+                                    {t("dashboard.totalAppeals")}
+                                </Text>
+                                <Text fontSize="30px" fontWeight="700">
+                                    {totalCount}
+                                </Text>
+                            </Box>
 
-                        >
-                            <Text fontSize="12px" color="gray.500" mb={2}>
-                                {t("dashboard.totalAppeals")}
-                            </Text>
-                            <Text fontSize="30px" fontWeight="700">
-                                {totalCount}
-                            </Text>
-                        </Box>
+                            {/* BAJARILGAN */}
+                            <Box
+                                p={6}
+                                borderRadius="18px"
+                                bg={useColorModeValue("green.50", "rgba(72,187,120,0.12)")}
+                                border="1px solid"
+                                borderColor={useColorModeValue("green.200", "rgba(72,187,120,0.4)")}
+                                boxShadow={cardShadow}
+                                transition="0.2s"
 
-                        {/* BAJARILGAN */}
-                        <Box
-                            p={6}
-                            borderRadius="18px"
-                            bg={useColorModeValue("green.50", "rgba(72,187,120,0.12)")}
-                            border="1px solid"
-                            borderColor={useColorModeValue("green.200", "rgba(72,187,120,0.4)")}
-                            boxShadow={cardShadow}
-                            transition="0.2s"
+                            >
+                                <Text fontSize="12px" color="green.500" mb={2}>
+                                    {t("dashboard.completed")}
+                                </Text>
+                                <Text fontSize="30px" fontWeight="700" color="green.500">
+                                    {completedCount}
+                                </Text>
+                            </Box>
 
-                        >
-                            <Text fontSize="12px" color="green.500" mb={2}>
-                                {t("dashboard.completed")}
-                            </Text>
-                            <Text fontSize="30px" fontWeight="700" color="green.500">
-                                {completedCount}
-                            </Text>
-                        </Box>
+                            {/* JARAYONDA */}
+                            <Box
+                                p={6}
+                                borderRadius="18px"
+                                bg={useColorModeValue("yellow.50", "rgba(247,201,72,0.12)")}
+                                border="1px solid"
+                                borderColor={useColorModeValue("yellow.300", "rgba(247,201,72,0.4)")}
+                                boxShadow={cardShadow}
+                                transition="0.2s"
 
-                        {/* JARAYONDA */}
-                        <Box
-                            p={6}
-                            borderRadius="18px"
-                            bg={useColorModeValue("yellow.50", "rgba(247,201,72,0.12)")}
-                            border="1px solid"
-                            borderColor={useColorModeValue("yellow.300", "rgba(247,201,72,0.4)")}
-                            boxShadow={cardShadow}
-                            transition="0.2s"
+                            >
+                                <Text fontSize="12px" color="yellow.600" mb={2}>
+                                    {t("dashboard.inProgress")}
+                                </Text>
+                                <Text fontSize="30px" fontWeight="700" color="yellow.600">
+                                    {inProgressCount}
+                                </Text>
+                            </Box>
 
-                        >
-                            <Text fontSize="12px" color="yellow.600" mb={2}>
-                                {t("dashboard.inProgress")}
-                            </Text>
-                            <Text fontSize="30px" fontWeight="700" color="yellow.600">
-                                {inProgressCount}
-                            </Text>
-                        </Box>
+                            {/* RAD ETILGAN */}
+                            <Box
+                                p={6}
+                                borderRadius="18px"
+                                bg={useColorModeValue("red.50", "rgba(245,101,101,0.12)")}
+                                border="1px solid"
+                                borderColor={useColorModeValue("red.200", "rgba(245,101,101,0.4)")}
+                                boxShadow={cardShadow}
+                                transition="0.2s"
 
-                        {/* RAD ETILGAN */}
-                        <Box
-                            p={6}
-                            borderRadius="18px"
-                            bg={useColorModeValue("red.50", "rgba(245,101,101,0.12)")}
-                            border="1px solid"
-                            borderColor={useColorModeValue("red.200", "rgba(245,101,101,0.4)")}
-                            boxShadow={cardShadow}
-                            transition="0.2s"
+                            >
+                                <Text fontSize="12px" color="red.500" mb={2}>
+                                    {t("dashboard.rejected")}
+                                </Text>
+                                <Text fontSize="30px" fontWeight="700" color="red.500">
+                                    {rejectedCount}
+                                </Text>
+                            </Box>
+                        </>}
 
-                        >
-                            <Text fontSize="12px" color="red.500" mb={2}>
-                                {t("dashboard.rejected")}
-                            </Text>
-                            <Text fontSize="30px" fontWeight="700" color="red.500">
-                                {rejectedCount}
-                            </Text>
-                        </Box>
 
                     </SimpleGrid>
 
