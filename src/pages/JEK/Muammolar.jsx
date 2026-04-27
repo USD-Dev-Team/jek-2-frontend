@@ -19,7 +19,8 @@ import {
     ModalHeader,
     Icon,
     Input,
-    Textarea
+    Textarea,
+    Skeleton
 } from '@chakra-ui/react'
 import React, { useEffect, useRef, useState } from 'react'
 import Cookies from 'js-cookie'
@@ -165,162 +166,166 @@ export default function Muammolar() {
     // RENDER
     return (
         <Flex direction={'column'} mb={10}>
-            <Flex
-                bg={cardBg}
-                backgroundImage={cardGradient}
-                border={cardBorder}
-                borderRadius="16px"
-                px={7}
-                py={4}
-                mt={5}
-                w={'100%'}
-                boxShadow={cardShadow}
-                transition="0.2s"
-                _hover={{
-                    transform: "translateY(-3px)",
-                    boxShadow: cardShadowHover,
-                }}
-                direction={'column'}
-                mb={4}
-            >
-                <Flex pb={10} w={'100%'} alignItems={'start'} justifyContent={'space-between'}>
-                    <VStack w={'100%'} align={'start'} gap={1}>
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>
-                            {t("appeals.applicant")}
-                        </span>                        <Text>{problem?.user?.full_name}</Text>
-                        <Text>{formatPhone(problem?.user?.phoneNumber)}</Text>
-                        <Divider w={'300px'} my={3} />
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>
-                            {t("appeals.area")}
-                        </span>                        <Text>{problem?.address?.district} , {problem?.address?.neighborhood}</Text>
-                        <Text>
-                            <span style={{ color: '#778092' }}>
-                                {t("appeals.buildingNumber")}:
-                            </span>{" "}
-                            {problem?.address?.building_number}
-                        </Text>
-                        <Text>
-                            <span style={{ color: '#778092' }}>
-                                {t("appeals.apartmentNumber")}:
-                            </span>{" "}
-                            {problem?.address?.apartment_number}
-                        </Text>                    </VStack>
-                    <VStack w={'100%'} align={'start'} gap={1}>
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.employee")}</span>
-                        <Text>{problem?.assigned_jek?.first_name} {problem?.assigned_jek?.last_name}</Text>
-                        <Divider w={'300px'} mt={10} mb={3} />
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.view.startedAt")}</span>
-                        <Text>{formatDateTime(problem?.createdAt)}</Text>
+            {loading ? (
+                <Skeleton rounded={'16px'} mt={5} w={'100%'} h={'500px'} />
+            ) : (
+                <Flex
+                    bg={cardBg}
+                    backgroundImage={cardGradient}
+                    border={cardBorder}
+                    borderRadius="16px"
+                    px={7}
+                    py={4}
+                    mt={5}
+                    w={'100%'}
+                    boxShadow={cardShadow}
+                    transition="0.2s"
+                    _hover={{
+                        transform: "translateY(-3px)",
+                        boxShadow: cardShadowHover,
+                    }}
+                    direction={'column'}
+                    mb={4}
+                >
+                    <Flex pb={10} w={'100%'} alignItems={'start'} justifyContent={'space-between'}>
+                        <VStack w={'100%'} align={'start'} gap={1}>
+                            <span style={{ color: '#778092', fontWeight: 'bold' }}>
+                                {t("appeals.applicant")}
+                            </span>                        <Text>{problem?.user?.full_name}</Text>
+                            <Text>{formatPhone(problem?.user?.phoneNumber)}</Text>
+                            <Divider w={'300px'} my={3} />
+                            <span style={{ color: '#778092', fontWeight: 'bold' }}>
+                                {t("appeals.area")}
+                            </span>
+                            <Text>{problem?.address?.district} , {problem?.address?.neighborhood}</Text>
+                            <Text>
+                                <span style={{ color: '#778092' }}>
+                                    {t("appeals.buildingNumber")}:
+                                </span>{" "}
+                                {problem?.address?.building_number}
+                            </Text>
+                            <Text>
+                                <span style={{ color: '#778092' }}>
+                                    {t("appeals.apartmentNumber")}:
+                                </span>{" "}
+                                {problem?.address?.apartment_number}
+                            </Text>                    </VStack>
+                        <VStack w={'100%'} align={'start'} gap={1}>
+                            <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.employee")}</span>
+                            <Text>{problem?.assigned_jek?.first_name === null ? 'Hodim biriktirlmagan' : <>{problem?.assigned_jek?.first_name} {problem?.assigned_jek?.last_name}</>} </Text>
+                            <Divider w={'300px'} mt={10} mb={3} />
+                            <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.view.startedAt")}</span>
+                            <Text>{formatDateTime(problem?.createdAt)}</Text>
+                            {
+                                problem?.completedAt && <>
+                                    <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.view.endedAt")}</span>
+                                    <Text>{formatDateTime(problem?.completedAt)}</Text>
+                                </>
+                            }
+
+
+
+
+                        </VStack>
+                        <VStack w={'33%'} align={'start'}>
+                            <Text mb={2} fontWeight="semibold">
+                                {problem?.request_number}
+                            </Text>
+                            <Badge mb={2} colorScheme={statusColorScheme(problem?.status)}>
+                                {Statuses[problem?.status] || problem?.status}
+                            </Badge>
+                            {notAllowed ? '' : <>
+                                {
+                                    problem?.status === 'PENDING' &&
+                                    <Button
+                                        bg={'yellow.500'}
+                                        _hover={{ bg: 'yellow.600' }}
+                                        onClick={() => pendingModal.onOpen()}
+                                    >
+                                        {t("common.startWork")}
+                                    </Button>
+                                }
+                                {
+                                    problem?.status === 'IN_PROGRESS' &&
+                                    <Button
+                                        bg={'blue.600'}
+                                        _hover={{ bg: "blue.800" }}
+                                        onClick={() => tugatishModal.onOpen()}
+                                    >
+                                        {t("common.finish")}
+                                    </Button>
+                                }
+                                {
+                                    problem?.status === 'JEK_COMPLETED' &&
+                                    <Text>
+                                        Foyd. tomondan kutilmoqda
+                                    </Text>
+                                }
+                                {
+                                    problem?.status === 'REJECTED' &&
+                                    <Button
+                                        bg={'red.500'}
+                                        _hover={{ bg: "red.800" }}
+                                        onClick={() => pendingModal.onOpen()}
+                                    >
+                                        {t("appeals.review")}
+                                    </Button>
+                                }</>}
+
+                        </VStack>
+
+                    </Flex>
+                    <Divider mb={10} />
+                    <Box
+                        flex="1"
+                        overflowX="auto"
+                        overflowY="hidden"
+                        pb="2"
+                        flexShrink={0}
+                        bg="transparent"
+
+                    >
+                        <HStack spacing={3} align="stretch" w="max-content" gap={4}>
+                            {problem?.requestPhotos?.length ? (
+                                problem.requestPhotos.map((r) => (
+                                    <Image
+                                        w={200}
+                                        h={200}
+                                        cursor="pointer"
+                                        borderRight={2}
+                                        borderRightColor={'gray.300'}
+                                        borderRadius="lg"
+                                        objectFit="contain"
+                                        src={r?.file_url ? `${IMAGE_URL}${r.file_url}` : "/no-image.png"}
+                                        alt={t("appeals.photo")}
+                                        onClick={() => {
+                                            setSelectedImage(r?.file_url ? `${IMAGE_URL}${r.file_url}` : "/no-image.png");
+                                            onOpen();
+                                        }}
+                                    />
+                                ))
+                            ) : (
+                                <Text color={'#778092'} fontWeight='bold' >{t("appeals.noPhoto")}</Text>
+                            )}
+                        </HStack>
+                    </Box>
+                    <Divider mb={10} />
+                    <Flex align={'start'} direction={'column'} gap={50}>
+                        <VStack align={'start'}>
+                            <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.userLetter")}</span>
+                            <Text>{problem?.description}</Text>
+                        </VStack>
                         {
-                            problem?.completedAt && <>
-                                <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.view.endedAt")}</span>
-                                <Text>{formatDateTime(problem?.completedAt)}</Text>
+                            problem?.note && <>
+                                <VStack align={'start'}>
+                                    <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.jekNote")}</span>
+                                    <Text>{problem?.note}</Text>
+                                </VStack>
                             </>
                         }
 
-
-
-
-                    </VStack>
-                    <VStack w={'33%'} align={'start'}>
-                        <Text mb={2} fontWeight="semibold">
-                            {problem?.request_number}
-                        </Text>
-                        <Badge mb={2} colorScheme={statusColorScheme(problem?.status)}>
-                            {Statuses[problem?.status] || problem?.status}
-                        </Badge>
-                        {notAllowed ? '' : <>
-                            {
-                                problem?.status === 'PENDING' &&
-                                <Button
-                                    bg={'yellow.500'}
-                                    _hover={{ bg: 'yellow.600' }}
-                                    onClick={() => pendingModal.onOpen()}
-                                >
-                                    {t("appeals.view.endedAt")}
-                                </Button>
-                            }
-                            {
-                                problem?.status === 'IN_PROGRESS' &&
-                                <Button
-                                    bg={'blue.600'}
-                                    _hover={{ bg: "blue.800" }}
-                                    onClick={() => tugatishModal.onOpen()}
-                                >
-                                    {t("common.finish")}
-                                </Button>
-                            }
-                            {
-                                problem?.status === 'JEK_COMPLETED' &&
-                                <Text>
-                                    Foyd. tomondan kutilmoqda
-                                </Text>
-                            }
-                            {
-                                problem?.status === 'REJECTED' &&
-                                <Button
-                                    bg={'red.500'}
-                                    _hover={{ bg: "red.800" }}
-                                    onClick={() => pendingModal.onOpen()}
-                                >
-                                    {t("appeals.review")}
-                                </Button>
-                            }</>}
-
-                    </VStack>
-
-                </Flex>
-                <Divider mb={10} />
-                <Box
-                    flex="1"
-                    overflowX="auto"
-                    overflowY="hidden"
-                    pb="2"
-                    flexShrink={0}
-                    bg="transparent"
-
-                >
-                    <HStack spacing={3} align="stretch" w="max-content" gap={4}>
-                        {problem?.requestPhotos?.length ? (
-                            problem.requestPhotos.map((r) => (
-                                <Image
-                                    w={200}
-                                    h={200}
-                                    cursor="pointer"
-                                    borderRight={2}
-                                    borderRightColor={'gray.300'}
-                                    borderRadius="lg"
-                                    objectFit="contain"
-                                    src={r?.file_url ? `${IMAGE_URL}${r.file_url}` : "/no-image.png"}
-                                    alt={t("appeals.photo")}
-                                    onClick={() => {
-                                        setSelectedImage(r?.file_url ? `${IMAGE_URL}${r.file_url}` : "/no-image.png");
-                                        onOpen();
-                                    }}
-                                />
-                            ))
-                        ) : (
-                            <Text color={'#778092'} fontWeight='bold' >{t("appeals.noPhoto")}</Text>
-                        )}
-                    </HStack>
-                </Box>
-                <Divider mb={10} />
-                <Flex align={'start'} direction={'column'} gap={50}>
-                    <VStack align={'start'}>
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.userLetter")}</span>
-                        <Text>{problem?.description}</Text>
-                    </VStack>
-                    {
-                        problem?.note && <>
-                            <VStack align={'start'}>
-                                <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.jekNote")}</span>
-                                <Text>{problem?.note}</Text>
-                            </VStack>
-                        </>
-                    }
-
-                </Flex>
-            </Flex>
+                    </Flex>
+                </Flex>)}
 
             {/* IMAGE MODAL */}
             <Modal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
