@@ -53,7 +53,7 @@ const GovernmentRoutes = [
     {
         name: "inspectionlar",
         path: "Inspectionlar/:id",
-        element: <Muammolar />
+        element: <JekMalumoti />
     }
 
 ];

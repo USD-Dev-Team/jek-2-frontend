@@ -226,311 +226,236 @@ export default function Murojatlar() {
       {/* FILTERS */}
       <Flex
         my={5}
-        alignItems="center"
-        justify="center"
-        direction="column"
         gap={3}
-        wrap="wrap"
         w="100%"
+        bg={cardBg}
+        backgroundImage={cardGradient}
+        border={cardBorder}
+        boxShadow={cardShadow}
+        p={5}
+        rounded={'16px'}
       >
-        <HStack w="100%">
-          {/* SEARCH */}
-          <InputGroup w="100%">
-            <InputLeftElement pointerEvents="none" ml={2}>
-              <Search size={16} />
-            </InputLeftElement>
+        {/* SEARCH */}
+        <InputGroup w="20%" position="relative">
 
-            <Input
-              value={form.search}
-              name="search"
-              onChange={changeForm}
-              placeholder={t("appeals.searchPlaceholder")}
-            />
+          <InputLeftElement pointerEvents="none">
+            <Search size={16} />
+          </InputLeftElement>
 
-            {form.search.trim() ? (
-              <InputRightElement mr={1}>
-                <IconButton
-                  aria-label="clear search"
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setForm((prev) => ({ ...prev, search: "" }))}
-                  icon={<X size={16} />}
-                />
-              </InputRightElement>
-            ) : null}
-          </InputGroup>
-
-          {/* TUMAN */}
-          <Select w="100%" value={form.tuman} name="tuman" onChange={changeForm}>
-            <option value="">{t("common.all")}</option>
-            {Object.entries(tuman).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </Select>
-
-          {/* MAHALLA */}
-          <Select
-            w="100%"
-            value={form.mahalla}
-            name="mahalla"
+          <Input
+            value={form.search}
+            name="search"
             onChange={changeForm}
-            isDisabled={!form.tuman}
+            placeholder=""
+            pl="38px"
+          />
+
+          <Box
+            position="absolute"
+            left="38px"
+            right="12px"
+            top="50%"
+            transform="translateY(-50%)"
+            overflow="hidden"
+            pointerEvents="none"
+            opacity={form.search ? 0 : 1}
+            transition="opacity 0.3s ease"
           >
-            <option value="">{t("common.all")}</option>
-            {Object.entries(mahallaObj).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </Select>
-
-          {/* VIEW TOGGLE */}
-          <ButtonGroup isAttached variant="outline" size="md">
-            <Button
-              leftIcon={<LayoutGrid size={16} />}
-              onClick={() => setViewMode("card")}
-              variant={viewMode === "card" ? "solid" : "outline"}
-              colorScheme="blue"
+            <Box
+              display="flex"
+              width="max-content"
+              animation="marquee 8s linear infinite"
             >
-              {t("common.card")}
-            </Button>
+              <Text color="gray.400" whiteSpace="nowrap" mr={16}>
+                {t("appeals.searchPlaceholder")}
+              </Text>
 
-            <Button
-              leftIcon={<Table2 size={16} />}
-              onClick={() => setViewMode("table")}
-              variant={viewMode === "table" ? "solid" : "outline"}
-              colorScheme="blue"
-            >
-              {t("common.table")}
-            </Button>
-          </ButtonGroup>
-        </HStack>
+              <Text color="gray.400" whiteSpace="nowrap" mr={16}>
+                {t("appeals.searchPlaceholder")}
+              </Text>
+            </Box>
+          </Box>
 
-        <HStack w="100%">
-          {/* STATUS */}
-          <Select w="100%" value={form.status} name="status" onChange={changeForm}>
-            {Object.entries(Statuses).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </Select>
+          {form.search.trim() && (
+            <InputRightElement>
+              <IconButton
+                aria-label="clear"
+                size="sm"
+                variant="ghost"
+                onClick={() =>
+                  setForm((prev) => ({ ...prev, search: "" }))
+                }
+                icon={<X size={16} />}
+              />
+            </InputRightElement>
+          )}
 
-          {/* START DATE */}
-          <Input
-            w="100%"
-            value={form.startData}
-            name="startData"
-            onChange={changeForm}
-            placeholder={t("appeals.startDate")}
-            type="date"
-          />
+        </InputGroup>
 
-          {/* END DATE */}
-          <Input
-            w="100%"
-            value={form.endData}
-            name="endData"
-            onChange={changeForm}
-            placeholder={t("appeals.endDate")}
-            type="date"
-          />
+        {/* TUMAN */}
+        <Select w="20%" value={form.tuman} name="tuman" onChange={changeForm}>
+          <option value="">{t("common.all")}</option>
+          {Object.entries(tuman).map(([key, label]) => (
+            <option key={key} value={key}>
+              {label}
+            </option>
+          ))}
+        </Select>
 
-          {/* RESET */}
-          <Button w="100%" variant="solidPrimary" onClick={resetForm}>
-            {t("appeals.clearFilters")}
-          </Button>
-        </HStack>
+        {/* MAHALLA */}
+        <Select
+          w="20%"
+          value={form.mahalla}
+          name="mahalla"
+          onChange={changeForm}
+          isDisabled={!form.tuman}
+        >
+          <option value="">{t("common.all")}</option>
+          {Object.entries(mahallaObj).map(([key, label]) => (
+            <option key={key} value={key}>
+              {label}
+            </option>
+          ))}
+        </Select>
+
+
+        {/* STATUS */}
+        <Select w="20%" value={form.status} name="status" onChange={changeForm}>
+          {Object.entries(Statuses).map(([key, label]) => (
+            <option key={key} value={key}>
+              {label}
+            </option>
+          ))}
+        </Select>
+
+        {/* START DATE */}
+        <Input
+          w="20%"
+          value={form.startData}
+          name="startData"
+          onChange={changeForm}
+          placeholder={t("appeals.startDate")}
+          type="date"
+        />
+
+        {/* END DATE */}
+        <Input
+          w="20%"
+          value={form.endData}
+          name="endData"
+          onChange={changeForm}
+          placeholder={t("appeals.endDate")}
+          type="date"
+        />
+
+        {/* RESET */}
+        <Button w="20%" variant="solidPrimary" onClick={resetForm}>
+          {t("appeals.clearFilters")}
+        </Button>
       </Flex>
 
       {/* LIST */}
-      {viewMode === "card" ? (
-        <Flex wrap={'wrap'} gap={3}>
-          {loading ? (
-            <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} h="335px" borderRadius="16px" />
-              ))}
-            </SimpleGrid>
-          ) : ariza?.length > 0 ? (
-            ariza.map((item) => {
-              const days = calculateDays(item.createdAt, item.completedAt);
 
-              return (
-                <Box
-                  key={item.id}
-                  bg={cardBg}
-                  backgroundImage={cardGradient}
-                  border={cardBorder}
-                  borderRadius="16px"
-                  px={7}
-                  py={4}
-                  w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.66%'}
-                  boxShadow={cardShadow}
-                  transition="0.2s"
-                  _hover={{
-                    transform: "translateY(-3px)",
-                    boxShadow: cardShadowHover,
-                  }}
-                >
+      <Flex wrap={'wrap'} gap={3}>
+        {loading ? (
+          <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} h="335px" borderRadius="16px" />
+            ))}
+          </SimpleGrid>
+        ) : ariza?.length > 0 ? (
+          ariza.map((item) => {
+            const days = calculateDays(item.createdAt, item.completedAt);
 
-                  <VStack align={'start'}>
-                    <HStack alignItems="center">
-                      <Text mb={2} fontWeight="semibold">
-                        {item.request_number}
-                      </Text>
-                      <Text mb={3}>|</Text>
-                      <Badge mb={2} colorScheme={statusColorScheme(item.status)}>
-                        {Statuses[item?.status] || item?.status}
-                      </Badge>
-                    </HStack>
+            return (
+              <Box
+                key={item.id}
+                bg={cardBg}
+                backgroundImage={cardGradient}
+                border={cardBorder}
+                borderRadius="16px"
+                px={7}
+                py={4}
+                w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.66%'}
+                boxShadow={cardShadow}
+                transition="0.2s"
+                _hover={{
+                  transform: "translateY(-3px)",
+                  boxShadow: cardShadowHover,
+                }}
+              >
 
-                    <VStack align="start" spacing={1}>
-                      <Text fontWeight="bold">
-                        <span style={{ fontWeight: "normal" }}>
-                          {t("appeals.employee")}:
-                        </span>{" "}
-                        {item?.assigned_jek
-                          ? `${item?.assigned_jek?.first_name} ${item?.assigned_jek?.last_name}`
-                          : t("common.notFound")}
-                      </Text>
-
-                      <Text fontWeight="bold">
-                        <span style={{ fontWeight: "normal" }}>
-                          {t("appeals.duration")}:
-                        </span>{" "}
-                        {days !== null
-                          ? `${days} ${t("common.day")}`
-                          : t("appeals.notFinished")}
-                      </Text>
-
-                      <Text fontWeight="bold">
-                        <span style={{ fontWeight: "normal" }}>
-                          {t("appeals.area")}:
-                        </span>{" "}
-                        {`${item?.address?.district || "-"} , ${item?.address?.neighborhood || "-"
-                          }`}
-                      </Text>
-                    </VStack>
-                  </VStack>
-
-
-
-                  <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
-
-                  <Flex alignItems="start" justifyContent="space-between">
-                    <VStack alignItems="start" spacing={1}>
-                      <HStack>
-                        <Text>{item?.user?.full_name}</Text>
-                        <Text>+{item?.user?.phoneNumber}</Text>
-                      </HStack>
-                      <Text>{formatDateTime(item.createdAt)}</Text>
-                    </VStack>
-                  </Flex>
-                  <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
-                  <Button onClick={() => navigate(`${item?.id}`)}>
-                    {t("common.view")}
-                  </Button>
-                </Box>
-              );
-            })
-          ) : (
-            <Text my={3} mx={'auto'} color="text" fontSize={23}>
-              {t("appeals.notFound")}
-            </Text>
-          )}
-        </Flex>
-      ) : (
-        <TableContainer
-          bg={cardBg}
-          border={cardBorder}
-          borderRadius="16px"
-          boxShadow={cardShadow}
-          overflowX="auto"
-          backgroundImage={cardGradient}
-        >
-          <Table size="sm" variant="simple">
-            <Thead position="sticky" top={0} bg={cardBg} zIndex={1}>
-              <Tr>
-                <Th>№</Th>
-                <Th>{t("common.status")}</Th>
-                <Th>{t("appeals.employee")}</Th>
-                <Th>{t("appeals.duration")}</Th>
-                <Th>{t("appeals.area")}</Th>
-                <Th>{t("appeals.table.applicant")}</Th>
-                <Th>{t("register.phone")}</Th>
-                <Th>{t("appeals.table.createdAt")}</Th>
-                <Th textAlign="right">{t("common.actions")}</Th>
-              </Tr>
-            </Thead>
-
-            <Tbody>
-              {loading ? (
-                [...Array(6)].map((_, i) => (
-                  <Tr key={i}>
-                    <Td colSpan={9}>
-                      <Skeleton h="28px" w="100%" rounded="md" />
-                    </Td>
-                  </Tr>
-                ))
-              ) : ariza?.length > 0 ? (
-                ariza.map((item) => {
-                  const days = calculateDays(item.createdAt, item.completedAt);
-
-                  return (
-                    <Tr key={item.id} _hover={{ bg: rowHoverBg }}>
-                      <Td fontWeight="600">{item.request_number}</Td>
-
-                      <Td>
-                        <Badge colorScheme={statusColorScheme(item.status)}>
-                          {Statuses[item?.status] || item?.status}
-                        </Badge>
-                      </Td>
-
-                      <Td>
-                        {item?.assigned_jek
-                          ? `${item.assigned_jek.first_name} ${item.assigned_jek.last_name}`
-                          : t("common.notFound")}
-                      </Td>
-
-                      <Td>
-                        {days !== null
-                          ? `${days} ${t("common.day")}`
-                          : t("appeals.notFinished")}
-                      </Td>
-
-                      <Td>
-                        {item?.address?.district || "-"},{" "}
-                        {item?.address?.neighborhood || "-"}
-                      </Td>
-
-                      <Td>{item?.user?.full_name || "-"}</Td>
-                      <Td>+{item?.user?.phoneNumber || "-"}</Td>
-                      <Td>{formatDateTime(item.createdAt)}</Td>
-
-                      <Td textAlign="right">
-                        <Button size="sm" onClick={() => navigate(`${item?.id}`)}>
-                          {t("common.view")}
-                        </Button>
-                      </Td>
-                    </Tr>
-                  );
-                })
-              ) : (
-                <Tr>
-                  <Td colSpan={9}>
-                    <Text my={3} textAlign={'center'} color="text" fontSize={18}>
-                      {t("appeals.notFound")}
+                <VStack align={'start'}>
+                  <HStack alignItems="center">
+                    <Text mb={2} fontWeight="semibold">
+                      {item.request_number}
                     </Text>
-                  </Td>
-                </Tr>
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      )}
+                    <Text mb={3}>|</Text>
+                    <Badge mb={2} colorScheme={statusColorScheme(item.status)}>
+                      {Statuses[item?.status] || item?.status}
+                    </Badge>
+                  </HStack>
+
+                  <VStack align="start" spacing={1}>
+                    <Text fontWeight="bold">
+                      <span style={{ fontWeight: "normal" }}>
+                        {t("appeals.employee")}:
+                      </span>{" "}
+                      {item?.assigned_jek
+                        ? `${item?.assigned_jek?.first_name} ${item?.assigned_jek?.last_name}`
+                        : t("common.notFound")}
+                    </Text>
+
+                    <Text fontWeight="bold">
+                      <span style={{ fontWeight: "normal" }}>
+                        {t("appeals.duration")}:
+                      </span>{" "}
+                      {days !== null
+                        ? `${days} ${t("common.day")}`
+                        : t("appeals.notFinished")}
+                    </Text>
+
+                    <Text fontWeight="bold">
+                      <span style={{ fontWeight: "normal" }}>
+                        {t("appeals.area")}:
+                      </span>{" "}
+                      {`${item?.address?.district || "-"} , ${item?.address?.neighborhood || "-"
+                        }`}
+                    </Text>
+                  </VStack>
+                </VStack>
+
+
+
+                <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
+
+                <Flex alignItems="start" justifyContent="space-between">
+                  <VStack alignItems="start" spacing={1}>
+                    <HStack wrap={'wrap'}>
+                      <span style={{ fontWeight: "normal" }}>
+                        {t("appeals.applicant")}:
+                      </span>{" "}
+                      <Text fontWeight="bold">{item?.user?.full_name}</Text>
+                      <Text fontWeight="bold">+{item?.user?.phoneNumber}</Text>
+                    </HStack>
+                    <Text fontWeight={'bold'}><span style={{ fontWeight: "normal" }}>
+                      {t("appeals.table.createdAt")}:
+                    </span>{" "}{formatDateTime(item.createdAt)}</Text>
+                  </VStack>
+                </Flex>
+                <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
+                <Button onClick={() => navigate(`${item?.id}`)}>
+                  {t("common.view")}
+                </Button>
+              </Box>
+            );
+          })
+        ) : (
+          <Text my={3} mx={'auto'} color="text" fontSize={23}>
+            {t("appeals.notFound")}
+          </Text>
+        )}
+      </Flex>
 
       {/*PAGINATION */}
       {totalPages > 0 ? (

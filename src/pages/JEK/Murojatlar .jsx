@@ -3,8 +3,7 @@ import { ChevronLeft, ChevronRight, LayoutGrid, Maximize2, Search, Table2, Trash
 import React, { useEffect, useRef, useState } from 'react'
 import { apiAriza } from '../../Services/api/Ariza'
 import { formatDateTime } from '../../utils/tools/formatDateTime'
-import { useTranslation } from "react-i18next";
-import { IMAGE_URL } from '../../constants/imageUrl'
+import { Trans, useTranslation } from "react-i18next";
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router'
 
@@ -14,13 +13,7 @@ export default function Murojatlar() {
   const navigate = useNavigate()
 
   const Statuses = {
-    '': t("appeals.statusAll"),
     PENDING: t("appeals.status_pending"),
-    IN_PROGRESS: t("appeals.status_in_progress"),
-    COMPLETED: t("appeals.status_completed_user"),
-    REJECTED: t("appeals.status_rejected_user"),
-    JEK_REJECTED: t("appeals.status_rejected"),
-    JEK_COMPLETED: t("appeals.status_completed"),
   };
 
 
@@ -58,7 +51,7 @@ export default function Murojatlar() {
         form.endData || null,
         Cookies.get('district'),
         Cookies.get('neighborhood'),
-        form.status,
+        "PENDING",
         text,
         page,
         limit
@@ -165,46 +158,68 @@ export default function Murojatlar() {
         my={5}
         alignItems={'center'}
         justifyContent={'space-between'}
-        gap={5} bg={cardBg}
+        gap={5}
+        bg={cardBg}
         p={5}
         rounded={'16px'}
         backgroundImage={cardGradient}>
         {/* SEARCH */}
-        <InputGroup w={'40%'}>
-          <InputLeftElement ml={2} w={'25px'} as={Search} />
+        <InputGroup w="40%" position="relative">
+
+          <InputLeftElement pointerEvents="none">
+            <Search size={16} />
+          </InputLeftElement>
+
           <Input
             value={form.search}
-            name='search'
-            onChange={(e) => changeForm(e)}
-            placeholder={t("appeals.searchPlaceholder")}
+            name="search"
+            onChange={changeForm}
+            placeholder=""
+            pl="38px"
           />
-          {form.search.trim() &&
-            < InputRightElement onClick={() => {
-              setForm({
-                startData: form.startData,
-                endData: form.endData,
-                status: form.status || null,
-                search: ""
-              })
-              setSearched([])
-            }}
-              cursor={'pointer'}
-              as={X}
-              w={5}
-              mr={3} />}
-        </InputGroup>
 
-        {/* STATUS TANLASH */}
-        <Select
-          w={'15%'}
-          value={form.status}
-          name='status'
-          onChange={(e) => changeForm(e)}
-        >
-          {Object.entries(Statuses).map(([value]) => (
-            <option key={value} value={value}>{Statuses[value]}</option>
-          ))}
-        </Select>
+          {/* ✅ Animated placeholder INPUT ICHIDA */}
+          <Box
+            position="absolute"
+            left="38px"
+            right="12px"
+            top="50%"
+            transform="translateY(-50%)"
+            overflow="hidden"
+            pointerEvents="none"
+            opacity={form.search ? 0 : 1}
+            transition="opacity 0.3s ease"
+          >
+            <Box
+              display="flex"
+              width="max-content"
+              animation="marquee 8s linear infinite"
+            >
+              <Text color="gray.400" whiteSpace="nowrap" mr={16}>
+                {t("appeals.searchPlaceholder")}
+              </Text>
+
+              <Text color="gray.400" whiteSpace="nowrap" mr={16}>
+                {t("appeals.searchPlaceholder")}
+              </Text>
+            </Box>
+          </Box>
+
+          {form.search.trim() && (
+            <InputRightElement>
+              <IconButton
+                aria-label="clear"
+                size="sm"
+                variant="ghost"
+                onClick={() =>
+                  setForm((prev) => ({ ...prev, search: "" }))
+                }
+                icon={<X size={16} />}
+              />
+            </InputRightElement>
+          )}
+
+        </InputGroup>
 
         {/* BOSHLANISH SANA */}
         <Input
@@ -232,182 +247,89 @@ export default function Murojatlar() {
         >
           {t("appeals.clearFilters")}
         </Button>
-
-        <ButtonGroup isAttached variant="outline" size="md">
-          <Button
-            leftIcon={<LayoutGrid size={16} />}
-            onClick={() => setViewMode("card")}
-            variant={viewMode === "card" ? "solid" : "outline"}
-            colorScheme="blue"
-          >
-            {t("common.card")}
-          </Button>
-
-          <Button
-            leftIcon={<Table2 size={16} />}
-            onClick={() => setViewMode("table")}
-            variant={viewMode === "table" ? "solid" : "outline"}
-            colorScheme="blue"
-          >
-            {t("common.table")}
-          </Button>
-        </ButtonGroup>
       </Flex>
 
       {/* GETTING TO CARD */}
 
-      {viewMode === 'card' ? (
-        <Flex wrap={'wrap'} gap={3}>
-          {loading ? (
-            <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} h="190px" borderRadius="16px" />
-              ))}
-            </SimpleGrid>
-          ) : (ariza?.length > 0 ?
-            ariza.map((item) => {
-              return (
-                <Box
-                  key={item.id}
-                  bg={cardBg}
-                  backgroundImage={cardGradient}
-                  border={cardBorder}
-                  borderRadius="16px"
-                  px={7}
-                  py={4}
-                  w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.5%'}
-                  boxShadow={cardShadow}
-                  transition="0.2s"
-                  _hover={{
-                    transform: "translateY(-3px)",
-                    boxShadow: cardShadowHover,
-                  }}
-                >
 
-                  <VStack align={'start'}>
-                    <HStack alignItems="center">
-                      <Text mb={2} fontWeight="semibold">
-                        {item.request_number}
-                      </Text>
-                      <Text mb={3}>|</Text>
-                      <Badge mb={2} colorScheme={statusColorScheme(item.status)}>
-                        {Statuses[item?.status] || item?.status}
-                      </Badge>
-                    </HStack>
-                  </VStack>
+      <Flex wrap={'wrap'} gap={3}>
+        {loading ? (
+          <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} h="190px" borderRadius="16px" />
+            ))}
+          </SimpleGrid>
+        ) : (ariza?.length > 0 ?
+          ariza.map((item) => {
+            return (
+              <Box
+                key={item.id}
+                bg={cardBg}
+                backgroundImage={cardGradient}
+                border={cardBorder}
+                borderRadius="16px"
+                px={7}
+                py={4}
+                w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.5%'}
+                boxShadow={cardShadow}
+                transition="0.2s"
+                _hover={{
+                  transform: "translateY(-3px)",
+                  boxShadow: cardShadowHover,
+                }}
+              >
 
-                  <Flex alignItems="start" justifyContent="space-between">
-                    <VStack alignItems="start" spacing={1}>
-                      <HStack>
-                        <Text>{item?.user?.full_name}</Text>
-                        <Text>+{item?.user?.phoneNumber}</Text>
-                      </HStack>
-                      <Text>{formatDateTime(item.createdAt)}</Text>
-                    </VStack>
-                  </Flex>
-                  <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
-                  <HStack>
-                    <Button
-                      onClick={() => {
-                        navigate(`${item?.id}`)
-                      }}
-                    >
-                      {t("common.view")}
-                    </Button>
+                <VStack align={'start'}>
+                  <HStack alignItems="center">
+                    <Text mb={2} fontWeight="semibold">
+                      {item.request_number}
+                    </Text>
+                    <Text mb={3}>|</Text>
+                    <Badge mb={2} colorScheme={statusColorScheme(item.status)}>
+                      {Statuses[item?.status] || item?.status}
+                    </Badge>
                   </HStack>
-                </Box>
-              )
-            })
-            : (form.search.trim() || ariza.status !== form.status || ariza.createdAt !== form.startData || ariza.completedAt !== form.endData
-              ? (
+                </VStack>
 
-                <Text my={3} mx={'auto'} color="text" fontSize={18}>{t("appeals.notFound")}</Text>
-              )
-              : ''))}
-        </Flex>
-      ) :
-        <TableContainer
-          bg={cardBg}
-          border={cardBorder}
-          borderRadius="16px"
-          boxShadow={cardShadow}
-          overflowX="auto"
-          backgroundImage={cardGradient}
-        >
-          <Table size="sm" variant="simple">
-            <Thead position="sticky" top={0} bg={cardBg} zIndex={1}>
-              <Tr>
-                <Th>№</Th>
-                <Th>{t("common.status")}</Th>
-                <Th>{t("appeals.duration")}</Th>
-                <Th>{t("appeals.employee")}</Th>
-                <Th>{t("register.phone")}</Th>
-                <Th>{t("appeals.table.createdAt")}</Th>
-                <Th>{t("common.actions")}</Th>
-              </Tr>
-            </Thead>
-
-            <Tbody>
-              {loading ? (
-                [...Array(6)].map((_, i) => (
-                  <Tr key={i}>
-                    <Td colSpan={9}>
-                      <Skeleton h="28px" w="100%" rounded="md" />
-                    </Td>
-                  </Tr>
-                ))
-              ) :
-                ariza?.length > 0 ? (
-                  ariza.map((item) => {
-                    const days = calculateDays(item.createdAt, item.completedAt);
-
-                    return (
-                      <Tr key={item.id} _hover={{ bg: rowHoverBg }}>
-                        <Td fontWeight="600">{item.request_number}</Td>
-
-                        <Td>
-                          <Badge colorScheme={statusColorScheme(item.status)}>
-                            {Statuses[item?.status] || item?.status}
-                          </Badge>
-                        </Td>
-
-                        <Td>
-                          {days !== null
-                            ? `${days} ${t("common.day")}`
-                            : t("appeals.notFinished")}
-                        </Td>
-
-                        <Td>{item?.user?.full_name || "-"}</Td>
-                        <Td>+{item?.user?.phoneNumber || "-"}</Td>
-                        <Td>{formatDateTime(item.createdAt)}</Td>
-
-                        <Td textAlign="right">
-                          <HStack>
-                            <Button
-                              onClick={() => {
-                                navigate(`${item?.id}`)
-                              }}
-                            >
-                              {t("common.view")}
-                            </Button>
-                          </HStack>
-                        </Td>
-                      </Tr>
-                    );
-                  })
-                ) : (
-                  <Tr>
-                    <Td colSpan={9}>
-                      <Text my={3} textAlign={'center'} color="text" fontSize={18}>
-                        {t("appeals.notFound")}
-                      </Text>
-                    </Td>
-                  </Tr>
-                )}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      }
+                <Flex alignItems="start" justifyContent="space-between">
+                  <VStack alignItems="start" spacing={1}>
+                    <HStack>
+                      <Text></Text>
+                      <Text>{item?.user?.full_name}</Text>
+                      <Text>+{item?.user?.phoneNumber}</Text>
+                    </HStack>
+                    <Text>{formatDateTime(item.createdAt)}</Text>
+                  </VStack>
+                </Flex>
+                <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
+                <HStack>
+                  <Button
+                    onClick={() => {
+                      navigate(`${item?.id}`)
+                    }}
+                  >
+                    {t("common.view")}
+                  </Button>
+                </HStack>
+              </Box>
+            )
+          })
+          : (form.search.trim() || ariza.status !== form.status || ariza.createdAt !== form.startData || ariza.completedAt !== form.endData
+            ? (
+              <VStack mx={"auto"}>
+                <Text mt={3} mx={'auto'} color="text" fontSize={18}>{t("appeals.notFound")}</Text>
+                <Text mb={3} mx="auto" color="text" fontSize={14}>
+                  <Trans
+                    i18nKey="appeals.onlyPending"
+                    components={{
+                      badge: <Badge colorScheme="yellow" px={2} />,
+                    }}
+                  />
+                </Text>
+              </VStack>
+            )
+            : ''))}
+      </Flex>
 
       {/*PAGINATION */}
       {totalPages > 0 ? (

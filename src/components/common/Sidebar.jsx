@@ -36,7 +36,7 @@ export default function Sidebar({ collapsed, links = [], role, end = false }) {
   return (
     <Flex
       position="fixed"
-      w={collapsed ? "70px" : "220px"}
+      w={collapsed ? "70px" : "240px"}
       minH="100vh"
       bg="darkblue"
       color="text"
@@ -106,11 +106,14 @@ export default function Sidebar({ collapsed, links = [], role, end = false }) {
                       bg={isActive ? "secondary" : "transparent"}
                       _hover={{ bg: "secondary", color: "white" }}
                       cursor="pointer"
-                      transition="0.2s"
+                      transition="background 0.2s ease, color 0.2s ease"
                       color={isActive ? "white" : "text"}
+                      overflow="hidden"   // ✅ MUHIM
                     >
                       <Icon as={item.icon} w={5} h={5} />
-                      {!collapsed && <Text fontWeight="medium">{label}</Text>}
+                      {!collapsed && <Text fontWeight="medium" whiteSpace="nowrap"
+                        overflow="hidden"
+                        textOverflow="ellipsis" >{label}</Text>}
                     </Flex>
                   </Tooltip>
                 )}
@@ -139,7 +142,7 @@ export default function Sidebar({ collapsed, links = [], role, end = false }) {
 
         {/* BOTTOM USER SECTION */}
         <Menu placement="right">
-          <Tooltip label={collapsed ? Cookies.get('first_name                                                                               `') : ""} placement="right" openDelay={200}>
+          <Tooltip label={collapsed ? Cookies.get('first_name') : ""} placement="right" openDelay={200}>
             <Flex alignItems={"center"}>
               <MenuButton
                 onClick={() => {

@@ -19,7 +19,8 @@ import {
     ModalHeader,
     Icon,
     Input,
-    Textarea
+    Textarea,
+    Skeleton
 } from '@chakra-ui/react'
 import React, { useEffect, useRef, useState } from 'react'
 import Cookies from 'js-cookie'
@@ -164,163 +165,273 @@ export default function Muammolar() {
 
     // RENDER
     return (
-        <Flex direction={'column'} mb={10}>
-            <Flex
-                bg={cardBg}
-                backgroundImage={cardGradient}
-                border={cardBorder}
-                borderRadius="16px"
-                px={7}
-                py={4}
+        <Flex direction="column" gap={6} mb={10}>
+            {/* HEADER CARD */}
+            <Box
                 mt={5}
-                w={'100%'}
+                bg={cardBg}
+                border={cardBorder}
+                borderRadius="20px"
+                p={6}
+                boxShadow={cardShadow}
+                _hover={{
+                    transform: "translateY(-3px)",
+                    boxShadow: cardShadowHover,
+                }}
+                backgroundImage={cardGradient}
+                transition="0.2s"
+            >
+                <Flex justify="space-between" align="start" wrap="wrap" gap={6}>
+                    {/* LEFT INFO */}
+                    <VStack align="start" spacing={3}>
+                        <Text fontSize="lg" fontWeight="bold">
+                            {problem?.request_number}
+                        </Text>
+
+                        <Badge
+                            fontSize="0.9em"
+                            rounded={'10px'}
+                            px={3}
+                            py={1}
+                            colorScheme={statusColorScheme(problem?.status)}
+                        >
+                            {Statuses[problem?.status] || problem?.status}
+                        </Badge>
+
+                        {/* ACTIONS */}
+                        {!notAllowed && (
+                            <HStack spacing={3} pt={3} flexWrap="wrap">
+                                {problem?.status === "PENDING" && (
+                                    <Button
+                                        size="sm"
+                                        bg="yellow.500"
+                                        rounded={'10px'}
+                                        px={5}
+                                        onClick={pendingModal.onOpen}
+                                        _hover={{ transform: "translateY(-2px)", bg: 'yellow.700' }}
+                                    >
+                                        {t("common.startWork")}
+                                    </Button>
+                                )}
+
+                                {problem?.status === "IN_PROGRESS" && (
+                                    <Button
+                                        size="sm"
+                                        bg='blue.500'
+                                        rounded={'10px'}
+                                        px={5}
+                                        onClick={tugatishModal.onOpen}
+                                        _hover={{ transform: "translateY(-2px)", bg: 'blue.700' }}
+                                    >
+                                        {t("common.finish")}
+                                    </Button>
+                                )}
+
+                                {problem?.status === "REJECTED" && (
+                                    <Button
+                                        size="sm"
+                                        bg="red.500"
+                                        rounded={'10px'}
+
+                                        px={5}
+                                        onClick={Kutilmoqda}
+                                        _hover={{ transform: "translateY(-2px)", bg: 'red.700' }}
+                                    >
+                                        {t("appeals.review")}
+                                    </Button>
+                                )}
+
+                                {problem?.status === "JEK_COMPLETED" && (
+                                    <Badge
+                                        colorScheme="purple"
+                                        rounded={'10px'}
+
+                                        px={4}
+                                        py={1}
+                                        fontSize="0.8em"
+                                    >
+                                        {t('appeals.waitingUser')}
+                                    </Badge>
+                                )}
+                            </HStack>
+                        )}
+
+                        <Divider />
+
+                        <Box>
+                            <Text fontSize="sm" opacity={0.7}>
+                                {t("appeals.applicant")}
+                            </Text>
+                            <Text fontWeight="semibold">
+                                {problem?.user?.full_name}
+                            </Text>
+                            <Text fontSize="sm" opacity={0.7}>
+                                {formatPhone(problem?.user?.phoneNumber)}
+                            </Text>
+                        </Box>
+
+                        <Box>
+                            <Text fontSize="sm">
+                                {problem?.address?.district}, {problem?.address?.neighborhood}
+                            </Text>
+                            <Text fontSize="sm" opacity={0.7}>
+                                {t("appeals.buildingNumber")}:{" "}
+                                {problem?.address?.building_number}
+                            </Text>
+                            <Text fontSize="sm" opacity={0.7}>
+                                {t("appeals.apartmentNumber")}:{" "}
+                                {problem?.address?.apartment_number}
+                            </Text>
+                        </Box>
+                    </VStack>
+
+                    {/* RIGHT INFO */}
+                    <VStack align="start" spacing={3}>
+                        <Box>
+                            <Text fontSize="sm" opacity={0.7}>
+                                {t("appeals.employee")}
+                            </Text>
+                            <Text>
+                                {problem?.assigned_jek
+                                    ? `${problem?.assigned_jek?.first_name} ${problem?.assigned_jek?.last_name}`
+                                    : "Biriktirilmagan"}
+                            </Text>
+                        </Box>
+
+                        <Box>
+                            <Text fontSize="sm" opacity={0.7}>
+                                {t("appeals.view.startedAt")}
+                            </Text>
+                            <Text>{formatDateTime(problem?.createdAt)}</Text>
+                        </Box>
+
+                        {problem?.completedAt && (
+                            <Box>
+                                <Text fontSize="sm" opacity={0.7}>
+                                    {t("appeals.view.endedAt")}
+                                </Text>
+                                <Text>{formatDateTime(problem?.completedAt)}</Text>
+                            </Box>
+                        )}
+                    </VStack>
+                </Flex>
+            </Box>
+
+            {/* GALLERY */}
+            <Box>
+                <Text mb={3} fontWeight="bold">
+                    {t("appeals.photo")}
+                </Text>
+
+                <Flex gap={4} wrap="wrap">
+                    {problem?.requestPhotos?.length ? (
+                        problem.requestPhotos.map((r, i) => (
+                            <Box
+                                key={i}
+                                w="160px"
+                                h="160px"
+                                borderRadius="16px"
+                                overflow="hidden"
+                                cursor="pointer"
+                                boxShadow="md"
+                                _hover={{ transform: "scale(1.05)" }}
+                                transition="0.2s"
+                                onClick={() => {
+                                    setSelectedImage(
+                                        r?.file_url
+                                            ? `${IMAGE_URL}${r.file_url}`
+                                            : "/no-image.png"
+                                    );
+                                    onOpen();
+                                }}
+                            >
+                                <Image
+                                    w="100%"
+                                    h="100%"
+                                    objectFit="cover"
+                                    src={
+                                        r?.file_url
+                                            ? `${IMAGE_URL}${r.file_url}`
+                                            : "/no-image.png"
+                                    }
+                                />
+                            </Box>
+                        ))
+                    ) : (
+                        <Text opacity={0.6}>{t("appeals.noPhoto")}</Text>
+                    )}
+                </Flex>
+            </Box>
+
+            {/* DESCRIPTION */}
+            <Box
+                bg={cardBg}
+                border={cardBorder}
+                borderRadius="20px"
+                p={6}
                 boxShadow={cardShadow}
                 transition="0.2s"
                 _hover={{
                     transform: "translateY(-3px)",
                     boxShadow: cardShadowHover,
                 }}
-                direction={'column'}
-                mb={4}
+                backgroundImage={cardGradient}
             >
-                <Flex pb={10} w={'100%'} alignItems={'start'} justifyContent={'space-between'}>
-                    <VStack w={'100%'} align={'start'} gap={1}>
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>
-                            {t("appeals.applicant")}
-                        </span>                        <Text>{problem?.user?.full_name}</Text>
-                        <Text>{formatPhone(problem?.user?.phoneNumber)}</Text>
-                        <Divider w={'300px'} my={3} />
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>
-                            {t("appeals.area")}
-                        </span>                        <Text>{problem?.address?.district} , {problem?.address?.neighborhood}</Text>
-                        <Text>
-                            <span style={{ color: '#778092' }}>
-                                {t("appeals.buildingNumber")}:
-                            </span>{" "}
-                            {problem?.address?.building_number}
+                <Text fontWeight="bold" mb={2}>
+                    {t("appeals.userLetter")}
+                </Text>
+                <Text mb={4}>{problem?.description}</Text>
+
+                {problem?.note && (
+                    <>
+                        <Divider my={4} />
+                        <Text fontWeight="bold" mb={2}>
+                            {t("appeals.jekNote")}
                         </Text>
-                        <Text>
-                            <span style={{ color: '#778092' }}>
-                                {t("appeals.apartmentNumber")}:
-                            </span>{" "}
-                            {problem?.address?.apartment_number}
-                        </Text>                    </VStack>
-                    <VStack w={'100%'} align={'start'} gap={1}>
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.employee")}</span>
-                        <Text>{problem?.assigned_jek?.first_name} {problem?.assigned_jek?.last_name}</Text>
-                        <Divider w={'300px'} mt={10} mb={3} />
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.view.startedAt")}</span>
-                        <Text>{formatDateTime(problem?.createdAt)}</Text>
-                        {
-                            problem?.completedAt && <>
-                                <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.view.endedAt")}</span>
-                                <Text>{formatDateTime(problem?.completedAt)}</Text>
-                            </>
-                        }
+                        <Text>{problem?.note}</Text>
+                    </>
+                )}
+            </Box>
 
+            {/* CHAT */}
+            <Box>
+                <Text fontWeight="bold" mb={4}>
+                    {t('appeals.chatHistory')}
+                </Text>
 
+                <VStack spacing={4} align="stretch">
+                    {messages.map((msg, i) => {
+                        const isUser = msg.type === "USER";
 
-
-                    </VStack>
-                    <VStack w={'33%'} align={'start'}>
-                        <Text mb={2} fontWeight="semibold">
-                            {problem?.request_number}
-                        </Text>
-                        <Badge mb={2} colorScheme={statusColorScheme(problem?.status)}>
-                            {Statuses[problem?.status] || problem?.status}
-                        </Badge>
-                        {notAllowed ? '' : <>
-                            {
-                                problem?.status === 'PENDING' &&
-                                <Button
-                                    bg={'yellow.500'}
-                                    _hover={{ bg: 'yellow.600' }}
-                                    onClick={() => pendingModal.onOpen()}
+                        return (
+                            <Flex
+                                key={i}
+                                justify={isUser ? "flex-start" : "flex-end"}
+                            >
+                                <Box
+                                    maxW="70%"
+                                    px={4}
+                                    py={3}
+                                    borderRadius="18px"
+                                    bg={isUser ? "gray.100" : "blue.500"}
+                                    color={isUser ? "black" : "white"}
+                                    boxShadow="md"
                                 >
-                                    {t("appeals.view.endedAt")}
-                                </Button>
-                            }
-                            {
-                                problem?.status === 'IN_PROGRESS' &&
-                                <Button
-                                    bg={'blue.600'}
-                                    _hover={{ bg: "blue.800" }}
-                                    onClick={() => tugatishModal.onOpen()}
-                                >
-                                    {t("common.finish")}
-                                </Button>
-                            }
-                            {
-                                problem?.status === 'JEK_COMPLETED' &&
-                                <Text>
-                                    Foyd. tomondan kutilmoqda
-                                </Text>
-                            }
-                            {
-                                problem?.status === 'REJECTED' &&
-                                <Button
-                                    bg={'red.500'}
-                                    _hover={{ bg: "red.800" }}
-                                    onClick={() => pendingModal.onOpen()}
-                                >
-                                    {t("appeals.review")}
-                                </Button>
-                            }</>}
-
-                    </VStack>
-
-                </Flex>
-                <Divider mb={10} />
-                <Box
-                    flex="1"
-                    overflowX="auto"
-                    overflowY="hidden"
-                    pb="2"
-                    flexShrink={0}
-                    bg="transparent"
-
-                >
-                    <HStack spacing={3} align="stretch" w="max-content" gap={4}>
-                        {problem?.requestPhotos?.length ? (
-                            problem.requestPhotos.map((r) => (
-                                <Image
-                                    w={200}
-                                    h={200}
-                                    cursor="pointer"
-                                    borderRight={2}
-                                    borderRightColor={'gray.300'}
-                                    borderRadius="lg"
-                                    objectFit="contain"
-                                    src={r?.file_url ? `${IMAGE_URL}${r.file_url}` : "/no-image.png"}
-                                    alt={t("appeals.photo")}
-                                    onClick={() => {
-                                        setSelectedImage(r?.file_url ? `${IMAGE_URL}${r.file_url}` : "/no-image.png");
-                                        onOpen();
-                                    }}
-                                />
-                            ))
-                        ) : (
-                            <Text color={'#778092'} fontWeight='bold' >{t("appeals.noPhoto")}</Text>
-                        )}
-                    </HStack>
-                </Box>
-                <Divider mb={10} />
-                <Flex align={'start'} direction={'column'} gap={50}>
-                    <VStack align={'start'}>
-                        <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.userLetter")}</span>
-                        <Text>{problem?.description}</Text>
-                    </VStack>
-                    {
-                        problem?.note && <>
-                            <VStack align={'start'}>
-                                <span style={{ color: '#778092', fontWeight: 'bold' }}>{t("appeals.jekNote")}</span>
-                                <Text>{problem?.note}</Text>
-                            </VStack>
-                        </>
-                    }
-
-                </Flex>
-            </Flex>
+                                    <Text fontSize="sm">{msg.note}</Text>
+                                    <Text
+                                        fontSize="10px"
+                                        opacity={0.7}
+                                        mt={1}
+                                        textAlign="right"
+                                    >
+                                        {formatDateTime(msg.createdAt)}
+                                    </Text>
+                                </Box>
+                            </Flex>
+                        );
+                    })}
+                </VStack>
+            </Box>
 
             {/* IMAGE MODAL */}
             <Modal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
@@ -337,35 +448,45 @@ export default function Muammolar() {
                     </ModalBody>
                 </ModalContent>
             </Modal>
-            {/* PENDING_MODAL */}
+
+            {/*PENDING MODAL */}
             <Modal isOpen={pendingModal.isOpen} onClose={pendingModal.onClose} isCentered>
                 <ModalOverlay />
-                <ModalContent display={'flex'} alignItems={'center'} flexDirection={'column'} maxW={'25vw'}>
-                    <ModalBody>
-                        <Text display={'flex'} alignItems={'start'} gap={2} pt={3}>
-                            {t("appeals.pendingAsk")}
-                        </Text>
-                    </ModalBody>
-                    <ModalFooter w={'100%'} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <Button onClick={() => pendingModal.onClose()} variant={'outlinePrimary'}>
+                <ModalContent>
+                    <ModalHeader>{t("appeals.pendingAsk")}</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalFooter>
+                        <Button mr={3} onClick={pendingModal.onClose}>
                             {t("common.cancel")}
                         </Button>
-                        <Button variant={'solidPrimary'} onClick={() => Kutilmoqda()}>
+                        <Button
+                            colorScheme="yellow"
+                            onClick={Kutilmoqda}
+                            isLoading={save}
+                        >
                             {t("common.yesStart")}
                         </Button>
                     </ModalFooter>
+
                 </ModalContent>
             </Modal>
-            {/*TUGATISH_MODAL */}
-            <Modal isOpen={tugatishModal.isOpen} onClose={tugatishModal.onClose} isCentered size="lg">
+            {/*TUGATISH MODAL */}
+            <Modal
+                isOpen={tugatishModal.isOpen}
+                onClose={tugatishModal.onClose}
+                isCentered
+                size="lg"
+            >
                 <ModalOverlay />
                 <ModalContent borderRadius="2xl">
-                    <ModalHeader>{t("appeals.finishTitle")}</ModalHeader>
+                    <ModalHeader fontWeight="bold">
+                        {t("appeals.finishTitle")}
+                    </ModalHeader>
                     <ModalCloseButton />
 
                     <ModalBody>
                         <VStack spacing={5}>
-                            {/* Upload area */}
+                            {/* DROP AREA */}
                             <Box
                                 w="100%"
                                 p={6}
@@ -374,7 +495,8 @@ export default function Muammolar() {
                                 borderRadius="xl"
                                 textAlign="center"
                                 cursor="pointer"
-                                _hover={{ bg: "gray.800" }}
+                                transition="0.2s"
+                                _hover={{ bg: "surface", borderColor: "blue.400s" }}
                                 onClick={() => fileRef.current.click()}
                                 onDrop={(e) => {
                                     e.preventDefault();
@@ -383,30 +505,26 @@ export default function Muammolar() {
                                 onDragOver={(e) => e.preventDefault()}
                             >
                                 {image ? (
-                                    <Box>
-                                        <img
+                                    <VStack spacing={3}>
+                                        <Image
                                             src={image}
-                                            alt="preview"
-                                            style={{
-                                                maxHeight: "200px",
-                                                margin: "0 auto",
-                                                borderRadius: "12px",
-                                            }}
+                                            maxH="200px"
+                                            borderRadius="lg"
                                         />
-                                        <Text mt={2} fontSize="sm" color="gray.500">
-                                            {t("appeals.imageUploaded")}
+                                        <Text fontSize="sm" color="green.500">
+                                            Rasm yuklandi ✅
                                         </Text>
-                                    </Box>
+                                    </VStack>
                                 ) : (
-                                    <Flex direction="column" align="center" gap={2}>
-                                        <Icon as={UploadCloud} boxSize={8} color="gray.400" />
+                                    <VStack spacing={2}>
+                                        <Icon as={UploadCloud} boxSize={10} color="gray.400" />
                                         <Text fontWeight="medium">
-                                            {t("appeals.uploadDrop")}
+                                            Rasmni shu yerga tashlang
                                         </Text>
                                         <Text fontSize="sm" color="gray.500">
-                                            {t("appeals.uploadTypes")}
+                                            yoki tanlash uchun bosing
                                         </Text>
-                                    </Flex>
+                                    </VStack>
                                 )}
 
                                 <Input
@@ -418,10 +536,10 @@ export default function Muammolar() {
                                 />
                             </Box>
 
-                            {/* Comment */}
+                            {/* COMMENT */}
                             <Box w="100%">
                                 <Text mb={2} fontWeight="medium">
-                                    {t("appeals.commentLabel")} <span style={{ color: 'red' }}>*</span>
+                                    {t("appeals.commentLabel")}
                                 </Text>
                                 <Textarea
                                     placeholder={t("appeals.commentPlaceholder")}
@@ -430,57 +548,32 @@ export default function Muammolar() {
                                     resize="none"
                                 />
                                 <Text fontSize="xs" color="gray.400" mt={1}>
-                                    {comment.length}/20 {t("common.minimal")}
+                                    {comment.length}/20 minimal
                                 </Text>
                             </Box>
                         </VStack>
                     </ModalBody>
 
-                    <ModalFooter >
-                        <Button variant="outlinePrimary" mr={3} onClick={tugatishModal.onClose}>
+                    <ModalFooter>
+                        <Button
+                            variant="outline"
+                            mr={3}
+                            onClick={tugatishModal.onClose}
+                        >
                             {t("common.cancel")}
                         </Button>
+
                         <Button
+                            colorScheme="blue"
                             onClick={Tugatildi}
+                            isLoading={save}
                             isDisabled={comment.length < 20 || !selectedFile}
-                            variant="solidPrimary"
                         >
                             {t("common.confirm")}
                         </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-            {/*MESSENGER */}
-            {messages.map((msg, i) => (
-                <Flex
-                    key={i}
-                    justify={msg.type === "USER" ? "start" : "end"}
-                    w="100%"
-                >
-                    <Box
-                        bg={cardBg}
-                        backgroundImage={cardGradient}
-                        border={cardBorder}
-                        borderRadius="16px"
-                        px={7}
-                        py={4}
-                        mt={3}
-                        boxShadow={cardShadow}
-                        transition="0.2s"
-                        _hover={{
-                            transform: "translateY(-3px)",
-                            boxShadow: cardShadowHover,
-                        }}
-                    >
-                        <Text>{msg.note}</Text>
-                        <Text fontSize="10px">
-                            {formatDateTime(msg.createdAt)}
-                        </Text>
-                    </Box>
-                </Flex>
-            ))}
-
-        </Flex >
-
-    )
+        </Flex>
+    );
 }

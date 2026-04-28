@@ -437,7 +437,7 @@ export default function Dashboard() {
 
       {/* Charts Row 1 */}
       <Flex gap={4} mb={4}>
-        <Box {...cardShell} flex={1} opacity={loading ? 0.7 : 1}>
+        <Box {...cardShell} w={'70%'} opacity={loading ? 0.7 : 1}>
           <Box fontSize="xs" color={c.textMuted} fontWeight={600} mb={3}>
             {t("dashboard.yearlyAppeals", { defaultValue: "Yearly appeals" })}
           </Box>
@@ -445,29 +445,7 @@ export default function Dashboard() {
             <Line key={i18n.language} data={yearlyLineData} options={baseOptions} />
           </Box>
         </Box>
-
-        <Box {...cardShell} flex={1} opacity={loading ? 0.7 : 1}>
-          <Box fontSize="xs" color={c.textMuted} fontWeight={600} mb={3}>
-            {t("dashboard.todayMonthlyDailyActivity", { defaultValue: "Today activity" })}
-          </Box>
-          <Box h="220px" position="relative">
-            <Line key={i18n.language} data={todayActivityLine} options={noLegend} />
-          </Box>
-        </Box>
-      </Flex>
-
-      {/* Charts Row 2 */}
-      <Flex gap={4}>
-        <Box {...cardShell} flex={1.6} opacity={loading ? 0.7 : 1}>
-          <Box fontSize="xs" color={c.textMuted} fontWeight={600} mb={3}>
-            {t("dashboard.monthlyAndTodayActivity", { defaultValue: "Monthly + Today activity" })}
-          </Box>
-          <Box h="220px" position="relative">
-            <Line key={i18n.language} data={monthlyAndTodayData} options={baseOptions} />
-          </Box>
-        </Box>
-
-        <Box {...cardShell} flex={1} opacity={loading ? 0.7 : 1}>
+        <Box {...cardShell} w={'30%'} opacity={loading ? 0.7 : 1}>
           <Box fontSize="xs" color={c.textMuted} fontWeight={600} mb={3}>
             {t("dashboard.statusDistribution", { defaultValue: "Status distribution" })}
           </Box>
