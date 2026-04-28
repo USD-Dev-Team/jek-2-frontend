@@ -128,13 +128,20 @@ export default function Dashboard() {
   const rejectedCount = statusMap.REJECTED ?? 0;
 
   // ===== UI Shell
-  const cardShell = {
-    backgroundImage: c.gradientBg,
-    border: `1px solid ${c.border}`,
-    borderRadius: "16px",
-    p: "16px",
-    boxShadow: c.shadowNormal,
-  };
+  const cardShell = useMemo(
+    () => ({
+      bg: c.surface,
+      backgroundImage: c.gradientBg,
+      border: `1px solid ${c.border}`,
+      borderRadius: "16px",
+      p: "16px",
+      boxShadow: c.shadowNormal,
+      transition: "0.2s",
+      _hover: { boxShadow: c.shadowHover, transform: "translateY(-2px)" },
+    }),
+    [c.surface, c.gradientBg, c.border, c.shadowLight, c.shadowHover]
+  );
+
 
   // ===== Chart options
   const baseOptions = useMemo(
@@ -248,6 +255,7 @@ export default function Dashboard() {
   // ===== Monthly + Today (10 ta nuqta) -> yearlyDynamics dan oxirgi 10 oy
   const last10MonthLabels = useMemo(() => monthLabels.slice(2), [monthLabels]); // Mar..Dec (10 ta)
   const last10MonthData = useMemo(() => yearlyDynamics.slice(2), [yearlyDynamics]);
+
 
   const monthlyAndTodayData = useMemo(
     () => ({
@@ -406,6 +414,7 @@ export default function Dashboard() {
             >
               {card.label}
             </Box>
+
 
             <Flex alignItems="baseline" gap={2}>
               <Box
