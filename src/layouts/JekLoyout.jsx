@@ -2,12 +2,13 @@ import { Outlet } from "react-router";
 import Sidebar from "../components/common/Sidebar";
 import { Box } from "@chakra-ui/react";
 import { useUIStore } from "../store/useUIStore";
-import { LayoutDashboard, MessageSquare } from "lucide-react";
+import { LayoutDashboard, MessageCircleDashed, MessageSquare } from "lucide-react";
 import Header from "../components/common/Header";
 
 const links = [
   { labelKey: "nav.dashboard", to: "/jek/Dashboard", icon: LayoutDashboard },
   { labelKey: "nav.appeals", to: "/jek/Murojatlar", icon: MessageSquare },
+  { labelKey: "nav.myAppeals", to: "/jek/Mening-murojatlarim", icon: MessageCircleDashed },
 ];
 
 export default function JekLayout() {

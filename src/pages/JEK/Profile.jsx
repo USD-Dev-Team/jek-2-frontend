@@ -1,10 +1,11 @@
-import { Badge, Button, Collapse, Divider, Flex, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Skeleton, Switch, Text, useColorModeValue, useDisclosure, VStack, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react'
+import { Badge, Button, Collapse, Divider, Flex, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Skeleton, Switch, Text, useColorModeValue, useDisclosure, VStack, InputGroup, InputRightElement, IconButton, SimpleGrid, Box } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { apiJekData } from '../../Services/api/Jekdata'
 import { useTranslation } from 'react-i18next'
 import { formatDateTime } from '../../utils/tools/formatDateTime'
 import Cookies from 'js-cookie'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { apiDashboard } from '../../Services/api/Dashboar'
 
 export default function Profile() {
     const id = Cookies.get('user_id')
@@ -16,6 +17,10 @@ export default function Profile() {
     const [saving, setSaving] = useState(false);
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [statData, setStatData] = useState(null)
+
+    const editProfileModal = useDisclosure();
+    const changePasswordModal = useDisclosure();
 
     const [profil, setProfil] = useState({
         first_name: "",
@@ -94,6 +99,9 @@ export default function Profile() {
         return `+${digits.slice(0, 3)} ${digits.slice(3, 5)}-${digits.slice(5, 8)}-${digits.slice(8, 10)}-${digits.slice(10, 12)}`
     }
 
+    const notAllowed = ['INSPECTION' , 'GOVERNMENT'].includes(param?.role)
+
+
     const deActivate = async (param) => {
         if (!param?.id) return;
         const payload = { isActive: param?.isActive ? false : true };
@@ -106,6 +114,33 @@ export default function Profile() {
             setSaving(false);
         }
     };
+    const getStatistics = async () => {
+        try {
+            const res = await apiDashboard.DataGet(2026, null, id, null);
+            setStatData(res.data);
+        } catch (e) {
+            console.log(e.response?.data);
+        }
+    };
+
+    useEffect(() => {
+        if (id) {
+            getStatistics();
+        }
+    }, [id]);
+
+    const statusMap = React.useMemo(() => {
+        const arr = statData?.statuses ?? [];
+        return arr.reduce((acc, s) => {
+            acc[s.status] = s?._count?.id ?? 0;
+            return acc;
+        }, {});
+    }, [statData]);
+
+    const totalCount = statData?.totalRequests ?? 0;
+    const completedCount = (statusMap.COMPLETED ?? 0) + (statusMap.JEK_COMPLETED ?? 0);
+    const inProgressCount = statusMap.IN_PROGRESS ?? 0;
+    const rejectedCount = statusMap.REJECTED ?? 0;
 
     const profilChange = async () => {
         try {
@@ -134,198 +169,215 @@ export default function Profile() {
             {loading ? (
                 <Skeleton rounded={'16px'} mt={5} w={'100%'} h={'300px'} />
             ) : (
-                <Flex
-                    bg={cardBg}
-                    backgroundImage={cardGradient}
-                    border={cardBorder}
-                    borderRadius="16px"
-                    px={7}
-                    py={7}
-                    my={5}
-                    w={'100%'}
-                    boxShadow={cardShadow}
-                    transition="0.2s"
-                    _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
-                    direction={'column'}
-                    mb={4}
-                >
-                    <HStack align={'start'} spacing={8} w="100%" flexWrap={{ base: 'wrap', lg: 'nowrap' }}>
-                        <VStack flex="1" minW="260px" align={'start'} gap={1}>
-                            <span style={{ color: '#778092', fontWeight: 'bold' }}>
-                                {t("jekEmployees.employee")}
-                            </span>
-                            <Text>
-                                {param?.first_name} {param?.last_name}
-                            </Text>
+                <Flex direction="column" gap={6} my={6}>
+                    {/* PROFILE HEADER */}
+                    <Flex
+                        bg={cardBg}
+                        border={cardBorder}
+                        backgroundImage={cardGradient}
+                        borderRadius="16px"
+                        p={8}
+                        boxShadow={cardShadow}
+                        align="center"
+                        direction={'column'}
+                        wrap="wrap"
+                        gap={6}
+                        transition="0.2s"
+                        _hover={{
+                            transform: "translateY(-3px)",
+                            boxShadow: cardShadowHover,
+                        }}
+                    >
+                        <Flex w={'100%'} justifyContent={'space-between'} align={'center'}>
+                            {/* LEFT SIDE */}
+                            <HStack spacing={6}>
+                                <Flex
+                                    w="80px"
+                                    h="80px"
+                                    borderRadius="full"
+                                    bg="blue.500"
+                                    color="white"
+                                    align="center"
+                                    justify="center"
+                                    fontSize="28px"
+                                    fontWeight="bold"
+                                >
+                                    {param?.first_name?.charAt(0)}
+                                </Flex>
 
-                            <Text>
-                                <span style={{ color: '#778092' }}>{t("common.role")}: </span>
-                                {param?.role}
-                            </Text>
+                                <VStack align="start" spacing={1}>
+                                    <Text fontSize="xl" fontWeight="bold">
+                                        {param?.first_name} {param?.last_name}
+                                    </Text>
+
+                                    <Text fontSize="sm" opacity={0.7}>
+                                        {t("common.role")}: {param?.role}
+                                    </Text>
+
+                                    <Badge
+                                        borderRadius="10px"
+                                        px={3}
+                                        py={1}
+                                        colorScheme={param?.isActive ? "green" : "red"}
+                                    >
+                                        {param?.isActive
+                                            ? t("jekEmployees.statusActive")
+                                            : t("jekEmployees.statusInactive")}
+                                    </Badge>
+                                </VStack>
+                            </HStack>
+
+                            {/* ACTIONS */}
+                            <HStack spacing={4} flexWrap="wrap">
+                                <Button
+                                    rounded="10px"
+                                    px={6}
+                                    variant="outline"
+                                    onClick={editProfileModal.onOpen}
+                                >
+                                    {t("jekEmployees.editProfile")}
+                                </Button>
+
+                                <Button
+                                    rounded="10px"
+                                    px={6}
+                                    variant="solidPrimary"
+                                    onClick={changePasswordModal.onOpen}
+                                >
+                                    {t("jekEmployees.changePassword")}
+                                </Button>
+                            </HStack>
+                        </Flex>
+                        <SimpleGrid w={'100%'} columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={8}>
+                            {notAllowed ? '' : <>
+                                {/* JAMI */}
+                                <Box
+                                    p={6}
+                                    borderRadius="18px"
+                                    bg={cardBg}
+                                    border={cardBorder}
+                                    boxShadow={cardShadow}
+                                    transition="0.2s"
+
+                                >
+                                    <Text fontSize="12px" color="gray.500" mb={2}>
+                                        {t("dashboard.totalAppeals")}
+                                    </Text>
+                                    <Text fontSize="30px" fontWeight="700">
+                                        {totalCount}
+                                    </Text>
+                                </Box>
+
+                                {/* BAJARILGAN */}
+                                <Box
+                                    p={6}
+                                    borderRadius="18px"
+                                    bg={useColorModeValue("green.50", "rgba(72,187,120,0.12)")}
+                                    border="1px solid"
+                                    borderColor={useColorModeValue("green.200", "rgba(72,187,120,0.4)")}
+                                    boxShadow={cardShadow}
+                                    transition="0.2s"
+
+                                >
+                                    <Text fontSize="12px" color="green.500" mb={2}>
+                                        {t("dashboard.completed")}
+                                    </Text>
+                                    <Text fontSize="30px" fontWeight="700" color="green.500">
+                                        {completedCount}
+                                    </Text>
+                                </Box>
+
+                                {/* JARAYONDA */}
+                                <Box
+                                    p={6}
+                                    borderRadius="18px"
+                                    bg={useColorModeValue("yellow.50", "rgba(247,201,72,0.12)")}
+                                    border="1px solid"
+                                    borderColor={useColorModeValue("yellow.300", "rgba(247,201,72,0.4)")}
+                                    boxShadow={cardShadow}
+                                    transition="0.2s"
+
+                                >
+                                    <Text fontSize="12px" color="yellow.600" mb={2}>
+                                        {t("dashboard.inProgress")}
+                                    </Text>
+                                    <Text fontSize="30px" fontWeight="700" color="yellow.600">
+                                        {inProgressCount}
+                                    </Text>
+                                </Box>
+
+                                {/* RAD ETILGAN */}
+                                <Box
+                                    p={6}
+                                    borderRadius="18px"
+                                    bg={useColorModeValue("red.50", "rgba(245,101,101,0.12)")}
+                                    border="1px solid"
+                                    borderColor={useColorModeValue("red.200", "rgba(245,101,101,0.4)")}
+                                    boxShadow={cardShadow}
+                                    transition="0.2s"
+
+                                >
+                                    <Text fontSize="12px" color="red.500" mb={2}>
+                                        {t("dashboard.rejected")}
+                                    </Text>
+                                    <Text fontSize="30px" fontWeight="700" color="red.500">
+                                        {rejectedCount}
+                                    </Text>
+                                </Box>
+                            </>}
 
 
-                            <Text>
-                                <span style={{ color: '#778092' }}>{t("common.status")}: </span>
-                                <Badge colorScheme={param?.isActive ? "green" : "red"}>
-                                    {param?.isActive
-                                        ? t("jekEmployees.statusActive")
-                                        : t("jekEmployees.statusInactive")}
-                                </Badge>
-                            </Text>
-                        </VStack>
+                        </SimpleGrid>
+                    </Flex>
 
-                        <VStack flex="1" minW="260px" align={'start'} gap={1}>
-                            <span style={{ color: '#778092', fontWeight: 'bold' }}>
-                                {adLenght === 1
-                                    ? t("jekEmployees.addressSingle")
-                                    : t("jekEmployees.addressPlural")}
-                            </span>
+                    {/* ADDRESS CARD */}
+                    <Flex
+                        bg={cardBg}
+                        border={cardBorder}
+                        backgroundImage={cardGradient}
+                        borderRadius="16px"
+                        p={8}
+                        boxShadow={cardShadow}
+                        direction="column"
+                        transition="0.2s"
+                        _hover={{
+                            transform: "translateY(-3px)",
+                            boxShadow: cardShadowHover,
+                        }}
+                    >
+                        <Text fontWeight="bold" mb={4}>
+                            {adLenght === 1
+                                ? t("jekEmployees.addressSingle")
+                                : t("jekEmployees.addressPlural")}
+                        </Text>
 
-                            
-                            {param?.addresses && param.addresses.length > 0 ? (
-                                param.addresses.map((item) => (
-                                    <VStack key={item.id} align={'start'} gap={1} w="100%">
-                                        <Text>
+                        {param?.addresses && param.addresses.length > 0 ? (
+                            <Flex wrap="wrap" gap={4}>
+                                {param.addresses.map((item) => (
+                                    <Flex
+                                        key={item.id}
+                                        px={4}
+                                        py={3}
+                                        borderRadius="10px"
+                                        bg="gray.100"
+                                        _dark={{ bg: "whiteAlpha.100" }}
+                                        minW="220px"
+                                    >
+                                        <Text fontSize="sm">
                                             {item.district}, {item.neighborhood}
                                         </Text>
-                                    </VStack>
-                                ))
-                            ) : (
-                                <Text color="#778092">
+                                    </Flex>
+                                ))}
+                            </Flex>
+                        ) : (
+                            <Text opacity={0.6}>
                                 {t("jekEmployees.noAddress")}
                             </Text>
-                            )}
-                        </VStack>
-
-                        <VStack align={'end'} spacing={3} minW="220px">
-                            <Button
-                                w="210px"
-                                rounded="12px"
-                                variant={activePanel === 'profil' ? 'solidPrimary' : 'outline'}
-                                onClick={() => togglePanel('profil')}
-                            >
-                                {t("jekEmployees.editProfile")}
-                            </Button>
-
-                            <Button
-                                w="210px"
-                                rounded="12px"
-                                variant={activePanel === 'parol' ? 'solidPrimary' : 'outline'}
-                                onClick={() => togglePanel('parol')}
-                            >
-                                {t("jekEmployees.changePassword")}
-                            </Button>
-                        </VStack>
-                    </HStack>
-
-                    {activePanel && <Divider w={'100%'} my={7} />}
-                    <Collapse in={!!activePanel} animateOpacity>
-                        <Flex justify="center" w="100%">
-                            {/* 1- PANEL */}
-                            {activePanel === 'profil' && (
-                                <VStack w={{ base: '100%', md: '420px' }} spacing={3}>
-                                    <Text color="#778092" fontWeight="bold">
-                                        {t("jekEmployees.editProfileTitle")}
-                                    </Text>
-
-                                    <Input
-                                        value={profil.first_name}
-                                        name='first_name'
-                                        onChange={changeProfil}
-                                        rounded={'16px'}
-                                        placeholder={t("register.firstNamePlaceholder")}
-                                    />
-
-                                    <Input
-                                        value={profil.last_name}
-                                        name='last_name'
-                                        onChange={changeProfil}
-                                        rounded={'16px'}
-                                        placeholder={t("register.lastNamePlaceholder")}
-                                    />
-
-                                    <Input
-                                        value={profil.phoneNumber}
-                                        name='phoneNumber'
-                                        onChange={changeProfil}
-                                        rounded={'16px'}
-                                        placeholder={t("register.phonePlaceholder")}
-                                    />
-
-                                    <Button
-                                        w={'100%'}
-                                        variant={'solidPrimary'}
-                                        rounded={'16px'}
-                                        onClick={profilChange}
-                                        isLoading={saving}
-                                    >
-                                        {t("common.confirm")}
-                                    </Button>
-                                </VStack>
-                            )}
-                            {/* 2- PANEL */}
-                            {activePanel === 'parol' && (
-                                <VStack w={{ base: '100%', md: '420px' }} spacing={3}>
-                                    <Text color="#778092" fontWeight="bold">
-                                        {t("jekEmployees.changePasswordTitle")}
-                                    </Text>
-
-                                    {/* PASSWORD */}
-                                    <InputGroup>
-                                        <Input
-                                            value={parol.password}
-                                            name='password'
-                                            onChange={changeParol}
-                                            rounded={'16px'}
-                                            placeholder={t("jekEmployees.newPassword")}
-                                            type={showPassword ? "text" : "password"}
-                                        />
-                                        <InputRightElement>
-                                            <IconButton
-                                                variant="ghost"
-                                                size="sm"
-                                                icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                                                onClick={() => setShowPassword(!showPassword)}
-                                            />
-                                        </InputRightElement>
-                                    </InputGroup>
-
-                                    {/* CONFIRM PASSWORD */}
-                                    <InputGroup>
-                                        <Input
-                                            value={parol.passwordConfirm}
-                                            name='passwordConfirm'
-                                            onChange={changeParol}
-                                            rounded={'16px'}
-                                            placeholder={t("jekEmployees.confirmNewPassword")}
-                                            type={showConfirmPassword ? "text" : "password"}
-                                        />
-                                        <InputRightElement>
-                                            <IconButton
-                                                variant="ghost"
-                                                size="sm"
-                                                icon={showConfirmPassword ? <ViewOffIcon /> : <ViewIcon />}
-                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                            />
-                                        </InputRightElement>
-                                    </InputGroup>
-
-                                    <Button
-                                        w={'100%'}
-                                        variant={'solidPrimary'}
-                                        rounded={'16px'}
-                                        onClick={parolChange}
-                                        isLoading={saving}
-                                    >
-                                        {t("common.confirm")}
-                                    </Button>
-                                </VStack>
-                            )}
-                        </Flex>
-                    </Collapse>
+                        )}
+                    </Flex>
                 </Flex>
             )}
-
+            {/*TASDIQ MODAL */}
             <Modal isOpen={confirmModal.isOpen} onClose={confirmModal.onClose} isCentered>
                 <ModalOverlay />
                 <ModalContent>
@@ -338,6 +390,121 @@ export default function Profile() {
                     <ModalFooter gap={3}>
                         <Button onClick={confirmModal.onClose}>{t("common.cancel")}</Button>
                         <Button onClick={() => deActivate(param)} colorScheme="blue" isLoading={saving}>{t("common.confirm")}</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+            {/*EDIT PROFIL MODAL */}
+            <Modal isOpen={editProfileModal.isOpen} onClose={editProfileModal.onClose} isCentered>
+                <ModalOverlay />
+                <ModalContent borderRadius="16px">
+                    <ModalHeader>{t("jekEmployees.editProfileTitle")}</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <VStack spacing={4}>
+                            <Input
+                                value={profil.first_name}
+                                name="first_name"
+                                onChange={changeProfil}
+                                rounded="16px"
+                                placeholder={t("register.firstNamePlaceholder")}
+                            />
+                            <Input
+                                value={profil.last_name}
+                                name="last_name"
+                                onChange={changeProfil}
+                                rounded="16px"
+                                placeholder={t("register.lastNamePlaceholder")}
+                            />
+                            <Input
+                                value={profil.phoneNumber}
+                                name="phoneNumber"
+                                onChange={changeProfil}
+                                rounded="16px"
+                                placeholder={t("register.phonePlaceholder")}
+                            />
+                        </VStack>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button mr={3} onClick={editProfileModal.onClose}>
+                            {t("common.cancel")}
+                        </Button>
+                        <Button
+                            variant="solidPrimary"
+                            onClick={() => {
+                                profilChange();
+                                editProfileModal.onClose();
+                            }}
+                            isLoading={saving}
+                        >
+                            {t("common.confirm")}
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            {/*PASWORD CHANGE MODAL */}
+            <Modal isOpen={changePasswordModal.isOpen} onClose={changePasswordModal.onClose} isCentered>
+                <ModalOverlay />
+                <ModalContent borderRadius="16px">
+                    <ModalHeader>{t("jekEmployees.changePasswordTitle")}</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <VStack spacing={4}>
+                            <InputGroup>
+                                <Input
+                                    value={parol.password}
+                                    name="password"
+                                    onChange={changeParol}
+                                    rounded="16px"
+                                    placeholder={t("jekEmployees.newPassword")}
+                                    type={showPassword ? "text" : "password"}
+                                />
+                                <InputRightElement>
+                                    <IconButton
+                                        variant="ghost"
+                                        size="sm"
+                                        icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    />
+                                </InputRightElement>
+                            </InputGroup>
+
+                            <InputGroup>
+                                <Input
+                                    value={parol.passwordConfirm}
+                                    name="passwordConfirm"
+                                    onChange={changeParol}
+                                    rounded="16px"
+                                    placeholder={t("jekEmployees.confirmNewPassword")}
+                                    type={showConfirmPassword ? "text" : "password"}
+                                />
+                                <InputRightElement>
+                                    <IconButton
+                                        variant="ghost"
+                                        size="sm"
+                                        icon={showConfirmPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                        onClick={() =>
+                                            setShowConfirmPassword(!showConfirmPassword)
+                                        }
+                                    />
+                                </InputRightElement>
+                            </InputGroup>
+                        </VStack>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button mr={3} onClick={changePasswordModal.onClose}>
+                            {t("common.cancel")}
+                        </Button>
+                        <Button
+                            variant="solidPrimary"
+                            onClick={() => {
+                                parolChange();
+                                changePasswordModal.onClose();
+                            }}
+                            isLoading={saving}
+                        >
+                            {t("common.confirm")}
+                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

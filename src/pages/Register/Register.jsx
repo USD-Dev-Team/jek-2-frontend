@@ -156,11 +156,11 @@ export default function Register() {
   const langLabel = langMap[i18n.language] ?? (i18n.language || "").toUpperCase();
 
   return (
-    <Flex minH="100vh" align="center" justify="center" bg="bg" px={4} my={10}>
+    <Flex minH="85vh" align="center" justify="center" bg="bg" px={4} my={10}>
       <Box
         as="form"
         onSubmit={handleSubmit}
-        w={{ base: "100%", sm: "400px" }}
+        w={{ base: "100%", sm: "600px" }}
         bg="surface"
         p={8}
         rounded="xl"
@@ -215,7 +215,7 @@ export default function Register() {
           {t("register.subtitle")}
         </Text>
 
-        {/* Ism Familiya */}
+        {/* Ism Familiya  Telefon  */}
         <HStack>
           <FormControl mb={4} isInvalid={!!errors.ism}>
             <FormLabel color="text">
@@ -230,7 +230,7 @@ export default function Register() {
           </FormControl>
 
           <FormControl mb={4} isInvalid={!!errors.familiya}>
-            <FormLabel color="text">
+            <FormLabel color="text" >
               {t("register.lastName")} <span style={{ color: "red" }}>*</span>
             </FormLabel>
             <Input
@@ -240,22 +240,21 @@ export default function Register() {
             />
             <FormErrorMessage>{errors.familiya}</FormErrorMessage>
           </FormControl>
+
+          <FormControl mb={4} isInvalid={!!errors.telefon}>
+            <FormLabel color="text" >
+              {t("register.phone")} <span style={{ color: "red" }}>*</span>
+            </FormLabel>
+            <Input
+              ref={telInput}
+              type="tel"
+              defaultValue={'+998'}
+              placeholder={t("register.phonePlaceholder")}
+              onChange={() => clearError("telefon")}
+            />
+            <FormErrorMessage>{errors.telefon}</FormErrorMessage>
+          </FormControl>
         </HStack>
-
-        {/* Telefon */}
-        <FormControl mb={4} isInvalid={!!errors.telefon}>
-          <FormLabel color="text">
-            {t("register.phone")} <span style={{ color: "red" }}>*</span>
-          </FormLabel>
-          <Input
-            ref={telInput}
-            type="tel"
-            placeholder={t("register.phonePlaceholder")}
-            onChange={() => clearError("telefon")}
-          />
-          <FormErrorMessage>{errors.telefon}</FormErrorMessage>
-        </FormControl>
-
         {/* Address */}
         <HStack>
           <FormControl mb={4} isInvalid={!!errors.tuman}>
@@ -303,43 +302,43 @@ export default function Register() {
           </FormControl>
         </HStack>
 
-        {/* Parol */}
-        <FormControl mb={2} isInvalid={!!errors.parol}>
-          <FormLabel color="text">
-            {t("register.password")} <span style={{ color: "red" }}>*</span>
-          </FormLabel>
-          <InputGroup>
-            <Input
-              ref={parolInput}
-              type={show ? "text" : "password"}
-              placeholder={t("register.passwordPlaceholder")}
-              onChange={() => clearError("parol")}
-            />
-            <InputRightElement cursor="pointer" onClick={() => setShow(!show)}>
-              {show ? <Eye /> : <EyeClosed />}
-            </InputRightElement>
-          </InputGroup>
-          <FormErrorMessage>{errors.parol}</FormErrorMessage>
-        </FormControl>
-
-        {/* Confirm */}
-        <FormControl mb={5} isInvalid={!!errors.confirmParol}>
-          <FormLabel color="text">
-            {t("register.confirmPassword")} <span style={{ color: "red" }}>*</span>
-          </FormLabel>
-          <InputGroup>
-            <Input
-              ref={confirmInput}
-              type={show2 ? "text" : "password"}
-              placeholder={t("register.confirmPasswordPlaceholder")}
-              onChange={() => clearError("confirmParol")}
-            />
-            <InputRightElement cursor="pointer" onClick={() => setShow2(!show2)}>
-              {show2 ? <Eye /> : <EyeClosed />}
-            </InputRightElement>
-          </InputGroup>
-          <FormErrorMessage>{errors.confirmParol}</FormErrorMessage>
-        </FormControl>
+        {/* Parol   Confirm */}
+        <HStack align={'start'}>
+          <FormControl mb={2} isInvalid={!!errors.parol}>
+            <FormLabel color="text">
+              {t("register.password")} <span style={{ color: "red" }}>*</span>
+            </FormLabel>
+            <InputGroup>
+              <Input
+                ref={parolInput}
+                type={show ? "text" : "password"}
+                placeholder={t("register.passwordPlaceholder")}
+                onChange={() => clearError("parol")}
+              />
+              <InputRightElement cursor="pointer" onClick={() => setShow(!show)}>
+                {show ? <Eye /> : <EyeClosed />}
+              </InputRightElement>
+            </InputGroup>
+            <FormErrorMessage>{errors.parol}</FormErrorMessage>
+          </FormControl>
+          <FormControl mb={5} isInvalid={!!errors.confirmParol}>
+            <FormLabel color="text">
+              {t("register.confirmPassword")} <span style={{ color: "red" }}>*</span>
+            </FormLabel>
+            <InputGroup>
+              <Input
+                ref={confirmInput}
+                type={show2 ? "text" : "password"}
+                placeholder={t("register.confirmPasswordPlaceholder")}
+                onChange={() => clearError("confirmParol")}
+              />
+              <InputRightElement cursor="pointer" onClick={() => setShow2(!show2)}>
+                {show2 ? <Eye /> : <EyeClosed />}
+              </InputRightElement>
+            </InputGroup>
+            <FormErrorMessage>{errors.confirmParol}</FormErrorMessage>
+          </FormControl>
+        </HStack>
 
         {/* Buttons */}
         <HStack>

@@ -30,9 +30,9 @@ export default function Header() {
     <Flex
       position="fixed"
       top="0"
-      left={collapsed ? "70px" : "220px"}
+      left={collapsed ? "70px" : "240px"}
       transition="0.25s ease"
-      boxShadow="lg"
+      boxShadow="10px 10px 15px -3px rgba(0, 0, 0, 0.1)"
       right="0"
       bg="darkblue"
       h="70px"
@@ -45,12 +45,6 @@ export default function Header() {
       <Breadcumb />
 
       <HStack gap={5}>
-        <IconButton
-          aria-label="Notifications"
-          icon={<BellDot size={25} />}
-          variant="ghost"
-        />
-
         <Select
           value={currentLang}
           onChange={handleLangChange}

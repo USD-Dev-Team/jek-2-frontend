@@ -46,6 +46,8 @@ import {
   X,
   LayoutGrid,
   Table2,
+  CheckCircle2,
+  XCircle,
 } from "lucide-react";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -241,6 +243,156 @@ export default function HodimlarINS() {
 
   return (
     <Box mb={10}>
+      {/* STATISTIKA */}
+      <Flex gap={5} mb={5} wrap="wrap">
+        {/* TOTAL */}
+        <Box
+          flex="1"
+          minW={{ base: "100%", md: "250px" }}
+          bg={cardBg}
+          backgroundImage={cardGradient}
+          border={cardBorder}
+          borderRadius="18px"
+          p={5}
+          boxShadow={cardShadow}
+          position="relative"
+          overflow="hidden"
+          transition="0.2s"
+          opacity={loading ? 0.7 : 1}
+          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+        >
+          <Box
+            w="42px"
+            h="42px"
+            borderRadius="14px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bg="rgba(59,130,246,0.12)"
+            color="blue.400"
+            mb={4}
+          >
+            <Users size={18} />
+          </Box>
+
+
+          <Text fontSize="11px" textTransform="uppercase" letterSpacing="0.08em" color="gray.400">
+            {t("jekEmployees.totalEmployees")}
+          </Text>
+
+          <Heading mt={2} fontSize="30px" color="blue.300">
+            {onlyJek.length}
+          </Heading>
+
+          {/* <Box
+            position="absolute"
+            top="-35%"
+            right="-25%"
+            w="170px"
+            h="170px"
+            bg="radial-gradient(circle, rgba(59,130,246,0.18), transparent 70%)"
+            pointerEvents="none"
+          /> */}
+        </Box>
+
+        {/* ACTIVE */}
+        <Box
+          flex="1"
+          minW={{ base: "100%", md: "250px" }}
+          bg={cardBg}
+          backgroundImage={cardGradient}
+          border={cardBorder}
+          borderRadius="18px"
+          p={5}
+          boxShadow={cardShadow}
+          position="relative"
+          overflow="hidden"
+          transition="0.2s"
+          opacity={loading ? 0.7 : 1}
+          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+        >
+          <Box
+            w="42px"
+            h="42px"
+            borderRadius="14px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bg="rgba(34,197,94,0.12)"
+            color="green.400"
+            mb={4}
+          >
+            <CheckCircle2 size={18} />
+          </Box>
+
+          <Text fontSize="11px" textTransform="uppercase" letterSpacing="0.08em" color="gray.400">
+            {t("jekEmployees.totalActiveEmployees")}
+          </Text>
+
+          <Heading mt={2} fontSize="30px" color="green.300">
+            {activeJek}
+          </Heading>
+
+          {/* <Box
+            position="absolute"
+            top="-35%"
+            right="-25%"
+            w="170px"
+            h="170px"
+            bg="radial-gradient(circle, rgba(34,197,94,0.18), transparent 70%)"
+            pointerEvents="none"
+          /> */}
+        </Box>
+
+        {/* INACTIVE */}
+        <Box
+          flex="1"
+          minW={{ base: "100%", md: "250px" }}
+          bg={cardBg}
+          backgroundImage={cardGradient}
+          border={cardBorder}
+          borderRadius="18px"
+          p={5}
+          boxShadow={cardShadow}
+          position="relative"
+          overflow="hidden"
+          transition="0.2s"
+          opacity={loading ? 0.7 : 1}
+          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+        >
+          <Box
+            w="42px"
+            h="42px"
+            borderRadius="14px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bg="rgba(239,68,68,0.12)"
+            color="red.400"
+            mb={4}
+          >
+            <XCircle size={18} />
+          </Box>
+
+          <Text fontSize="11px" textTransform="uppercase" letterSpacing="0.08em" color="gray.400">
+            {t("jekEmployees.totalInactiveEmployees")}
+          </Text>
+
+          <Heading mt={2} fontSize="30px" color="red.300">
+            {noActiveJek}
+          </Heading>
+
+          {/* <Box
+            position="absolute"
+            top="-35%"
+            right="-25%"
+            w="170px"
+            h="170px"
+            bg="radial-gradient(circle, rgba(239,68,68,0.18), transparent 70%)"
+            pointerEvents="none"
+          /> */}
+        </Box>
+      </Flex>
       {/* FILTERS */}
       <Flex
         my={5}
@@ -302,26 +454,6 @@ export default function HodimlarINS() {
             onChange={changeForm}
             placeholder={t("jekEmployees.phone")}
           />
-          {/* VIEW TOGGLE */}
-          <ButtonGroup isAttached variant="outline" size="md">
-            <Button
-              leftIcon={<LayoutGrid size={16} />}
-              onClick={() => setViewMode("card")}
-              variant={viewMode === "card" ? "solid" : "outline"}
-              colorScheme="blue"
-            >
-              {t("common.card")}
-            </Button>
-
-            <Button
-              leftIcon={<Table2 size={16} />}
-              onClick={() => setViewMode("table")}
-              variant={viewMode === "table" ? "solid" : "outline"}
-              colorScheme="blue"
-            >
-              {t("common.table")}
-            </Button>
-          </ButtonGroup>
         </HStack>
         <HStack w={'100%'}>
           {/* TUMAN */}
@@ -371,64 +503,6 @@ export default function HodimlarINS() {
         </HStack>
 
       </Flex>
-
-      {/* STATISTIKA */}
-      <Flex gap={5} mb={5} wrap="wrap">
-        <VStack
-          w={'auto'}
-          bg={cardBg}
-          backgroundImage={cardGradient}
-          border={cardBorder}
-          borderRadius="16px"
-          align="start"
-          p={5}
-          boxShadow={cardShadow}
-          transition="0.2s"
-          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
-        >
-          <Heading color="warning">{onlyJek.length}</Heading>
-          <Text display="flex" justify="center" gap={2}>
-            <Users /> {t("jekEmployees.totalEmployees")} :
-          </Text>
-        </VStack>
-
-        <VStack
-          w={'auto'}
-          bg={cardBg}
-          backgroundImage={cardGradient}
-          border={cardBorder}
-          borderRadius="16px"
-          align="start"
-          p={5}
-          boxShadow={cardShadow}
-          transition="0.2s"
-          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
-        >
-          <Heading color="success">{activeJek}</Heading>
-          <Text display="flex" justify="center" gap={2}>
-            <Users /> {t("jekEmployees.totalActiveEmployees")} :
-          </Text>
-        </VStack>
-
-        <VStack
-          w={'auto'}
-          bg={cardBg}
-          backgroundImage={cardGradient}
-          border={cardBorder}
-          borderRadius="16px"
-          align="start"
-          p={5}
-          boxShadow={cardShadow}
-          transition="0.2s"
-          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
-        >
-          <Heading color="danger">{noActiveJek}</Heading>
-          <Text display="flex" justify="center" gap={2}>
-            <Users /> {t("jekEmployees.totalInactiveEmployees")} :
-          </Text>
-        </VStack>
-      </Flex>
-
       {/* LIST */}
       {viewMode === "card" ? (
         <Flex wrap={'wrap'} gap={3}>

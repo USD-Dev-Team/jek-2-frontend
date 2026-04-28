@@ -155,10 +155,11 @@ const resources = {
       nav: {
         dashboard: "Boshqaruv paneli",
         appeals: "Murojaatlar",
+        myAppeals: "Mening murojaatlarim",
         employees: "Hodimlar",
         jekEmployees: "JEK hodimlari",
         role: "Rol",
-        account:'Akaunt'
+        account: 'Akaunt'
       },
 
       common: {
@@ -203,7 +204,7 @@ const resources = {
         statusAll: "Barchasi",
         status_pending: "Kutilmoqda",
         status_in_progress: "Jarayonda",
-        status_completed: "Bajarildi",
+        status_completed: "Bajarildi(JEK)",
         status_rejected: "Rad etildi",
         status_completed_user: "Bajarildi(Foyd.)",
         status_rejected_user: "Rad etildi(Foyd.)",
@@ -232,6 +233,8 @@ const resources = {
         jekNote: "Izoh (JEK)",
 
         notFound: "Ariza mavjud emas",
+        onlyPending: "Bu yerga faqat <badge>Kutilmoqda</badge> statusli murojaatlar keladi",
+        chatHistory:'Faoliyat tarixi',
         view: {
           status: "Holat",
           type: "Murojaat xati",
@@ -467,7 +470,7 @@ const resources = {
         appeals: "Appeals",
         employees: "Employees",
         jekEmployees: "JEK employees",
-        account:'Account'
+        account: 'Account'
       },
 
       common: {
