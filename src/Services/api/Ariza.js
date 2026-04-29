@@ -5,11 +5,11 @@ class apiAriza {
     //     const response = await $api.get(`${BASE_URL}/requests/jek/list?status=${status}&page=${page}&limit=${limit}`)
     //     return response;
     // }
-    static getFilteredRequest = async (id , start, end, tuman, mahalla, status, search, page, limit) => {
+    static getFilteredRequest = async (id, start, end, tuman, mahalla, status, search, page, limit) => {
         const response = await $api.get(`${BASE_URL}/requests/universal-search`,
             {
                 params: {
-                    assigned_jek_id : id,
+                    assigned_jek_id: id,
                     startDate: start,
                     endDate: end,
                     district: tuman,

@@ -393,12 +393,15 @@ export default function HodimlarINS() {
       {/* FILTERS */}
       <Flex
         my={5}
-        direction={"column"}
-        gap={5}
-        bg={cardBg}
+        direction={'column'}
+        gap={5} bg={cardBg}
+        border={cardBorder}
         p={5}
         rounded={"16px"}
         backgroundImage={cardGradient}
+        boxShadow={cardShadow}
+        transition="0.2s"
+        _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
       >
         <HStack w={"100%"}>
           {/* ISM */}
@@ -510,183 +513,80 @@ export default function HodimlarINS() {
           </Button>
         </HStack>
       </Flex>
-      {/* LIST */}
-      {viewMode === "card" ? (
-        <Flex wrap={"wrap"} gap={3}>
-          {loading ? (
-            <SimpleGrid
-              columns={{ base: 1, md: 2, xl: 3 }}
-              spacing={3}
-              w="100%"
-            >
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} h="170px" borderRadius="16px" />
-              ))}
-            </SimpleGrid>
-          ) : onlyJek.length > 0 ? (
-            onlyJek.map((emp) => {
-              const isExpanded = expandedId === emp.id;
+      <Flex wrap={'wrap'} gap={3}>
+        {loading ? (
+          <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} h="170px" borderRadius="16px" />
+            ))}
+          </SimpleGrid>
+        ) : onlyJek.length > 0 ? (
+          onlyJek.map((emp) => {
+            const isExpanded = expandedId === emp.id;
 
-              return (
-                <Box
-                  key={emp.id}
-                  bg={cardBg}
-                  backgroundImage={cardGradient}
-                  border={cardBorder}
-                  borderRadius="16px"
-                  px={7}
-                  py={4}
-                  w={maxRow === 1 || maxRow === 2 ? "49.5%" : "32.66%"}
-                  boxShadow={cardShadow}
-                  transition="0.2s"
-                  _hover={{
-                    transform: "translateY(-3px)",
-                    boxShadow: cardShadowHover,
-                  }}
-                >
-                  {/* HEADER */}
-                  <Flex justify="space-between" align="center">
-                    <HStack>
-                      <Heading fontSize="18px">{`${emp?.first_name} ${emp?.last_name}`}</Heading>
-                      <Badge colorScheme={emp?.isActive ? "green" : "red"}>
-                        {emp?.isActive
-                          ? t("jekEmployees.statusActive")
-                          : t("jekEmployees.statusInactive")}
-                      </Badge>
-                    </HStack>
-                  </Flex>
-
-                  <Divider my={3} />
-
-                  {/* ASOSIY */}
-                  <Text fontWeight="semibold">
-                    <span style={{ fontWeight: "normal" }}>
-                      {t("jekEmployees.phone")}:
-                    </span>
-                    +{emp?.phoneNumber || "-"}
-                  </Text>
-                  <Text fontWeight="semibold">
-                    <span style={{ fontWeight: "normal" }}>
-                      {t("jekEmployees.areaCol")}:
-                    </span>
-                    {empDistrict(emp)}, {empMahalla(emp)}
-                  </Text>
-
-                  <Divider my={3} />
+            return (
+              <Box
+                key={emp.id}
+                bg={cardBg}
+                backgroundImage={cardGradient}
+                border={cardBorder}
+                borderRadius="16px"
+                px={7}
+                py={4}
+                w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.66%'}
+                boxShadow={cardShadow}
+                transition="0.2s"
+                _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+              >
+                {/* HEADER */}
+                <Flex justify="space-between" align="center">
                   <HStack>
-                    <Button size="sm" onClick={() => navigate(`${emp.id}`)}>
-                      {t("jekEmployees.details")}
-                    </Button>
-                    <Text>{t("jekEmployees.toggle")}</Text>
-
-                    <Switch
-                      isChecked={!!emp?.isActive}
-                      onChange={(e) => openConfirm(emp, e.target.checked)}
-                    />
+                    <Heading fontSize="18px">{`${emp?.first_name} ${emp?.last_name}`}</Heading>
+                    <Badge colorScheme={emp?.isActive ? "green" : "red"}>
+                      {emp?.isActive ? t("jekEmployees.statusActive") : t("jekEmployees.statusInactive")}
+                    </Badge>
                   </HStack>
-                </Box>
-              );
-            })
-          ) : (
-            <Text my={3} mx={"auto"} color="text" fontSize={23}>
-              {t("jekEmployees.notFound")}
-            </Text>
-          )}
-        </Flex>
-      ) : (
-        <TableContainer
-          bg={cardBg}
-          border={cardBorder}
-          borderRadius="16px"
-          boxShadow={cardShadow}
-          backgroundImage={cardGradient}
-          overflowX="auto"
-        >
-          <Table size="sm" variant="simple">
-            <Thead position="sticky" top={0} bg={cardBg} zIndex={1}>
-              <Tr>
-                <Th>{t("jekEmployees.employee")}</Th>
-                <Th>{t("common.status")}</Th>
-                <Th>{t("jekEmployees.phone")}</Th>
-                <Th>{t("jekEmployees.areaCol")}</Th>
-                <Th textAlign="center">{t("common.actions")}</Th>
-              </Tr>
-            </Thead>
+                </Flex>
 
-            <Tbody>
-              {loading ? (
-                [...Array(6)].map((_, i) => (
-                  <Tr key={i}>
-                    <Td colSpan={5}>
-                      <Skeleton h="28px" w="100%" rounded="md" />
-                    </Td>
-                  </Tr>
-                ))
-              ) : onlyJek.length > 0 ? (
-                onlyJek.map((emp) => {
-                  const isExpanded = expandedId === emp.id;
+                <Divider my={3} />
 
-                  return (
-                    <React.Fragment key={emp.id}>
-                      <Tr _hover={{ bg: rowHoverBg }}>
-                        <Td fontWeight="600">{`${emp?.first_name} ${emp?.last_name}`}</Td>
+                {/* ASOSIY */}
+                <Text fontWeight="semibold">
+                  <span style={{ fontWeight: "normal" }}>{t("jekEmployees.phone")}:</span>
+                  +{emp?.phoneNumber || "-"}
+                </Text>
+                <Text fontWeight="semibold">
+                  <span style={{ fontWeight: "normal" }}>{t("jekEmployees.areaCol")}:</span>
+                  {empDistrict(emp)}, {empMahalla(emp)}
+                </Text>
 
-                        <Td>
-                          <Badge colorScheme={emp?.isActive ? "green" : "red"}>
-                            {emp?.isActive
-                              ? t("jekEmployees.statusActive")
-                              : t("jekEmployees.statusInactive")}
-                          </Badge>
-                        </Td>
+                <Divider my={3} />
+                <HStack>
+                  <Button
+                    size="sm"
+                    onClick={() => navigate(`${emp.id}`)}
+                  >
+                    {t("jekEmployees.details")}
+                  </Button>
+                  <Text>
+                    {t("jekEmployees.toggle")}
+                  </Text>
 
-                        <Td>+{emp?.phoneNumber || "-"}</Td>
+                  <Switch
+                    isChecked={!!emp?.isActive}
+                    onChange={(e) => openConfirm(emp, e.target.checked)}
+                  />
 
-                        <Td>
-                          {empDistrict(emp)}, {empMahalla(emp)}
-                        </Td>
-
-                        <Td textAlign="right">
-                          <HStack justify="flex-end">
-                            <Button
-                              size="sm"
-                              onClick={() => navigate(`${emp.id}`)}
-                            >
-                              {t("jekEmployees.details")}
-                            </Button>
-
-                            <HStack>
-                              {t("jekEmployees.statusActive")}
-                              <Switch
-                                isChecked={!!emp?.isActive}
-                                onChange={(e) =>
-                                  openConfirm(emp, e.target.checked)
-                                }
-                              />
-                            </HStack>
-                          </HStack>
-                        </Td>
-                      </Tr>
-                    </React.Fragment>
-                  );
-                })
-              ) : (
-                <Tr>
-                  <Td colSpan={5}>
-                    <Text
-                      my={3}
-                      textAlign={"center"}
-                      color="text"
-                      fontSize={23}
-                    >
-                      {t("jekEmployees.notFound")}
-                    </Text>
-                  </Td>
-                </Tr>
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      )}
+                </HStack>
+              </Box>
+            );
+          })
+        ) : (
+          <Text my={3} mx={'auto'} color="text" fontSize={23}>
+            {t("jekEmployees.notFound")}
+          </Text>
+        )}
+      </Flex>
 
       {/* CONFIRM MODAL */}
       <Modal
