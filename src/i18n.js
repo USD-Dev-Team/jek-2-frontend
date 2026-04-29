@@ -88,11 +88,11 @@ const resources = {
         selectDistrict: "Tumanni tanlang",
 
         yearlyAppeals: "Yillik murojaatlar",
-        todayMonthlyDailyActivity: "Bugungi oylik kunlik aktivlik",
-        monthlyAndTodayActivity: "Oylik va bugungi aktivlik",
+        todayMonthlyDailyActivity: "Bugungi oylik kunlik faollik",
+        monthlyAndTodayActivity: "Oylik va bugungi faollik",
         statusDistribution: "Holat taqsimoti",
 
-        legendMonthlyActivity: "Oylik aktivlik",
+        legendMonthlyActivity: "Oylik faollik",
         legendToday: "Bugungi kun",
 
         status_completed: "Bajarilgan",
@@ -154,7 +154,7 @@ const resources = {
 
       nav: {
         dashboard: "Boshqaruv paneli",
-        appeals: "Murojaatlar",
+        appeals: "Barcha murojaatlar",
         myAppeals: "Mening murojaatlarim",
         employees: "Hodimlar",
         jekEmployees: "JEK hodimlari",
@@ -183,6 +183,7 @@ const resources = {
         actions: "Amallar",
         loading: "Yuklanmoqda...",
         role: "Rol",
+        detail:'Batafsil',
 
         all: "Hammasi",
         day: "kun",
@@ -206,8 +207,8 @@ const resources = {
         status_in_progress: "Jarayonda",
         status_completed: "Bajarildi(JEK)",
         status_rejected: "Rad etildi",
-        status_completed_user: "Bajarildi(Foyd.)",
-        status_rejected_user: "Rad etildi(Foyd.)",
+        status_completed_user: "Bajarildi(Foydalanuvchi)",
+        status_rejected_user: "Rad etildi(Foydalanuvchi)",
 
         pendingAsk: "Siz ushbu murojaatni o'z zimmangizga olasizmi?",
         finishTitle: "Ishni tugatish",
@@ -229,12 +230,13 @@ const resources = {
         waitingUser: "Foydalanuvchi tomonidan tasdiqlanishi kutilmoqda",
         review: "Qayta ko'rib chiqish",
         noPhoto: "Rasm mavjud emas",
-        userLetter: "Murojaat xati (Foyd.)",
+        userLetter: "Murojaat xati (Foydalanivchi)",
         jekNote: "Izoh (JEK)",
 
         notFound: "Ariza mavjud emas",
         onlyPending: "Bu yerga faqat <badge>Kutilmoqda</badge> statusli murojaatlar keladi",
         chatHistory:'Faoliyat tarixi',
+        notMerged:'Biriktirilmagan',
         view: {
           status: "Holat",
           type: "Murojaat xati",
@@ -249,7 +251,7 @@ const resources = {
         area: "Hudud",
         notFinished: "Tugamagan",
         noNote: "Izoh yo'q",
-        photo: "Rasm",
+        photo: "Rasm(Foydalanuvchi)",
         table: {
           applicant: "Arizachi",
           createdAt: "Yaratilgan sana"
@@ -257,7 +259,7 @@ const resources = {
       },
 
       jekEmployees: {
-        toggle: "Aktiv / Nofaol",
+        toggle: "Faol / Nofaol",
         addAddress: "Manzil kiritish",
         addAddressTitle: "Hodimga mahalla qo'shish",
         title: "JEK hodimlar",
@@ -269,7 +271,7 @@ const resources = {
         totalInactiveEmployees: "Jami faol emas hodimlar",
 
         statusAll: "Barchasi",
-        statusActive: "Aktiv",
+        statusActive: "Faol",
         statusInactive: "Nofaol",
 
         phone: "Telefon",
@@ -280,15 +282,15 @@ const resources = {
         rating: "Reyting",
 
         details: "Tafsilot",
-        toggle: "Aktiv/Nofaol",
+        toggle: "Faol/Nofaol",
         last10: "Oxirgi 10 ta murojaat",
 
         confirmDeactivateTitle: "Hodimni nofaol qilish",
         confirmDeactivateText:
           "Hodimni nofaol qilishni tasdiqlaysizmi? Hodim tizimga kira olmaydi.",
-        confirmActivateTitle: "Hodimni aktiv qilish",
+        confirmActivateTitle: "Hodimni faol qilish",
         confirmActivateText:
-          "Hodimni aktiv qilishni tasdiqlaysizmi? Hodim tizimga kira oladi.",
+          "Hodimni faol qilishni tasdiqlaysizmi? Hodim tizimga kira oladi.",
 
         employee: "Hodim",
         noData: "Ma'lumot yo'q",
@@ -556,7 +558,7 @@ const resources = {
         area: "Area",
         notFinished: "Not finished",
         noNote: "No note",
-        photo: "Photo",
+        photo: "Photo(User)",
         table: {
           applicant: "Applicant",
           createdAt: "Created at"
@@ -819,8 +821,8 @@ const resources = {
         status_in_progress: "В процессе",
         status_completed: "Выполнено",
         status_rejected: "Отклонено",
-        status_completed_user: "Завершено (Польз.)",
-        status_rejected_user: "Отклонено (Польз.)",
+        status_completed_user: "Завершено (Пользаватель)",
+        status_rejected_user: "Отклонено (Пользаватель)",
 
         pendingAsk: "Вы берёте это обращение на себя?",
         finishTitle: "Завершение работы",
@@ -851,7 +853,7 @@ const resources = {
         area: "Район",
         notFinished: "Не завершено",
         noNote: "Нет комментария",
-        photo: "Фото",
+        photo: "Фото(Пользователть)",
 
         table: {
           applicant: "Заявитель",
@@ -863,7 +865,7 @@ const resources = {
         waitingUser: "Ожидается подтверждение пользователя",
         review: "Пересмотреть",
         noPhoto: "Фото отсутствует",
-        userLetter: "Обращение (Польз.)",
+        userLetter: "Обращение (Пользаватель)",
         jekNote: "Комментарий (ЖЭК)",
       },
 

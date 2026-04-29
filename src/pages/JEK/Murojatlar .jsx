@@ -47,6 +47,7 @@ export default function Murojatlar() {
     try {
       setLoading(true)
       const res = await apiAriza.getFilteredRequest(
+        null,
         form.startData || null,
         form.endData || null,
         Cookies.get('district'),

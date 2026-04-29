@@ -20,20 +20,22 @@ import {
     Icon,
     Input,
     Textarea,
-    Skeleton
+    Skeleton,
+    IconButton
 } from '@chakra-ui/react'
 import React, { useEffect, useRef, useState } from 'react'
 import Cookies from 'js-cookie'
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { apiAriza } from '../../Services/api/Ariza';
 import { formatDateTime } from '../../utils/tools/formatDateTime';
 import { IMAGE_URL } from '../../constants/imageUrl';
 import { useTranslation } from 'react-i18next';
-import { UploadCloud } from 'lucide-react';
+import { AppleIcon, Calendar, ChevronLeft, Phone, PhoneCall, UploadCloud, User, User2, UserCircle, UserCircle2 } from 'lucide-react';
 
 export default function Muammolar() {
     const { id } = useParams()
     const { t } = useTranslation();
+    const navigate = useNavigate()
 
     //UI states
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -103,6 +105,7 @@ export default function Muammolar() {
         try {
             setSave(true)
             const res = await apiAriza.Kutilmoqda(id)
+            navigate(`/jek/Mening-murojatlarim/${id}`)
             muammo()
             pendingModal.onClose()
         } finally {
@@ -161,160 +164,221 @@ export default function Muammolar() {
         })),
     ].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
+    const jekImages =
+        problem?.history_notes?.JEK?.flatMap(jek => jek.photo_urls || []) || [];
+
+    const userImages = problem?.requestPhotos?.filter(photo =>
+        !jekImages.includes(photo.file_url)
+    );
 
 
     // RENDER
     return (
         <Flex direction="column" gap={6} mb={10}>
-            {/* HEADER CARD */}
-            <Box
-                mt={5}
-                bg={cardBg}
-                border={cardBorder}
-                borderRadius="20px"
-                p={6}
-                boxShadow={cardShadow}
-                _hover={{
-                    transform: "translateY(-3px)",
-                    boxShadow: cardShadowHover,
-                }}
-                backgroundImage={cardGradient}
-                transition="0.2s"
-            >
-                <Flex justify="space-between" align="start" wrap="wrap" gap={6}>
-                    {/* LEFT INFO */}
-                    <VStack align="start" spacing={3}>
-                        <Text fontSize="lg" fontWeight="bold">
-                            {problem?.request_number}
-                        </Text>
+            <Box>
+                <IconButton
+                    w={'70px'}
+                    bg={cardBg}
+                    border={cardBorder}
+                    borderRadius="20px"
+                    icon={<ChevronLeft />}
+                    boxShadow={cardShadow}
+                    _hover={{
+                        transform: "translateY(-3px)",
+                        boxShadow: cardShadowHover,
+                    }}
+                    backgroundImage={cardGradient}
+                    transition="0.2s"
+                    onClick={() => navigate(-1)}
+                />
+                {/* HEADER CARD */}
+                {loading ? (
+                    <Skeleton
+                        mt={5}
+                        height="280px"   // card balandligi
+                        borderRadius="20px"
+                    />
+                ) : (
+                    <Box
+                        mt={5}
+                        bg={cardBg}
+                        border={cardBorder}
+                        borderRadius="20px"
+                        p={6}
+                        boxShadow={cardShadow}
+                        _hover={{
+                            transform: "translateY(-3px)",
+                            boxShadow: cardShadowHover,
+                        }}
+                        backgroundImage={cardGradient}
+                        transition="0.2s"
+                    >
+                        <Flex justify="space-between" align="start" wrap="wrap" gap={6}>
+                            {/* TOP INFO */}
+                            <HStack align="start" justify={'space-between'} w={'100%'} spacing={3}>
+                                <VStack align={'start'}>
 
-                        <Badge
-                            fontSize="0.9em"
-                            rounded={'10px'}
-                            px={3}
-                            py={1}
-                            colorScheme={statusColorScheme(problem?.status)}
-                        >
-                            {Statuses[problem?.status] || problem?.status}
-                        </Badge>
-
-                        {/* ACTIONS */}
-                        {!notAllowed && (
-                            <HStack spacing={3} pt={3} flexWrap="wrap">
-                                {problem?.status === "PENDING" && (
-                                    <Button
-                                        size="sm"
-                                        bg="yellow.500"
-                                        rounded={'10px'}
-                                        px={5}
-                                        onClick={pendingModal.onOpen}
-                                        _hover={{ transform: "translateY(-2px)", bg: 'yellow.700' }}
-                                    >
-                                        {t("common.startWork")}
-                                    </Button>
-                                )}
-
-                                {problem?.status === "IN_PROGRESS" && (
-                                    <Button
-                                        size="sm"
-                                        bg='blue.500'
-                                        rounded={'10px'}
-                                        px={5}
-                                        onClick={tugatishModal.onOpen}
-                                        _hover={{ transform: "translateY(-2px)", bg: 'blue.700' }}
-                                    >
-                                        {t("common.finish")}
-                                    </Button>
-                                )}
-
-                                {problem?.status === "REJECTED" && (
-                                    <Button
-                                        size="sm"
-                                        bg="red.500"
-                                        rounded={'10px'}
-
-                                        px={5}
-                                        onClick={Kutilmoqda}
-                                        _hover={{ transform: "translateY(-2px)", bg: 'red.700' }}
-                                    >
-                                        {t("appeals.review")}
-                                    </Button>
-                                )}
-
-                                {problem?.status === "JEK_COMPLETED" && (
+                                    <Text fontSize="lg" fontWeight="bold">
+                                        {problem?.request_number}
+                                    </Text>
                                     <Badge
-                                        colorScheme="purple"
+                                        fontSize="0.9em"
                                         rounded={'10px'}
-
-                                        px={4}
+                                        px={3}
                                         py={1}
-                                        fontSize="0.8em"
+                                        colorScheme={statusColorScheme(problem?.status)}
                                     >
-                                        {t('appeals.waitingUser')}
+                                        {Statuses[problem?.status] || problem?.status}
                                     </Badge>
+                                </VStack>
+
+                                {/* ACTIONS */}
+                                {!notAllowed && (
+                                    <HStack spacing={3} flexWrap="wrap">
+                                        {problem?.status === "PENDING" && (
+                                            <Button
+                                                size="sm"
+                                                bg="yellow.500"
+                                                rounded={'10px'}
+                                                px={5}
+                                                color={'white'}
+                                                onClick={pendingModal.onOpen}
+                                                _hover={{ transform: "translateY(-2px)", bg: 'yellow.700' }}
+                                            >
+                                                {t("common.startWork")}
+                                            </Button>
+                                        )}
+
+                                        {problem?.status === "IN_PROGRESS" && (
+                                            <Button
+                                                size="sm"
+                                                bg='blue.500'
+                                                rounded={'10px'}
+                                                px={5}
+                                                color={'white'}
+                                                onClick={tugatishModal.onOpen}
+                                                _hover={{ transform: "translateY(-2px)", bg: 'blue.700' }}
+                                            >
+                                                {t("common.finish")}
+                                            </Button>
+                                        )}
+
+                                        {problem?.status === "REJECTED" && (
+                                            <Button
+                                                size="sm"
+                                                bg="red.500"
+                                                rounded={'10px'}
+                                                color={'white'}
+                                                px={5}
+                                                onClick={Kutilmoqda}
+                                                _hover={{ transform: "translateY(-2px)", bg: 'red.700' }}
+                                            >
+                                                {t("appeals.review")}
+                                            </Button>
+                                        )}
+
+                                        {problem?.status === "JEK_COMPLETED" && (
+                                            <Badge
+                                                colorScheme="purple"
+                                                rounded={'10px'}
+                                                px={4}
+                                                py={1}
+                                                fontSize="0.8em"
+                                            >
+                                                {t('appeals.waitingUser')}
+                                            </Badge>
+                                        )}
+                                    </HStack>
                                 )}
+
+
+                                {/* 
+                        
+
+                         */}
                             </HStack>
-                        )}
+                            <Divider />
+                            <HStack w={'100%'} justify={'space-between'} align={'start'}>
+                                <VStack align={'start'}>
+                                    <Box>
+                                        <Text fontSize="sm" opacity={0.7}>
+                                            {t("appeals.applicant")}
+                                        </Text>
+                                        <HStack spacing={2}>
+                                            <User2 size={18} opacity={0.7} />
+                                            <Text fontWeight={'semibold'}>
+                                                {problem?.user?.full_name}
+                                            </Text>
+                                        </HStack>
+                                        <HStack spacing={2}>
+                                            <PhoneCall size={18} opacity={0.7} />
+                                            <Text fontSize="sm">
+                                                {formatPhone(problem?.user?.phoneNumber)}
+                                            </Text>
+                                        </HStack>
+                                    </Box>
+                                    <Box>
+                                        <Text fontSize="sm">
+                                            {problem?.address?.district}, {problem?.address?.neighborhood}
+                                        </Text>
+                                        <Text fontSize="sm" opacity={0.7}>
+                                            {t("appeals.buildingNumber")}:{" "}
+                                            {problem?.address?.building_number}
+                                        </Text>
+                                        <Text fontSize="sm" opacity={0.7}>
+                                            {t("appeals.apartmentNumber")}:{" "}
+                                            {problem?.address?.apartment_number}
+                                        </Text>
+                                    </Box>
+                                </VStack>
+                                <VStack align={'start'}>
+                                    <Box>
+                                        <Text fontSize="sm" opacity={0.7}>
+                                            {t("appeals.employee")}
+                                        </Text>
+                                        <HStack spacing={2}>
+                                            <UserCircle2 size={18} opacity={0.7} />
+                                            <Text>
+                                                {problem?.assigned_jek
+                                                    ? `${problem?.assigned_jek?.first_name} ${problem?.assigned_jek?.last_name}`
+                                                    : t('appeals.notMerged')}
+                                            </Text>
+                                        </HStack>
+                                    </Box>
+                                    <Box>
+                                        <Text fontSize="sm" opacity={0.7}>
+                                            {t("appeals.view.startedAt")}
+                                        </Text>
+                                        <HStack spacing={2}>
+                                            <Calendar size={18} opacity={0.7} />
+                                            <Text>{formatDateTime(problem?.createdAt)}</Text>
+                                        </HStack>
+                                    </Box>
+                                    {problem?.completedAt && (
+                                        <Box>
+                                            <Text fontSize="sm" opacity={0.7}>
+                                                {t("appeals.view.endedAt")}
+                                            </Text>
+                                            <HStack spacing={2}>
+                                                <Calendar size={18} opacity={0.7} />
+                                                <Text>{formatDateTime(problem?.completedAt)}</Text>
+                                            </HStack>
+                                        </Box>
+                                    )}
+                                </VStack>
+                            </HStack>
 
-                        <Divider />
+                            {/* RIGHT INFO */}
+                            {/* <VStack align="start" spacing={3}>
+                        
 
-                        <Box>
-                            <Text fontSize="sm" opacity={0.7}>
-                                {t("appeals.applicant")}
-                            </Text>
-                            <Text fontWeight="semibold">
-                                {problem?.user?.full_name}
-                            </Text>
-                            <Text fontSize="sm" opacity={0.7}>
-                                {formatPhone(problem?.user?.phoneNumber)}
-                            </Text>
-                        </Box>
+                        
 
-                        <Box>
-                            <Text fontSize="sm">
-                                {problem?.address?.district}, {problem?.address?.neighborhood}
-                            </Text>
-                            <Text fontSize="sm" opacity={0.7}>
-                                {t("appeals.buildingNumber")}:{" "}
-                                {problem?.address?.building_number}
-                            </Text>
-                            <Text fontSize="sm" opacity={0.7}>
-                                {t("appeals.apartmentNumber")}:{" "}
-                                {problem?.address?.apartment_number}
-                            </Text>
-                        </Box>
-                    </VStack>
 
-                    {/* RIGHT INFO */}
-                    <VStack align="start" spacing={3}>
-                        <Box>
-                            <Text fontSize="sm" opacity={0.7}>
-                                {t("appeals.employee")}
-                            </Text>
-                            <Text>
-                                {problem?.assigned_jek
-                                    ? `${problem?.assigned_jek?.first_name} ${problem?.assigned_jek?.last_name}`
-                                    : "Biriktirilmagan"}
-                            </Text>
-                        </Box>
-
-                        <Box>
-                            <Text fontSize="sm" opacity={0.7}>
-                                {t("appeals.view.startedAt")}
-                            </Text>
-                            <Text>{formatDateTime(problem?.createdAt)}</Text>
-                        </Box>
-
-                        {problem?.completedAt && (
-                            <Box>
-                                <Text fontSize="sm" opacity={0.7}>
-                                    {t("appeals.view.endedAt")}
-                                </Text>
-                                <Text>{formatDateTime(problem?.completedAt)}</Text>
-                            </Box>
-                        )}
-                    </VStack>
-                </Flex>
+                    </VStack> */}
+                        </Flex>
+                    </Box>
+                )}
             </Box>
 
             {/* GALLERY */}
@@ -324,8 +388,9 @@ export default function Muammolar() {
                 </Text>
 
                 <Flex gap={4} wrap="wrap">
-                    {problem?.requestPhotos?.length ? (
-                        problem.requestPhotos.map((r, i) => (
+                    {userImages?.length ? (
+                        userImages.map((r, i) => (
+
                             <Box
                                 key={i}
                                 w="160px"
@@ -364,34 +429,38 @@ export default function Muammolar() {
             </Box>
 
             {/* DESCRIPTION */}
-            <Box
-                bg={cardBg}
-                border={cardBorder}
-                borderRadius="20px"
-                p={6}
-                boxShadow={cardShadow}
-                transition="0.2s"
-                _hover={{
-                    transform: "translateY(-3px)",
-                    boxShadow: cardShadowHover,
-                }}
-                backgroundImage={cardGradient}
-            >
-                <Text fontWeight="bold" mb={2}>
-                    {t("appeals.userLetter")}
-                </Text>
-                <Text mb={4}>{problem?.description}</Text>
+            {loading ? (
+                <Skeleton height="200px" borderRadius="20px" />
+            ) : (
+                <Box
+                    bg={cardBg}
+                    border={cardBorder}
+                    borderRadius="20px"
+                    p={6}
+                    boxShadow={cardShadow}
+                    transition="0.2s"
+                    _hover={{
+                        transform: "translateY(-3px)",
+                        boxShadow: cardShadowHover,
+                    }}
+                    backgroundImage={cardGradient}
+                >
+                    <Text fontWeight="bold" mb={2}>
+                        {t("appeals.userLetter")}
+                    </Text>
+                    <Text mb={4}>{problem?.description}</Text>
 
-                {problem?.note && (
-                    <>
-                        <Divider my={4} />
-                        <Text fontWeight="bold" mb={2}>
-                            {t("appeals.jekNote")}
-                        </Text>
-                        <Text>{problem?.note}</Text>
-                    </>
-                )}
-            </Box>
+                    {problem?.note && (
+                        <>
+                            <Divider my={4} />
+                            <Text fontWeight="bold" mb={2}>
+                                {t("appeals.jekNote")}
+                            </Text>
+                            <Text>{problem?.note}</Text>
+                        </>
+                    )}
+                </Box>
+            )}
 
             {/* CHAT */}
             <Box>
@@ -402,21 +471,86 @@ export default function Muammolar() {
                 <VStack spacing={4} align="stretch">
                     {messages.map((msg, i) => {
                         const isUser = msg.type === "USER";
-
+                        console.log(msg.photo_urls)
                         return (
                             <Flex
                                 key={i}
                                 justify={isUser ? "flex-start" : "flex-end"}
                             >
                                 <Box
-                                    maxW="70%"
+                                    display="flex"
+                                    flexDirection="column"
+                                    alignItems={isUser ? "flex-start" : "flex-end"}
+                                    maxW="45%"
+                                    minW={'12%'}
                                     px={4}
                                     py={3}
                                     borderRadius="18px"
-                                    bg={isUser ? "gray.100" : "blue.500"}
-                                    color={isUser ? "black" : "white"}
-                                    boxShadow="md"
+                                    bg={cardBg}
+                                    border={cardBorder}
+                                    boxShadow={cardShadow}
+                                    _hover={{
+                                        transform: "translateY(-3px)",
+                                        boxShadow: cardShadowHover,
+                                    }}
+                                    backgroundImage={cardGradient}
+                                    transition="0.2s"
+                                    justify={isUser ? "flex-start" : "flex-end"}
+
+                                // bg={isUser ? "gray.100" : "blue.500"}
+                                // color={isUser ? "black" : "white"}
                                 >
+                                    <Badge
+                                        fontSize="8px"
+                                        rounded={'8px'}
+                                        px={3}
+                                        py={1}
+                                        colorScheme={statusColorScheme(msg?.new_status)}
+                                        mb={1}
+
+                                        justify={isUser ? 'flex-start' : 'flex-end'}
+                                    >
+                                        {Statuses[msg?.new_status] || msg?.new_status}
+                                    </Badge>
+                                    <Flex gap={4} wrap="wrap">
+                                        {msg?.photo_urls?.length ? (
+                                            msg.photo_urls.map((r, i) => (
+                                                <Box
+                                                    key={i}
+                                                    w="100%"
+                                                    // h="160px"
+                                                    borderRadius="16px"
+                                                    overflow="hidden"
+                                                    cursor="pointer"
+                                                    boxShadow="md"
+                                                    _hover={{ transform: "scale(1.05)" }}
+                                                    transition="0.2s"
+                                                    onClick={() => {
+                                                        setSelectedImage(
+                                                            r.startsWith("http")
+                                                                ? r
+                                                                : `${IMAGE_URL}${r}`
+                                                        );
+                                                        onOpen();
+                                                    }}
+                                                >
+                                                    <Image
+                                                        w="100%"
+                                                        h="100%"
+                                                        objectFit="cover"
+                                                        src={
+                                                            r.startsWith("http")
+                                                                ? r
+                                                                : `${IMAGE_URL}${r}`
+                                                        }
+                                                    />
+                                                </Box>
+                                            ))
+                                        ) : (
+                                            ''
+                                        )}
+                                    </Flex>
+
                                     <Text fontSize="sm">{msg.note}</Text>
                                     <Text
                                         fontSize="10px"

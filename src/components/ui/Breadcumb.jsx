@@ -22,13 +22,16 @@ export default function Breadcumb() {
     'mening-murojatlarim': "nav.myAppeals",
   };
 
+  const isUUID = (segment) =>
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(segment);
+
   const crumbs = useMemo(() => {
     const raw = loc.pathname.split("/").filter(Boolean);
 
     return raw
       .map((segment, index) => ({
         segment,
-        to: "/" + raw.slice(0, index + 1).join("/"), // link to‘g‘ri qoladi
+        to: "/" + raw.slice(0, index + 1).join("/"),
       }))
       .filter(({ segment }) => {
         const normalized = decodeURIComponent(segment).toLowerCase();
@@ -38,8 +41,14 @@ export default function Breadcumb() {
 
   const getLabel = (segment) => {
     const normalized = decodeURIComponent(segment).toLowerCase();
+
+    if (isUUID(normalized)) {
+      return t("common.detail") || "Batafsil";
+    }
+
     const key = segmentToKey[normalized];
     if (key) return t(key);
+
     return decodeURIComponent(segment);
   };
 
