@@ -75,6 +75,10 @@ class apiJekData {
         })
         return response;
     }
+    static delete = async ( jek_id, addressId,) => {
+        const response = await $api.delete(`${BASE_URL}/addresses/remove/${jek_id}/${addressId}`)
+            return response
+    }
 
 
 }
