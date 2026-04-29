@@ -1,42 +1,4 @@
-import {
-  Badge,
-  Box,
-  Button,
-  Divider,
-  Flex,
-  Heading,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Switch,
-  Text,
-  useDisclosure,
-  VStack,
-  Collapse,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  InputRightElement,
-  Select,
-  Skeleton,
-  IconButton,
-  useColorModeValue,
-  ButtonGroup,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  Grid,
-  SimpleGrid,
-} from "@chakra-ui/react";
+import { Badge, Box, Button, Divider, Flex, Heading, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Switch, Text, useDisclosure, VStack, Collapse, InputGroup, InputLeftElement, Input, InputRightElement, Select, Skeleton, IconButton, useColorModeValue, ButtonGroup, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Grid, SimpleGrid, } from "@chakra-ui/react";
 
 import {
   ChevronDown,
@@ -58,7 +20,7 @@ import { useNavigate } from "react-router";
 
 export default function HodimlarINS() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Select value doim string bo'ladi: "", "true", "false"
   const Statuses = {
@@ -109,19 +71,19 @@ export default function HodimlarINS() {
   const cardBg = useColorModeValue("#ffffff", "#0B1C26");
   const cardGradient = useColorModeValue(
     "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
-    "linear-gradient(180deg, #0B1C26 0%, #07141e 100%)"
+    "linear-gradient(180deg, #0B1C26 0%, #07141e 100%)",
   );
   const cardBorder = useColorModeValue(
     "1px solid rgba(0,0,0,0.06)",
-    "1px solid rgba(255,255,255,0.06)"
+    "1px solid rgba(255,255,255,0.06)",
   );
   const cardShadow = useColorModeValue(
     "0 10px 25px rgba(0,0,0,0.06)",
-    "0 18px 55px rgba(0,0,0,0.45)"
+    "0 18px 55px rgba(0,0,0,0.45)",
   );
   const cardShadowHover = useColorModeValue(
     "0 14px 32px rgba(0,0,0,0.10)",
-    "0 24px 70px rgba(0,0,0,0.55)"
+    "0 24px 70px rgba(0,0,0,0.55)",
   );
   const expandedRowBg = useColorModeValue("gray.50", "whiteAlpha.50");
 
@@ -135,17 +97,17 @@ export default function HodimlarINS() {
 
   const onlyJek = useMemo(
     () => (Array.isArray(hodim) ? hodim.filter((h) => h.role === "JEK") : []),
-    [hodim]
+    [hodim],
   );
 
   const activeJek = useMemo(
     () => onlyJek.filter((h) => h.isActive === true).length,
-    [onlyJek]
+    [onlyJek],
   );
 
   const noActiveJek = useMemo(
     () => onlyJek.filter((h) => h.isActive !== true).length,
-    [onlyJek]
+    [onlyJek],
   );
 
   const changeForm = (e) => {
@@ -184,7 +146,7 @@ export default function HodimlarINS() {
         form.tuman,
         form.mahalla,
         form.nomer,
-        isActiveParam
+        isActiveParam,
       );
       setHodim(res.data.data);
     } finally {
@@ -238,8 +200,7 @@ export default function HodimlarINS() {
 
   const empDistrict = (emp) => emp?.addresses?.[0]?.address?.district || "-";
   const empMahalla = (emp) => emp?.addresses?.[0]?.address?.neighborhood || "-";
-  const maxRow = hodim?.length
-
+  const maxRow = hodim?.length;
 
   return (
     <Box mb={10}>
@@ -248,12 +209,16 @@ export default function HodimlarINS() {
         {/* TOTAL */}
         <Box
           flex="1"
-          minW={{ base: "100%", md: "250px" }}
+          minW={{ base: "100%", md: "200px" }}
+          h={"120px"}
           bg={cardBg}
           backgroundImage={cardGradient}
           border={cardBorder}
           borderRadius="18px"
           p={5}
+          display={"flex"}
+          alignItems={"start"}
+          justifyContent={"space-between"}
           boxShadow={cardShadow}
           position="relative"
           overflow="hidden"
@@ -261,7 +226,24 @@ export default function HodimlarINS() {
           opacity={loading ? 0.7 : 1}
           _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
         >
-          <Box
+       
+
+        <VStack align={"start"} >
+              <Text
+            fontSize="14px"
+            textTransform="uppercase"
+            letterSpacing="0.08em"
+            color="gray.400"
+          >
+            {t("jekEmployees.totalEmployees")}
+          </Text>
+
+          <Heading  fontSize="30px" color="blue.300">
+            {onlyJek.length}
+          </Heading>
+        </VStack>
+
+           <Box
             w="42px"
             h="42px"
             borderRadius="14px"
@@ -274,15 +256,6 @@ export default function HodimlarINS() {
           >
             <Users size={18} />
           </Box>
-
-
-          <Text fontSize="11px" textTransform="uppercase" letterSpacing="0.08em" color="gray.400">
-            {t("jekEmployees.totalEmployees")}
-          </Text>
-
-          <Heading mt={2} fontSize="30px" color="blue.300">
-            {onlyJek.length}
-          </Heading>
 
           {/* <Box
             position="absolute"
@@ -299,11 +272,15 @@ export default function HodimlarINS() {
         <Box
           flex="1"
           minW={{ base: "100%", md: "250px" }}
+          h={"120px"}
           bg={cardBg}
           backgroundImage={cardGradient}
           border={cardBorder}
           borderRadius="18px"
           p={5}
+          display={"flex"}
+          alignItems={"start"}
+          justifyContent={"space-between"}
           boxShadow={cardShadow}
           position="relative"
           overflow="hidden"
@@ -311,27 +288,36 @@ export default function HodimlarINS() {
           opacity={loading ? 0.7 : 1}
           _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
         >
-          <Box
-            w="42px"
-            h="42px"
-            borderRadius="14px"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            bg="rgba(34,197,94,0.12)"
-            color="green.400"
-            mb={4}
-          >
-            <CheckCircle2 size={18} />
-          </Box>
+          <VStack align={"start"}>
+             <Text
+              fontSize="14px"
+              textTransform="uppercase"
+              letterSpacing="0.08em"
+              color="gray.400"
+            >
+              {t("jekEmployees.totalActiveEmployees")}
+            </Text>
 
-          <Text fontSize="11px" textTransform="uppercase" letterSpacing="0.08em" color="gray.400">
-            {t("jekEmployees.totalActiveEmployees")}
-          </Text>
-
-          <Heading mt={2} fontSize="30px" color="green.300">
+          <Heading  fontSize="30px" color="green.300">
             {activeJek}
           </Heading>
+          </VStack>
+
+            <Box
+              w="42px"
+              h="42px"
+              borderRadius="14px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              bg="rgba(34,197,94,0.12)"
+              color="green.400"
+              mb={4}
+            >
+              <CheckCircle2 size={18} />
+            </Box>
+
+           
 
           {/* <Box
             position="absolute"
@@ -352,6 +338,9 @@ export default function HodimlarINS() {
           backgroundImage={cardGradient}
           border={cardBorder}
           borderRadius="18px"
+            display={"flex"}
+          alignItems={"start"}
+          justifyContent={"space-between"}
           p={5}
           boxShadow={cardShadow}
           position="relative"
@@ -360,6 +349,20 @@ export default function HodimlarINS() {
           opacity={loading ? 0.7 : 1}
           _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
         >
+          <VStack align={"start"}>
+             <Text
+            fontSize="14px"
+            textTransform="uppercase"
+            letterSpacing="0.08em"
+            color="gray.400"
+          >
+            {t("jekEmployees.totalInactiveEmployees")}
+          </Text>
+
+          <Heading fontSize="30px" color="red.300">
+            {noActiveJek}
+          </Heading>
+          </VStack>
           <Box
             w="42px"
             h="42px"
@@ -374,13 +377,7 @@ export default function HodimlarINS() {
             <XCircle size={18} />
           </Box>
 
-          <Text fontSize="11px" textTransform="uppercase" letterSpacing="0.08em" color="gray.400">
-            {t("jekEmployees.totalInactiveEmployees")}
-          </Text>
-
-          <Heading mt={2} fontSize="30px" color="red.300">
-            {noActiveJek}
-          </Heading>
+         
 
           {/* <Box
             position="absolute"
@@ -400,19 +397,24 @@ export default function HodimlarINS() {
         gap={5} bg={cardBg}
         border={cardBorder}
         p={5}
-        rounded={'16px'}
+        rounded={"16px"}
         backgroundImage={cardGradient}
         boxShadow={cardShadow}
         transition="0.2s"
         _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
       >
-        <HStack w={'100%'}>
+        <HStack w={"100%"}>
           {/* ISM */}
-          <InputGroup w={'100%'}>
+          <InputGroup w={"100%"}>
             <InputLeftElement pointerEvents="none">
               <Search size={16} />
             </InputLeftElement>
-            <Input value={form.ism} name="ism" onChange={changeForm} placeholder={t("register.firstName")} />
+            <Input
+              value={form.ism}
+              name="ism"
+              onChange={changeForm}
+              placeholder={t("register.firstName")}
+            />
             {form.ism.trim() ? (
               <InputRightElement>
                 <IconButton
@@ -427,7 +429,7 @@ export default function HodimlarINS() {
           </InputGroup>
 
           {/* FAMILIYA */}
-          <InputGroup w={'100%'}>
+          <InputGroup w={"100%"}>
             <InputLeftElement pointerEvents="none">
               <Search size={16} />
             </InputLeftElement>
@@ -452,16 +454,21 @@ export default function HodimlarINS() {
 
           {/* TELEFON */}
           <Input
-            w={'100%'}
+            w={"100%"}
             value={form.nomer}
             name="nomer"
             onChange={changeForm}
             placeholder={t("jekEmployees.phone")}
           />
         </HStack>
-        <HStack w={'100%'}>
+        <HStack w={"100%"}>
           {/* TUMAN */}
-          <Select w={'100%'} value={form.tuman} name="tuman" onChange={changeForm}>
+          <Select
+            w={"100%"}
+            value={form.tuman}
+            name="tuman"
+            onChange={changeForm}
+          >
             <option value="">{t("common.all")}</option>
             {Object.entries(tuman).map(([key, label]) => (
               <option key={key} value={key}>
@@ -472,7 +479,7 @@ export default function HodimlarINS() {
 
           {/* MAHALLA */}
           <Select
-            w={'100%'}
+            w={"100%"}
             value={form.mahalla}
             name="mahalla"
             onChange={changeForm}
@@ -488,7 +495,7 @@ export default function HodimlarINS() {
 
           {/* STATUS */}
           <Select
-            w={'100%'}
+            w={"100%"}
             value={form.isActive}
             name="isActive"
             onChange={changeForm}
@@ -501,11 +508,10 @@ export default function HodimlarINS() {
           </Select>
 
           {/* RESET */}
-          <Button w={'100%'} variant="solidPrimary" onClick={resetForm}>
+          <Button w={"100%"} variant="solidPrimary" onClick={resetForm}>
             {t("appeals.clearFilters")}
           </Button>
         </HStack>
-
       </Flex>
       <Flex wrap={'wrap'} gap={3}>
         {loading ? (
@@ -583,25 +589,45 @@ export default function HodimlarINS() {
       </Flex>
 
       {/* CONFIRM MODAL */}
-      <Modal isOpen={confirmModal.isOpen} onClose={confirmModal.onClose} isCentered>
+      <Modal
+        isOpen={confirmModal.isOpen}
+        onClose={confirmModal.onClose}
+        isCentered
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
 
-          <ModalHeader>{nextActiveValue ? t("jekEmployees.confirmActivateTitle") : t("jekEmployees.confirmDeactivateTitle")}</ModalHeader>
+          <ModalHeader>
+            {nextActiveValue
+              ? t("jekEmployees.confirmActivateTitle")
+              : t("jekEmployees.confirmDeactivateTitle")}
+          </ModalHeader>
 
           <ModalBody>
-            <Text>{nextActiveValue ? t("jekEmployees.confirmActivateText") : t("jekEmployees.confirmDeactivateText")}</Text>
+            <Text>
+              {nextActiveValue
+                ? t("jekEmployees.confirmActivateText")
+                : t("jekEmployees.confirmDeactivateText")}
+            </Text>
 
             <Text mt={3}>
               {t("jekEmployees.employee")}:{" "}
-              <b>{selected ? `${selected.first_name} ${selected.last_name}` : "-"}</b>
+              <b>
+                {selected
+                  ? `${selected.first_name} ${selected.last_name}`
+                  : "-"}
+              </b>
             </Text>
           </ModalBody>
 
           <ModalFooter gap={3}>
             <Button onClick={confirmModal.onClose}>{t("common.cancel")}</Button>
-            <Button onClick={() => deActivate(selected)} colorScheme="blue" isLoading={saving}>
+            <Button
+              onClick={() => deActivate(selected)}
+              colorScheme="blue"
+              isLoading={saving}
+            >
               {t("common.confirm")}
             </Button>
           </ModalFooter>
