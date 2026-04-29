@@ -152,6 +152,7 @@ export default function Murojatlar() {
       setLoading(true);
 
       const res = await apiAriza.getFilteredRequest(
+        null,
         form.startData,
         form.endData,
         form.tuman,
@@ -431,13 +432,20 @@ export default function Murojatlar() {
 
                 <Flex alignItems="start" justifyContent="space-between">
                   <VStack alignItems="start" spacing={1}>
-                    <HStack wrap={'wrap'}>
-                      <span style={{ fontWeight: "normal" }}>
-                        {t("appeals.applicant")}:
-                      </span>{" "}
-                      <Text fontWeight="bold">{item?.user?.full_name}</Text>
-                      <Text fontWeight="bold">+{item?.user?.phoneNumber}</Text>
-                    </HStack>
+                    <VStack wrap={'wrap'} align={'start'}>
+                      <HStack>
+                        <span style={{ fontWeight: "normal" }}>
+                          {t("appeals.applicant")}:
+                        </span>{" "}
+                        <Text fontWeight="bold">{item?.user?.full_name}</Text>
+                      </HStack>
+                      <HStack>
+                        <span style={{ fontWeight: "normal" }}>
+                          {t("jekEmployees.phone")}:
+                        </span>{" "}
+                        <Text fontWeight="bold">+{item?.user?.phoneNumber}</Text>
+                      </HStack>
+                    </VStack>
                     <Text fontWeight={'bold'}><span style={{ fontWeight: "normal" }}>
                       {t("appeals.table.createdAt")}:
                     </span>{" "}{formatDateTime(item.createdAt)}</Text>

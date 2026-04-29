@@ -52,13 +52,13 @@ export default function MeningMurojatlarim() {
         try {
             setLoading(true)
             const res = await apiAriza.getFilteredRequest(
+                Cookies.get('user_id'),
                 form.startData || null,
                 form.endData || null,
                 Cookies.get('district'),
                 Cookies.get('neighborhood'),
                 form.status,
-                // text,
-                Cookies.get('user_id'),
+                text,
                 page,
                 limit
             )
