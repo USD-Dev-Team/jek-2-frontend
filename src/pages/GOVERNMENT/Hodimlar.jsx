@@ -1,42 +1,4 @@
-import {
-  Badge,
-  Box,
-  Button,
-  Divider,
-  Flex,
-  Heading,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Switch,
-  Text,
-  useDisclosure,
-  VStack,
-  Collapse,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  InputRightElement,
-  Select,
-  Skeleton,
-  IconButton,
-  useColorModeValue,
-  ButtonGroup,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  Grid,
-  SimpleGrid,
-} from "@chakra-ui/react";
+import { Badge, Box, Button, Divider, Flex, Heading, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Switch, Text, useDisclosure, VStack, Collapse, InputGroup, InputLeftElement, Input, InputRightElement, Select, Skeleton, IconButton, useColorModeValue, ButtonGroup, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Grid, SimpleGrid, } from "@chakra-ui/react";
 
 import {
   ChevronDown,
@@ -46,6 +8,8 @@ import {
   X,
   LayoutGrid,
   Table2,
+  CheckCircle2,
+  XCircle,
 } from "lucide-react";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -56,7 +20,7 @@ import { useNavigate } from "react-router";
 
 export default function HodimlarINS() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Select value doim string bo'ladi: "", "true", "false"
   const Statuses = {
@@ -83,9 +47,6 @@ export default function HodimlarINS() {
   const [selected, setSelected] = useState(null);
   const [nextActiveValue, setNextActiveValue] = useState(null);
 
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1);
-
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -110,19 +71,19 @@ export default function HodimlarINS() {
   const cardBg = useColorModeValue("#ffffff", "#0B1C26");
   const cardGradient = useColorModeValue(
     "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
-    "linear-gradient(180deg, #0B1C26 0%, #07141e 100%)"
+    "linear-gradient(180deg, #0B1C26 0%, #07141e 100%)",
   );
   const cardBorder = useColorModeValue(
     "1px solid rgba(0,0,0,0.06)",
-    "1px solid rgba(255,255,255,0.06)"
+    "1px solid rgba(255,255,255,0.06)",
   );
   const cardShadow = useColorModeValue(
     "0 10px 25px rgba(0,0,0,0.06)",
-    "0 18px 55px rgba(0,0,0,0.45)"
+    "0 18px 55px rgba(0,0,0,0.45)",
   );
   const cardShadowHover = useColorModeValue(
     "0 14px 32px rgba(0,0,0,0.10)",
-    "0 24px 70px rgba(0,0,0,0.55)"
+    "0 24px 70px rgba(0,0,0,0.55)",
   );
   const expandedRowBg = useColorModeValue("gray.50", "whiteAlpha.50");
 
@@ -134,7 +95,20 @@ export default function HodimlarINS() {
     return mahalla?.[districtKeyUz] || mahalla?.[districtLabelTranslated] || {};
   }, [form.tuman, mahalla, tuman]);
 
+  const onlyJek = useMemo(
+    () => (Array.isArray(hodim) ? hodim.filter((h) => h.role === "JEK") : []),
+    [hodim],
+  );
 
+  const activeJek = useMemo(
+    () => onlyJek.filter((h) => h.isActive === true).length,
+    [onlyJek],
+  );
+
+  const noActiveJek = useMemo(
+    () => onlyJek.filter((h) => h.isActive !== true).length,
+    [onlyJek],
+  );
 
   const changeForm = (e) => {
     const { name, value } = e.target;
@@ -161,6 +135,7 @@ export default function HodimlarINS() {
   };
 
   const getEmployees = async (ism, familiya) => {
+    // APIga boolean / '' yuboramiz
     const isActiveParam = form.isActive === "" ? "" : form.isActive === "true";
 
     try {
@@ -172,28 +147,12 @@ export default function HodimlarINS() {
         form.mahalla,
         form.nomer,
         isActiveParam,
-        page,
-        1000000000000000,
-        'JEK'
       );
-
       setHodim(res.data.data);
-      setTotalPages(res.data.meta.totalPages); // ✅
     } finally {
       setLoading(false);
     }
   };
-
-  const activeJek = useMemo(
-    () => hodim.filter((h) => h.isActive === true).length,
-    [hodim]
-  );
-
-  const noActiveJek = useMemo(
-    () => hodim.filter((h) => h.isActive !== true).length,
-    [hodim]
-  );
-
 
   // debounce ism/familiya
   useEffect(() => {
@@ -208,6 +167,7 @@ export default function HodimlarINS() {
   // filter change -> fetch
   useEffect(() => {
     getEmployees(debouncedIsm, debouncedFamiliya);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     form.tuman,
     form.mahalla,
@@ -215,8 +175,8 @@ export default function HodimlarINS() {
     form.isActive,
     debouncedIsm,
     debouncedFamiliya,
-    page // ✅
   ]);
+
   const openConfirm = (emp, value) => {
     setSelected(emp);
     setNextActiveValue(value);
@@ -240,27 +200,221 @@ export default function HodimlarINS() {
 
   const empDistrict = (emp) => emp?.addresses?.[0]?.address?.district || "-";
   const empMahalla = (emp) => emp?.addresses?.[0]?.address?.neighborhood || "-";
-  const maxRow = hodim?.length
-
+  const maxRow = hodim?.length;
 
   return (
     <Box mb={10}>
+      {/* STATISTIKA */}
+      <Flex gap={5} mb={5} wrap="wrap">
+        {/* TOTAL */}
+        <Box
+          flex="1"
+          minW={{ base: "100%", md: "200px" }}
+          h={"120px"}
+          bg={cardBg}
+          backgroundImage={cardGradient}
+          border={cardBorder}
+          borderRadius="18px"
+          p={5}
+          display={"flex"}
+          alignItems={"start"}
+          justifyContent={"space-between"}
+          boxShadow={cardShadow}
+          position="relative"
+          overflow="hidden"
+          transition="0.2s"
+          opacity={loading ? 0.7 : 1}
+          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+        >
+       
+
+        <VStack align={"start"} >
+              <Text
+            fontSize="14px"
+            textTransform="uppercase"
+            letterSpacing="0.08em"
+            color="gray.400"
+          >
+            {t("jekEmployees.totalEmployees")}
+          </Text>
+
+          <Heading  fontSize="30px" color="blue.300">
+            {onlyJek.length}
+          </Heading>
+        </VStack>
+
+           <Box
+            w="42px"
+            h="42px"
+            borderRadius="14px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bg="rgba(59,130,246,0.12)"
+            color="blue.400"
+            mb={4}
+          >
+            <Users size={18} />
+          </Box>
+
+          {/* <Box
+            position="absolute"
+            top="-35%"
+            right="-25%"
+            w="170px"
+            h="170px"
+            bg="radial-gradient(circle, rgba(59,130,246,0.18), transparent 70%)"
+            pointerEvents="none"
+          /> */}
+        </Box>
+
+        {/* ACTIVE */}
+        <Box
+          flex="1"
+          minW={{ base: "100%", md: "250px" }}
+          h={"120px"}
+          bg={cardBg}
+          backgroundImage={cardGradient}
+          border={cardBorder}
+          borderRadius="18px"
+          p={5}
+          display={"flex"}
+          alignItems={"start"}
+          justifyContent={"space-between"}
+          boxShadow={cardShadow}
+          position="relative"
+          overflow="hidden"
+          transition="0.2s"
+          opacity={loading ? 0.7 : 1}
+          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+        >
+          <VStack align={"start"}>
+             <Text
+              fontSize="14px"
+              textTransform="uppercase"
+              letterSpacing="0.08em"
+              color="gray.400"
+            >
+              {t("jekEmployees.totalActiveEmployees")}
+            </Text>
+
+          <Heading  fontSize="30px" color="green.300">
+            {activeJek}
+          </Heading>
+          </VStack>
+
+            <Box
+              w="42px"
+              h="42px"
+              borderRadius="14px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              bg="rgba(34,197,94,0.12)"
+              color="green.400"
+              mb={4}
+            >
+              <CheckCircle2 size={18} />
+            </Box>
+
+           
+
+          {/* <Box
+            position="absolute"
+            top="-35%"
+            right="-25%"
+            w="170px"
+            h="170px"
+            bg="radial-gradient(circle, rgba(34,197,94,0.18), transparent 70%)"
+            pointerEvents="none"
+          /> */}
+        </Box>
+
+        {/* INACTIVE */}
+        <Box
+          flex="1"
+          minW={{ base: "100%", md: "250px" }}
+          bg={cardBg}
+          backgroundImage={cardGradient}
+          border={cardBorder}
+          borderRadius="18px"
+            display={"flex"}
+          alignItems={"start"}
+          justifyContent={"space-between"}
+          p={5}
+          boxShadow={cardShadow}
+          position="relative"
+          overflow="hidden"
+          transition="0.2s"
+          opacity={loading ? 0.7 : 1}
+          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+        >
+          <VStack align={"start"}>
+             <Text
+            fontSize="14px"
+            textTransform="uppercase"
+            letterSpacing="0.08em"
+            color="gray.400"
+          >
+            {t("jekEmployees.totalInactiveEmployees")}
+          </Text>
+
+          <Heading fontSize="30px" color="red.300">
+            {noActiveJek}
+          </Heading>
+          </VStack>
+          <Box
+            w="42px"
+            h="42px"
+            borderRadius="14px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bg="rgba(239,68,68,0.12)"
+            color="red.400"
+            mb={4}
+          >
+            <XCircle size={18} />
+          </Box>
+
+         
+
+          {/* <Box
+            position="absolute"
+            top="-35%"
+            right="-25%"
+            w="170px"
+            h="170px"
+            bg="radial-gradient(circle, rgba(239,68,68,0.18), transparent 70%)"
+            pointerEvents="none"
+          /> */}
+        </Box>
+      </Flex>
       {/* FILTERS */}
       <Flex
         my={5}
         direction={'column'}
         gap={5} bg={cardBg}
+        border={cardBorder}
         p={5}
-        rounded={'16px'}
+        rounded={"16px"}
         backgroundImage={cardGradient}
+        boxShadow={cardShadow}
+        transition="0.2s"
+        _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
       >
-        <HStack w={'100%'}>
+        <HStack w={"100%"}>
           {/* ISM */}
-          <InputGroup w={'100%'}>
+          <InputGroup w={"100%"}>
             <InputLeftElement pointerEvents="none">
               <Search size={16} />
             </InputLeftElement>
-            <Input value={form.ism} name="ism" onChange={changeForm} placeholder={t("register.firstName")} />
+            <Input
+              value={form.ism}
+              name="ism"
+              onChange={changeForm}
+              placeholder={t("register.firstName")}
+            />
             {form.ism.trim() ? (
               <InputRightElement>
                 <IconButton
@@ -275,7 +429,7 @@ export default function HodimlarINS() {
           </InputGroup>
 
           {/* FAMILIYA */}
-          <InputGroup w={'100%'}>
+          <InputGroup w={"100%"}>
             <InputLeftElement pointerEvents="none">
               <Search size={16} />
             </InputLeftElement>
@@ -300,36 +454,21 @@ export default function HodimlarINS() {
 
           {/* TELEFON */}
           <Input
-            w={'100%'}
+            w={"100%"}
             value={form.nomer}
             name="nomer"
             onChange={changeForm}
             placeholder={t("jekEmployees.phone")}
           />
-          {/* VIEW TOGGLE */}
-          <ButtonGroup isAttached variant="outline" size="md">
-            <Button
-              leftIcon={<LayoutGrid size={16} />}
-              onClick={() => setViewMode("card")}
-              variant={viewMode === "card" ? "solid" : "outline"}
-              colorScheme="blue"
-            >
-              {t("common.card")}
-            </Button>
-
-            <Button
-              leftIcon={<Table2 size={16} />}
-              onClick={() => setViewMode("table")}
-              variant={viewMode === "table" ? "solid" : "outline"}
-              colorScheme="blue"
-            >
-              {t("common.table")}
-            </Button>
-          </ButtonGroup>
         </HStack>
-        <HStack w={'100%'}>
+        <HStack w={"100%"}>
           {/* TUMAN */}
-          <Select w={'100%'} value={form.tuman} name="tuman" onChange={changeForm}>
+          <Select
+            w={"100%"}
+            value={form.tuman}
+            name="tuman"
+            onChange={changeForm}
+          >
             <option value="">{t("common.all")}</option>
             {Object.entries(tuman).map(([key, label]) => (
               <option key={key} value={key}>
@@ -340,7 +479,7 @@ export default function HodimlarINS() {
 
           {/* MAHALLA */}
           <Select
-            w={'100%'}
+            w={"100%"}
             value={form.mahalla}
             name="mahalla"
             onChange={changeForm}
@@ -356,7 +495,7 @@ export default function HodimlarINS() {
 
           {/* STATUS */}
           <Select
-            w={'100%'}
+            w={"100%"}
             value={form.isActive}
             name="isActive"
             onChange={changeForm}
@@ -369,272 +508,126 @@ export default function HodimlarINS() {
           </Select>
 
           {/* RESET */}
-          <Button w={'100%'} variant="solidPrimary" onClick={resetForm}>
+          <Button w={"100%"} variant="solidPrimary" onClick={resetForm}>
             {t("appeals.clearFilters")}
           </Button>
         </HStack>
-
       </Flex>
+      <Flex wrap={'wrap'} gap={3}>
+        {loading ? (
+          <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} h="170px" borderRadius="16px" />
+            ))}
+          </SimpleGrid>
+        ) : onlyJek.length > 0 ? (
+          onlyJek.map((emp) => {
+            const isExpanded = expandedId === emp.id;
 
-      {/* STATISTIKA */}
-      <Flex gap={5} mb={5} wrap="wrap">
-        <VStack
-          w={'auto'}
-          bg={cardBg}
-          backgroundImage={cardGradient}
-          border={cardBorder}
-          borderRadius="16px"
-          align="start"
-          p={5}
-          boxShadow={cardShadow}
-          transition="0.2s"
-          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
-        >
-          <Heading color="warning">{hodim.length}</Heading>
-          <Text display="flex" justify="center" gap={2}>
-            <Users /> {t("jekEmployees.totalEmployees")} :
-          </Text>
-        </VStack>
-
-        <VStack
-          w={'auto'}
-          bg={cardBg}
-          backgroundImage={cardGradient}
-          border={cardBorder}
-          borderRadius="16px"
-          align="start"
-          p={5}
-          boxShadow={cardShadow}
-          transition="0.2s"
-          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
-        >
-          <Heading color="success">{activeJek}</Heading>
-          <Text display="flex" justify="center" gap={2}>
-            <Users /> {t("jekEmployees.totalActiveEmployees")} :
-          </Text>
-        </VStack>
-
-        <VStack
-          w={'auto'}
-          bg={cardBg}
-          backgroundImage={cardGradient}
-          border={cardBorder}
-          borderRadius="16px"
-          align="start"
-          p={5}
-          boxShadow={cardShadow}
-          transition="0.2s"
-          _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
-        >
-          <Heading color="danger">{noActiveJek}</Heading>
-          <Text display="flex" justify="center" gap={2}>
-            <Users /> {t("jekEmployees.totalInactiveEmployees")} :
-          </Text>
-        </VStack>
-      </Flex>
-
-      {/* LIST */}
-      {viewMode === "card" ? (
-        <Flex wrap={'wrap'} gap={3}>
-          {loading ? (
-            <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} h="170px" borderRadius="16px" />
-              ))}
-            </SimpleGrid>
-          ) : hodim.length > 0 ? (
-            hodim.map((emp) => {
-              const isExpanded = expandedId === emp.id;
-
-              return (
-                <Box
-                  key={emp.id}
-                  bg={cardBg}
-                  backgroundImage={cardGradient}
-                  border={cardBorder}
-                  borderRadius="16px"
-                  px={7}
-                  py={4}
-                  w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.66%'}
-                  boxShadow={cardShadow}
-                  transition="0.2s"
-                  _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
-                >
-                  {/* HEADER */}
-                  <Flex justify="space-between" align="center">
-                    <HStack>
-                      <Heading fontSize="18px">{`${emp?.first_name} ${emp?.last_name}`}</Heading>
-                      <Badge colorScheme={emp?.isActive ? "green" : "red"}>
-                        {emp?.isActive ? t("jekEmployees.statusActive") : t("jekEmployees.statusInactive")}
-                      </Badge>
-                    </HStack>
-                  </Flex>
-
-                  <Divider my={3} />
-
-                  {/* ASOSIY */}
-                  <Text fontWeight="semibold">
-                    <span style={{ fontWeight: "normal" }}>{t("jekEmployees.phone")}:</span>
-                    +{emp?.phoneNumber || "-"}
-                  </Text>
-                  <Text fontWeight="semibold">
-                    <span style={{ fontWeight: "normal" }}>{t("jekEmployees.areaCol")}:</span>
-                    {empDistrict(emp)}, {empMahalla(emp)}
-                  </Text>
-
-                  <Divider my={3} />
+            return (
+              <Box
+                key={emp.id}
+                bg={cardBg}
+                backgroundImage={cardGradient}
+                border={cardBorder}
+                borderRadius="16px"
+                px={7}
+                py={4}
+                w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.66%'}
+                boxShadow={cardShadow}
+                transition="0.2s"
+                _hover={{ transform: "translateY(-3px)", boxShadow: cardShadowHover }}
+              >
+                {/* HEADER */}
+                <Flex justify="space-between" align="center">
                   <HStack>
-                    <Button
-                      size="sm"
-                      onClick={() => navigate(`${emp.id}`)}
-                    >
-                      {t("jekEmployees.details")}
-                    </Button>
-                    <Text>
-                      {t("jekEmployees.toggle")}
-                    </Text>
-
-                    <Switch
-                      isChecked={!!emp?.isActive}
-                      onChange={(e) => openConfirm(emp, e.target.checked)}
-                    />
-
+                    <Heading fontSize="18px">{`${emp?.first_name} ${emp?.last_name}`}</Heading>
+                    <Badge colorScheme={emp?.isActive ? "green" : "red"}>
+                      {emp?.isActive ? t("jekEmployees.statusActive") : t("jekEmployees.statusInactive")}
+                    </Badge>
                   </HStack>
-                </Box>
-              );
-            })
-          ) : (
-            <Text my={3} mx={'auto'} color="text" fontSize={23}>
-              {t("jekEmployees.notFound")}
-            </Text>
-          )}
-        </Flex>
-      ) : (
-        <TableContainer
-          bg={cardBg}
-          border={cardBorder}
-          borderRadius="16px"
-          boxShadow={cardShadow}
-          backgroundImage={cardGradient}
-          overflowX="auto"
-        >
-          <Table size="sm" variant="simple">
-            <Thead position="sticky" top={0} bg={cardBg} zIndex={1}>
-              <Tr>
-                <Th>{t("jekEmployees.employee")}</Th>
-                <Th>{t("common.status")}</Th>
-                <Th>{t("jekEmployees.phone")}</Th>
-                <Th>{t("jekEmployees.areaCol")}</Th>
-                <Th textAlign="center">{t("common.actions")}</Th>
-              </Tr>
-            </Thead>
+                </Flex>
 
-            <Tbody>
-              {loading ? (
-                [...Array(6)].map((_, i) => (
-                  <Tr key={i}>
-                    <Td colSpan={5}>
-                      <Skeleton h="28px" w="100%" rounded="md" />
-                    </Td>
-                  </Tr>
-                ))
-              ) : hodim.length > 0 ? (
-                hodim.map((emp) => {
-                  const isExpanded = expandedId === emp.id;
+                <Divider my={3} />
 
-                  return (
-                    <React.Fragment key={emp.id}>
-                      <Tr _hover={{ bg: rowHoverBg }}>
-                        <Td fontWeight="600">{`${emp?.first_name} ${emp?.last_name}`}</Td>
+                {/* ASOSIY */}
+                <Text fontWeight="semibold">
+                  <span style={{ fontWeight: "normal" }}>{t("jekEmployees.phone")}:</span>
+                  +{emp?.phoneNumber || "-"}
+                </Text>
+                <Text fontWeight="semibold">
+                  <span style={{ fontWeight: "normal" }}>{t("jekEmployees.areaCol")}:</span>
+                  {empDistrict(emp)}, {empMahalla(emp)}
+                </Text>
 
-                        <Td>
-                          <Badge colorScheme={emp?.isActive ? "green" : "red"}>
-                            {emp?.isActive ? t("jekEmployees.statusActive") : t("jekEmployees.statusInactive")}
-                          </Badge>
-                        </Td>
+                <Divider my={3} />
+                <HStack>
+                  <Button
+                    size="sm"
+                    onClick={() => navigate(`${emp.id}`)}
+                  >
+                    {t("jekEmployees.details")}
+                  </Button>
+                  <Text>
+                    {t("jekEmployees.toggle")}
+                  </Text>
 
-                        <Td>+{emp?.phoneNumber || "-"}</Td>
+                  <Switch
+                    isChecked={!!emp?.isActive}
+                    onChange={(e) => openConfirm(emp, e.target.checked)}
+                  />
 
-                        <Td>
-                          {empDistrict(emp)}, {empMahalla(emp)}
-                        </Td>
-
-                        <Td textAlign="right">
-                          <HStack justify="flex-end">
-                            <Button
-                              size="sm"
-                              onClick={() => navigate(`${emp.id}`)}
-                            >
-                              {t("jekEmployees.details")}
-                            </Button>
-
-                            <HStack>
-                              {t("jekEmployees.statusActive")}
-                              <Switch
-                                isChecked={!!emp?.isActive}
-                                onChange={(e) => openConfirm(emp, e.target.checked)}
-                              />
-                            </HStack>
-                          </HStack>
-                        </Td>
-                      </Tr>
-                    </React.Fragment>
-                  );
-                })
-              ) : (
-                <Tr>
-                  <Td colSpan={5}>
-                    <Text my={3} textAlign={'center'} color="text" fontSize={23}>
-                      {t("jekEmployees.notFound")}
-                    </Text>
-                  </Td>
-                </Tr>
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      )}
-
-      {totalPages > 1 && (
-        <Flex mt={5} justify="center" gap={3}>
-          <Button
-            onClick={() => setPage(prev => prev - 1)}
-            isDisabled={page === 0}
-          >
-            Prev
-          </Button>
-
-          <Text>{page + 1} / {totalPages}</Text>
-
-          <Button
-            onClick={() => setPage(prev => prev + 1)}
-            isDisabled={page + 1 === totalPages}
-          >
-            Next
-          </Button>
-        </Flex>
-      )}
+                </HStack>
+              </Box>
+            );
+          })
+        ) : (
+          <Text my={3} mx={'auto'} color="text" fontSize={23}>
+            {t("jekEmployees.notFound")}
+          </Text>
+        )}
+      </Flex>
 
       {/* CONFIRM MODAL */}
-      <Modal isOpen={confirmModal.isOpen} onClose={confirmModal.onClose} isCentered>
+      <Modal
+        isOpen={confirmModal.isOpen}
+        onClose={confirmModal.onClose}
+        isCentered
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
 
-          <ModalHeader>{nextActiveValue ? t("jekEmployees.confirmActivateTitle") : t("jekEmployees.confirmDeactivateTitle")}</ModalHeader>
+          <ModalHeader>
+            {nextActiveValue
+              ? t("jekEmployees.confirmActivateTitle")
+              : t("jekEmployees.confirmDeactivateTitle")}
+          </ModalHeader>
 
           <ModalBody>
-            <Text>{nextActiveValue ? t("jekEmployees.confirmActivateText") : t("jekEmployees.confirmDeactivateText")}</Text>
+            <Text>
+              {nextActiveValue
+                ? t("jekEmployees.confirmActivateText")
+                : t("jekEmployees.confirmDeactivateText")}
+            </Text>
 
             <Text mt={3}>
               {t("jekEmployees.employee")}:{" "}
-              <b>{selected ? `${selected.first_name} ${selected.last_name}` : "-"}</b>
+              <b>
+                {selected
+                  ? `${selected.first_name} ${selected.last_name}`
+                  : "-"}
+              </b>
             </Text>
           </ModalBody>
 
           <ModalFooter gap={3}>
             <Button onClick={confirmModal.onClose}>{t("common.cancel")}</Button>
-            <Button onClick={() => deActivate(selected)} colorScheme="blue" isLoading={saving}>
+            <Button
+              onClick={() => deActivate(selected)}
+              colorScheme="blue"
+              isLoading={saving}
+            >
               {t("common.confirm")}
             </Button>
           </ModalFooter>

@@ -153,213 +153,229 @@ export default function Murojatlar() {
   const maxRow = ariza?.length
 
 
-  return (
-    <div>
-      <Flex
-        my={5}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-        gap={5}
-        bg={cardBg}
-        p={5}
-        rounded={'16px'}
-        backgroundImage={cardGradient}>
-        {/* SEARCH */}
-        <InputGroup w="40%" position="relative">
+ return (
+  <div>
+    <Flex
+      my={5}
+      alignItems={{ base: "stretch", md: "center" }}
+      justifyContent="space-between"
+      flexDirection={{ base: "column", md: "row" }}
+      gap={4}
+      bg={cardBg}
+      p={{ base: 4, md: 5 }}
+      rounded={"16px"}
+      backgroundImage={cardGradient}
+    >
+      {/* SEARCH */}
+      <InputGroup w={{ base: "100%", md: "40%" }} position="relative">
+        <InputLeftElement pointerEvents="none">
+          <Search size={16} />
+        </InputLeftElement>
 
-          <InputLeftElement pointerEvents="none">
-            <Search size={16} />
-          </InputLeftElement>
-
-          <Input
-            value={form.search}
-            name="search"
-            onChange={changeForm}
-            placeholder=""
-            pl="38px"
-          />
-
-          {/* ✅ Animated placeholder INPUT ICHIDA */}
-          <Box
-            position="absolute"
-            left="38px"
-            right="12px"
-            top="50%"
-            transform="translateY(-50%)"
-            overflow="hidden"
-            pointerEvents="none"
-            opacity={form.search ? 0 : 1}
-            transition="opacity 0.3s ease"
-          >
-            <Box
-              display="flex"
-              width="max-content"
-              animation="marquee 8s linear infinite"
-            >
-              <Text color="gray.400" whiteSpace="nowrap" mr={16}>
-                {t("appeals.searchPlaceholder")}
-              </Text>
-
-              <Text color="gray.400" whiteSpace="nowrap" mr={16}>
-                {t("appeals.searchPlaceholder")}
-              </Text>
-            </Box>
-          </Box>
-
-          {form.search.trim() && (
-            <InputRightElement>
-              <IconButton
-                aria-label="clear"
-                size="sm"
-                variant="ghost"
-                onClick={() =>
-                  setForm((prev) => ({ ...prev, search: "" }))
-                }
-                icon={<X size={16} />}
-              />
-            </InputRightElement>
-          )}
-
-        </InputGroup>
-
-        {/* BOSHLANISH SANA */}
         <Input
-          w={'25%'}
+          value={form.search}
+          name="search"
+          onChange={changeForm}
+          placeholder=""
+          pl="38px"
+        />
+
+        <Box
+          position="absolute"
+          left="38px"
+          right="12px"
+          top="50%"
+          transform="translateY(-50%)"
+          overflow="hidden"
+          pointerEvents="none"
+          opacity={form.search ? 0 : 1}
+          transition="opacity 0.3s ease"
+        >
+          <Box
+            display="flex"
+            width="max-content"
+            animation="marquee 8s linear infinite"
+          >
+            <Text color="gray.400" whiteSpace="nowrap" mr={16}>
+              {t("appeals.searchPlaceholder")}
+            </Text>
+            <Text color="gray.400" whiteSpace="nowrap" mr={16}>
+              {t("appeals.searchPlaceholder")}
+            </Text>
+          </Box>
+        </Box>
+
+        {form.search.trim() && (
+          <InputRightElement>
+            <IconButton
+              aria-label="clear"
+              size="sm"
+              variant="ghost"
+              onClick={() =>
+                setForm((prev) => ({ ...prev, search: "" }))
+              }
+              icon={<X size={16} />}
+            />
+          </InputRightElement>
+        )}
+      </InputGroup>
+
+      {/* DATE + BUTTON GROUP */}
+      <Flex
+        w={{ base: "100%", md: "60%" }}
+        gap={3}
+        flexDirection={{ base: "column", sm: "row" }}
+      >
+        <Input
+          w={{ base: "100%", sm: "33%" }}
           value={form.startData}
-          name='startData'
+          name="startData"
           onChange={(e) => changeForm(e)}
           placeholder={t("appeals.startDate")}
-          type='date'
+          type="date"
         />
-        {/* TUGASH SANA */}
+
         <Input
-          w={'25%'}
+          w={{ base: "100%", sm: "33%" }}
           value={form.endData}
-          name='endData'
+          name="endData"
           onChange={(e) => changeForm(e)}
           placeholder={t("appeals.endDate")}
-          type='date'
+          type="date"
         />
 
         <Button
-          w={'20%'}
-          variant={'solidPrimary'}
+          w={{ base: "100%", sm: "34%" }}
+          variant={"solidPrimary"}
           onClick={resetForm}
         >
           {t("appeals.clearFilters")}
         </Button>
       </Flex>
+    </Flex>
 
-      {/* GETTING TO CARD */}
-
-
-      <Flex wrap={'wrap'} gap={3}>
-        {loading ? (
-          <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} h="190px" borderRadius="16px" />
-            ))}
-          </SimpleGrid>
-        ) : (ariza?.length > 0 ?
-          ariza.map((item) => {
-            return (
-              <Box
-                key={item.id}
-                bg={cardBg}
-                backgroundImage={cardGradient}
-                border={cardBorder}
-                borderRadius="16px"
-                px={7}
-                py={4}
-                w={maxRow === 1 || maxRow === 2 ? '49.5%' : '32.5%'}
-                boxShadow={cardShadow}
-                transition="0.2s"
-                _hover={{
-                  transform: "translateY(-3px)",
-                  boxShadow: cardShadowHover,
-                }}
-              >
-
-                <VStack align={'start'}>
-                  <HStack alignItems="center">
-                    <Text mb={2} fontWeight="semibold">
-                      {item.request_number}
-                    </Text>
-                    <Text mb={3}>|</Text>
-                    <Badge mb={2} colorScheme={statusColorScheme(item.status)}>
-                      {Statuses[item?.status] || item?.status}
-                    </Badge>
-                  </HStack>
-                </VStack>
-
-                <Flex alignItems="start" justifyContent="space-between">
-                  <VStack alignItems="start" spacing={1}>
-                    <HStack>
-                      <Text></Text>
-                      <Text>{item?.user?.full_name}</Text>
-                      <Text>+{item?.user?.phoneNumber}</Text>
-                    </HStack>
-                    <Text>{formatDateTime(item.createdAt)}</Text>
-                  </VStack>
-                </Flex>
-                <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
-                <HStack>
-                  <Button
-                    onClick={() => {
-                      navigate(`${item?.id}`)
-                    }}
-                  >
-                    {t("common.view")}
-                  </Button>
+    {/* CARDS */}
+    <Flex gap={3} flexWrap="wrap">
+      {loading ? (
+        <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3} w="100%">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} h="190px" borderRadius="16px" />
+          ))}
+        </SimpleGrid>
+      ) : ariza?.length > 0 ? (
+        ariza.map((item) => {
+          return (
+            <Box
+              key={item.id}
+              bg={cardBg}
+              backgroundImage={cardGradient}
+              border={cardBorder}
+              borderRadius="16px"
+              px={7}
+              py={4}
+              w={{
+                base: "100%",
+                sm: "48%",
+                lg: maxRow === 1 || maxRow === 2 ? "49.5%" : "32.5%",
+              }}
+              boxShadow={cardShadow}
+              transition="0.2s"
+              _hover={{
+                transform: "translateY(-3px)",
+                boxShadow: cardShadowHover,
+              }}
+            >
+              <VStack align={"start"}>
+                <HStack alignItems="center">
+                  <Text mb={2} fontWeight="semibold">
+                    {item.request_number}
+                  </Text>
+                  <Text mb={3}>|</Text>
+                  <Badge mb={2} colorScheme={statusColorScheme(item.status)}>
+                    {Statuses[item?.status] || item?.status}
+                  </Badge>
                 </HStack>
-              </Box>
-            )
-          })
-          : (form.search.trim() || ariza.status !== form.status || ariza.createdAt !== form.startData || ariza.completedAt !== form.endData
-            ? (
-              <VStack mx={"auto"}>
-                <Text mt={3} mx={'auto'} color="text" fontSize={18}>{t("appeals.notFound")}</Text>
-                <Text mb={3} mx="auto" color="text" fontSize={14}>
-                  <Trans
-                    i18nKey="appeals.onlyPending"
-                    components={{
-                      badge: <Badge colorScheme="yellow" px={2} />,
-                    }}
-                  />
-                </Text>
               </VStack>
-            )
-            : ''))}
-      </Flex>
 
-      {/*PAGINATION */}
-      {totalPages > 0 ? (
-        <Flex mb={10} mt={5} justifyContent="center" alignItems="center" gap={3}>
-          <Button
-            onClick={() => setPage(prev => Math.max(prev - 1, 1))}
-            isDisabled={page === 1}
-          >
-            <ChevronLeft />
-          </Button>
+              <Flex alignItems="start" justifyContent="space-between">
+                <VStack alignItems="start" spacing={1}>
+                  <HStack flexWrap="wrap">
+                    <Text>{item?.user?.full_name}</Text>
+                    <Text>+{item?.user?.phoneNumber}</Text>
+                  </HStack>
+                  <Text>{formatDateTime(item.createdAt)}</Text>
+                </VStack>
+              </Flex>
 
-          <Text>
-            {page} / {totalPages || 1}
+              <Divider mb={5} mt={5} h="1px" bg="gray.200" opacity={0.6} />
+
+              <HStack>
+                <Button
+                  onClick={() => {
+                    navigate(`${item?.id}`);
+                  }}
+                >
+                  {t("common.view")}
+                </Button>
+              </HStack>
+            </Box>
+          );
+        })
+      ) : form.search.trim() ||
+        ariza.status !== form.status ||
+        ariza.createdAt !== form.startData ||
+        ariza.completedAt !== form.endData ? (
+        <VStack mx={"auto"}>
+          <Text mt={3} mx={"auto"} color="text" fontSize={18}>
+            {t("appeals.notFound")}
           </Text>
+          <Text mb={3} mx="auto" color="text" fontSize={14}>
+            <Trans
+              i18nKey="appeals.onlyPending"
+              components={{
+                badge: <Badge colorScheme="yellow" px={2} />,
+              }}
+            />
+          </Text>
+        </VStack>
+      ) : (
+        ""
+      )}
+    </Flex>
 
-          <Button
-            onClick={() =>
-              setPage(prev => Math.min(prev + 1, totalPages || 1))
-            }
-            isDisabled={page === totalPages || totalPages === 0}
-          >
-            <ChevronRight />
-          </Button>
-        </Flex>
-      )
-        :
-        (
-          ''
-        )}
-    </div >
-  )
+    {/* PAGINATION */}
+    {totalPages > 0 ? (
+      <Flex
+        mb={10}
+        mt={5}
+        justifyContent="center"
+        alignItems="center"
+        gap={3}
+        flexWrap="wrap"
+      >
+        <Button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          isDisabled={page === 1}
+        >
+          <ChevronLeft />
+        </Button>
+
+        <Text>
+          {page} / {totalPages || 1}
+        </Text>
+
+        <Button
+          onClick={() =>
+            setPage((prev) => Math.min(prev + 1, totalPages || 1))
+          }
+          isDisabled={page === totalPages || totalPages === 0}
+        >
+          <ChevronRight />
+        </Button>
+      </Flex>
+    ) : (
+      ""
+    )}
+  </div>
+);
 }

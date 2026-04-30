@@ -835,12 +835,12 @@ export default function JekMalumoti() {
       <Modal isOpen={confDel.isOpen} onClose={confDel.onClose} isCentered>
         <ModalOverlay />
         <ModalContent borderRadius={"16px"}>
-          <ModalHeader>Rostdan xam biriktirilgan manzilni ochirmoqchimsz ?</ModalHeader>
+          <ModalHeader>{t("addressDelete.title")}</ModalHeader>
       
           <ModalFooter gap={3}>
-            <Button onClick={confDel.onClose}>Bekor qilish</Button>
+            <Button onClick={confDel.onClose}>{t("addressDelete.cancel")}</Button>
             <Button onClick={delAddress} isLoading={saving} colorScheme="red">
-              Xa
+              {t("addressDelete.confirm")}
             </Button>
           </ModalFooter>
         </ModalContent>

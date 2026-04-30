@@ -17,6 +17,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  SimpleGrid,
 } from "@chakra-ui/react";
 
 import LOGO from "/jek.png";
@@ -155,206 +156,210 @@ export default function Register() {
   const langMap = { uz: "O'z", en: "En", ru: "Ru" };
   const langLabel = langMap[i18n.language] ?? (i18n.language || "").toUpperCase();
 
-  return (
-    <Flex minH="85vh" align="center" justify="center" bg="bg" px={4} my={10}>
-      <Box
-        as="form"
-        onSubmit={handleSubmit}
-        w={{ base: "100%", sm: "600px" }}
-        bg="surface"
-        p={8}
-        rounded="xl"
-        shadow="lg"
+ return (
+  <Flex
+    minH="100vh"
+    align="center"
+    justify="center"
+    bg="bg"
+    px={{ base: 3, md: 4 }}
+    py={{ base: 6, md: 10 }}
+  >
+    <Box
+      as="form"
+      onSubmit={handleSubmit}
+      w="100%"
+      maxW="650px"
+      bg="surface"
+      p={{ base: 2, md: 8 }}
+      rounded="xl"
+      shadow="lg"
+    >
+      {/* Language */}
+      <Flex justify="flex-end" mb={2}>
+        <Menu>
+          <MenuButton
+            as={Button}
+            leftIcon={<Globe size={18} />}
+            size="sm"
+            variant="outline"
+            colorScheme="blue"
+            fontWeight="600"
+          >
+            {t("login.language")} — {langLabel}
+          </MenuButton>
+          <MenuList minW="140px">
+            <MenuItem onClick={() => i18n.changeLanguage("uz")}>🇺🇿 O'zbekcha</MenuItem>
+            <MenuItem onClick={() => i18n.changeLanguage("en")}>🇬🇧 English</MenuItem>
+            <MenuItem onClick={() => i18n.changeLanguage("ru")}>🇷🇺 Русский</MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
+
+      {/* Logo */}
+      <Flex justify="center" mb={2}>
+        <Box w="60px" h="60px">
+          <Image rounded="100%" src={LOGO} alt="" />
+        </Box>
+      </Flex>
+
+      {/* Title */}
+      <Heading textAlign="center" size={{ base: "md", md: "lg" }} mb={2} color="text">
+        {t("register.title")}
+      </Heading>
+
+      <Text textAlign="center" color="gray.500" mb={2} fontSize={{ base: "sm", md: "md" }}>
+        {t("register.subtitle")}
+      </Text>
+
+      {/* ISM / FAMILIYA / PHONE */}
+      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={2}>
+        <FormControl isInvalid={!!errors.ism}>
+          <FormLabel color="text">
+            {t("register.firstName")} <span style={{ color: "red" }}>*</span>
+          </FormLabel>
+          <Input
+          h={{base: 8 , md: 10}}
+            ref={ismInput}
+            placeholder={t("register.firstNamePlaceholder")}
+            onChange={() => clearError("ism")}
+          />
+          <FormErrorMessage>{errors.ism}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.familiya}>
+          <FormLabel color="text">
+            {t("register.lastName")} <span style={{ color: "red" }}>*</span>
+          </FormLabel>
+          <Input
+            h={{base: 8 , md: 10}}
+            ref={familiyaInput}
+            placeholder={t("register.lastNamePlaceholder")}
+            onChange={() => clearError("familiya")}
+          />
+          <FormErrorMessage>{errors.familiya}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.telefon}>
+          <FormLabel color="text">
+            {t("register.phone")} <span style={{ color: "red" }}>*</span>
+          </FormLabel>
+          <Input
+            h={{base: 8 , md: 10}}
+            ref={telInput}
+            type="tel"
+            defaultValue="+998"
+            placeholder={t("register.phonePlaceholder")}
+            onChange={() => clearError("telefon")}
+          />
+          <FormErrorMessage>{errors.telefon}</FormErrorMessage>
+        </FormControl>
+      </SimpleGrid>
+
+      {/* ADDRESS */}
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2} mt={2}>
+        <FormControl isInvalid={!!errors.tuman}>
+          <FormLabel color="text">
+            {t("register.district")} <span style={{ color: "red" }}>*</span>
+          </FormLabel>
+          <Select
+            h={{base: 8 , md: 10}}
+            value={selectedTuman}
+            placeholder={t("register.districtPlaceholder")}
+            onChange={(e) => {
+              setSelectedTuman(e.target.value);
+              setSelectedMahalla("");
+              clearError("tuman");
+              clearError("mahalla");
+            }}
+          >
+            {Object.entries(tuman).map(([key, label]) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
+          </Select>
+          <FormErrorMessage>{errors.tuman}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl
+          isInvalid={!!errors.mahalla}
+          isDisabled={!selectedTuman}
+        >
+          <FormLabel color="text">
+            {t("register.mahalla")} <span style={{ color: "red" }}>*</span>
+          </FormLabel>
+          <Select
+            h={{base: 8 , md: 10}}
+            value={selectedMahalla}
+            placeholder={t("register.mahallaPlaceholder")}
+            onChange={(e) => {
+              setSelectedMahalla(e.target.value);
+              clearError("mahalla");
+            }}
+          >
+            {Object.entries(mahallaObj).map(([key, label]) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
+          </Select>
+          <FormErrorMessage>{errors.mahalla}</FormErrorMessage>
+        </FormControl>
+      </SimpleGrid>
+
+      {/* PASSWORD */}
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2} mt={2}>
+        <FormControl isInvalid={!!errors.parol}>
+          <FormLabel color="text">
+            {t("register.password")} <span style={{ color: "red" }}>*</span>
+          </FormLabel>
+          <InputGroup>
+            <Input
+              h={{base: 8 , md: 10}}
+              ref={parolInput}
+              type={show ? "text" : "password"}
+              placeholder={t("register.passwordPlaceholder")}
+              onChange={() => clearError("parol")}
+            />
+            <InputRightElement cursor="pointer" onClick={() => setShow(!show)}>
+              {show ? <Eye /> : <EyeClosed />}
+            </InputRightElement>
+          </InputGroup>
+          <FormErrorMessage>{errors.parol}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.confirmParol}>
+          <FormLabel color="text">
+            {t("register.confirmPassword")} <span style={{ color: "red" }}>*</span>
+          </FormLabel>
+          <InputGroup>
+            <Input
+              h={{base: 8 , md: 10}}
+              ref={confirmInput}
+              type={show2 ? "text" : "password"}
+              placeholder={t("register.confirmPasswordPlaceholder")}
+              onChange={() => clearError("confirmParol")}
+            />
+            <InputRightElement cursor="pointer" onClick={() => setShow2(!show2)}>
+              {show2 ? <Eye /> : <EyeClosed />}
+            </InputRightElement>
+          </InputGroup>
+          <FormErrorMessage>{errors.confirmParol}</FormErrorMessage>
+        </FormControl>
+      </SimpleGrid>
+
+      {/* BUTTON */}
+      <Button
+        mt={5}
+        w="100%"
+        isLoading={loading}
+        type="submit"
+        variant="solidPrimary"
       >
-        {/* Language menu */}
-        <Flex justify="flex-end" mb={4}>
-          <Menu>
-            <MenuButton
-              as={Button}
-              leftIcon={<Globe size={18} />}
-              size="sm"
-              variant="outline"
-              colorScheme="blue"
-              fontWeight="600"
-            >
-              {t("login.language")} — {langLabel}
-            </MenuButton>
-            <MenuList minW="140px">
-              <MenuItem onClick={() => i18n.changeLanguage("uz")}>🇺🇿 O'zbekcha</MenuItem>
-              <MenuItem onClick={() => i18n.changeLanguage("en")}>🇬🇧 English</MenuItem>
-              <MenuItem onClick={() => i18n.changeLanguage("ru")}>🇷🇺 Русский</MenuItem>
-            </MenuList>
-          </Menu>
-        </Flex>
-
-        {/* Logo */}
-        <Flex justify="center" mb={4}>
-          <Box
-            w="60px"
-            h="60px"
-            bg="blue.900"
-            rounded="full"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            color="white"
-            fontWeight="bold"
-            fontSize="md"
-          >
-            <Image rounded="100%" src={LOGO} alt="" />
-          </Box>
-        </Flex>
-
-        {/* Title */}
-        <Heading textAlign="center" size="lg" mb={2} color="text">
-          {t("register.title")}
-        </Heading>
-
-        {/* Subtitle */}
-        <Text textAlign="center" color="gray.500" mb={6}>
-          {t("register.subtitle")}
-        </Text>
-
-        {/* Ism Familiya  Telefon  */}
-        <HStack>
-          <FormControl mb={4} isInvalid={!!errors.ism}>
-            <FormLabel color="text">
-              {t("register.firstName")} <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-            <Input
-              ref={ismInput}
-              placeholder={t("register.firstNamePlaceholder")}
-              onChange={() => clearError("ism")}
-            />
-            <FormErrorMessage>{errors.ism}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl mb={4} isInvalid={!!errors.familiya}>
-            <FormLabel color="text" >
-              {t("register.lastName")} <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-            <Input
-              ref={familiyaInput}
-              placeholder={t("register.lastNamePlaceholder")}
-              onChange={() => clearError("familiya")}
-            />
-            <FormErrorMessage>{errors.familiya}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl mb={4} isInvalid={!!errors.telefon}>
-            <FormLabel color="text" >
-              {t("register.phone")} <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-            <Input
-              ref={telInput}
-              type="tel"
-              defaultValue={'+998'}
-              placeholder={t("register.phonePlaceholder")}
-              onChange={() => clearError("telefon")}
-            />
-            <FormErrorMessage>{errors.telefon}</FormErrorMessage>
-          </FormControl>
-        </HStack>
-        {/* Address */}
-        <HStack>
-          <FormControl mb={4} isInvalid={!!errors.tuman}>
-            <FormLabel color="text">
-              {t("register.district")} <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-            <Select
-              value={selectedTuman}
-              placeholder={t("register.districtPlaceholder")}
-              onChange={(e) => {
-                setSelectedTuman(e.target.value);
-                setSelectedMahalla(""); // tuman o'zgarsa mahalla reset
-                clearError("tuman");
-                clearError("mahalla");
-              }}
-            >
-              {Object.entries(tuman).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
-                </option>
-              ))}
-            </Select>
-            <FormErrorMessage>{errors.tuman}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl mb={4} isInvalid={!!errors.mahalla} isDisabled={!selectedTuman}>
-            <FormLabel color="text">
-              {t("register.mahalla")} <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-            <Select
-              value={selectedMahalla}
-              placeholder={t("register.mahallaPlaceholder")}
-              onChange={(e) => {
-                setSelectedMahalla(e.target.value);
-                clearError("mahalla");
-              }}
-            >
-              {Object.entries(mahallaObj).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
-                </option>
-              ))}
-            </Select>
-            <FormErrorMessage>{errors.mahalla}</FormErrorMessage>
-          </FormControl>
-        </HStack>
-
-        {/* Parol   Confirm */}
-        <HStack align={'start'}>
-          <FormControl mb={2} isInvalid={!!errors.parol}>
-            <FormLabel color="text">
-              {t("register.password")} <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-            <InputGroup>
-              <Input
-                ref={parolInput}
-                type={show ? "text" : "password"}
-                placeholder={t("register.passwordPlaceholder")}
-                onChange={() => clearError("parol")}
-              />
-              <InputRightElement cursor="pointer" onClick={() => setShow(!show)}>
-                {show ? <Eye /> : <EyeClosed />}
-              </InputRightElement>
-            </InputGroup>
-            <FormErrorMessage>{errors.parol}</FormErrorMessage>
-          </FormControl>
-          <FormControl mb={5} isInvalid={!!errors.confirmParol}>
-            <FormLabel color="text">
-              {t("register.confirmPassword")} <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-            <InputGroup>
-              <Input
-                ref={confirmInput}
-                type={show2 ? "text" : "password"}
-                placeholder={t("register.confirmPasswordPlaceholder")}
-                onChange={() => clearError("confirmParol")}
-              />
-              <InputRightElement cursor="pointer" onClick={() => setShow2(!show2)}>
-                {show2 ? <Eye /> : <EyeClosed />}
-              </InputRightElement>
-            </InputGroup>
-            <FormErrorMessage>{errors.confirmParol}</FormErrorMessage>
-          </FormControl>
-        </HStack>
-
-        {/* Buttons */}
-        <HStack>
-          <Button
-            type="submit"
-            style={{ cursor: loading ? "progress" : "pointer" }}
-            w="100%"
-            isLoading={loading}
-            _hover={{ bg: "secondary" }}
-            loadingText={t("login.loading")}
-            variant="solidPrimary"
-          >
-            {t("register.createBtn")}
-          </Button>
-        </HStack>
-      </Box>
-    </Flex>
-  );
+        {t("register.createBtn")}
+      </Button>
+    </Box>
+  </Flex>
+);
 }
