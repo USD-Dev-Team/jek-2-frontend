@@ -21,6 +21,16 @@ class apiDashboard {
 
         return response;
     }
+    static byAdress = async (yil) => {
+        const params = {
+            year: yil,
+        };
+        const response = await $api.get(`${BASE_URL}/statistics/district-statistics`, {
+            params
+        });
+
+        return response;
+    }
     // static getAll = async () => {
     //     const response = await $api.get(`${BASE_URL}/admins/all-list`)
     //     return response;
