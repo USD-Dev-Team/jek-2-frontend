@@ -90,6 +90,7 @@ function useChartColors() {
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
+  const [adressYear, setAdressYear] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const { t, i18n } = useTranslation();
@@ -125,7 +126,7 @@ export default function Dashboard() {
     return null;
   }, [debouncedYear]);
   const getDashboardINS = useCallback(async () => {
-    if (!YEAR) return; // ❗ invalid bo‘lsa API chaqirmaydi
+    if (!YEAR) return;
 
     try {
       setLoading(true);
@@ -137,7 +138,11 @@ export default function Dashboard() {
         selectedMahallaKey
       );
 
+
       setData(res?.data ?? null);
+
+      const adressRes = await apiDashboard.byAdress(YEAR)
+      setAdressYear(adressRes.data)
     } finally {
       setLoading(false);
     }
@@ -361,45 +366,96 @@ export default function Dashboard() {
     [c.textMuted]
   );
 
-  const fallbackRegions = useMemo(
-    () => [
-      { region: t("dashboard.region.tashkent", { defaultValue: "Tashkent" }), completed: 70, inProgress: 28, rejected: 8 },
-      { region: t("dashboard.region.samarkand", { defaultValue: "Samarkand" }), completed: 55, inProgress: 18, rejected: 6 },
-      { region: t("dashboard.region.fergana", { defaultValue: "Fergana" }), completed: 42, inProgress: 14, rejected: 4 },
-      { region: t("dashboard.region.andijan", { defaultValue: "Andijan" }), completed: 38, inProgress: 12, rejected: 3 },
-      { region: t("dashboard.region.bukhara", { defaultValue: "Bukhara" }), completed: 30, inProgress: 10, rejected: 2 },
-    ],
-    [t, i18n.language]
-  );
+  // const fallbackRegions = useMemo(
+  //   () => [
+  //     { region: t("dashboard.region.tashkent", { defaultValue: "Tashkent" }), completed: 70, inProgress: 28, rejected: 8 },
+  //     { region: t("dashboard.region.samarkand", { defaultValue: "Samarkand" }), completed: 55, inProgress: 18, rejected: 6 },
+  //     { region: t("dashboard.region.fergana", { defaultValue: "Fergana" }), completed: 42, inProgress: 14, rejected: 4 },
+  //     { region: t("dashboard.region.andijan", { defaultValue: "Andijan" }), completed: 38, inProgress: 12, rejected: 3 },
+  //     { region: t("dashboard.region.bukhara", { defaultValue: "Bukhara" }), completed: 30, inProgress: 10, rejected: 2 },
+  //   ],
+  //   [t, i18n.language]
+  // );
+
+  // const regionsCompare = useMemo(() => {
+  //   const rows = data?.regionsCompare;
+  //   return Array.isArray(rows) && rows.length ? rows : fallbackRegions;
+  // }, [data, fallbackRegions]);
+
+  // const regionBarData = useMemo(
+  //   () => ({
+  //     labels: regionsCompare.map((r) => r.region),
+  //     datasets: [
+  //       {
+  //         label: t("dashboard.status_completed", { defaultValue: "Completed" }),
+  //         data: regionsCompare.map((r) => r.completed ?? 0),
+  //         backgroundColor: c.success,
+  //       },
+  //       {
+  //         label: t("dashboard.status_inProgress", { defaultValue: "In progress" }),
+  //         data: regionsCompare.map((r) => r.inProgress ?? 0),
+  //         backgroundColor: c.warning,
+  //       },
+  //       {
+  //         label: t("dashboard.status_rejected", { defaultValue: "Rejected" }),
+  //         data: regionsCompare.map((r) => r.rejected ?? 0),
+  //         backgroundColor: c.danger,
+  //       },
+  //     ],
+  //   }),
+  //   [regionsCompare, t, c.success, c.warning, c.danger, i18n.language]
+  // );
 
   const regionsCompare = useMemo(() => {
-    const rows = data?.regionsCompare;
-    return Array.isArray(rows) && rows.length ? rows : fallbackRegions;
-  }, [data, fallbackRegions]);
+    const backendData = Array.isArray(adressYear)
+      ? adressYear
+      : [];
 
-  const regionBarData = useMemo(
-    () => ({
-      labels: regionsCompare.map((r) => r.region),
-      datasets: [
-        {
-          label: t("dashboard.status_completed", { defaultValue: "Completed" }),
-          data: regionsCompare.map((r) => r.completed ?? 0),
-          backgroundColor: c.success,
-        },
-        {
-          label: t("dashboard.status_inProgress", { defaultValue: "In progress" }),
-          data: regionsCompare.map((r) => r.inProgress ?? 0),
-          backgroundColor: c.warning,
-        },
-        {
-          label: t("dashboard.status_rejected", { defaultValue: "Rejected" }),
-          data: regionsCompare.map((r) => r.rejected ?? 0),
-          backgroundColor: c.danger,
-        },
-      ],
-    }),
-    [regionsCompare, t, c.success, c.warning, c.danger, i18n.language]
-  );
+    const allDistricts = Object.values(tumans);
+
+    return allDistricts.map((districtName) => {
+      const found = backendData.find(
+        (item) => item.district === districtName
+      );
+
+      return {
+        region: districtName,
+        completed:
+          (found?.COMPLETED ?? 0),
+        inProgress: found?.IN_PROGRESS ?? 0,
+        rejected:
+          (found?.REJECTED ?? 0),
+      };
+    });
+  }, [adressYear, tumans]);
+
+  const regionBarData = useMemo(() => ({
+    labels: regionsCompare.map((r) => r.region),
+    datasets: [
+      {
+        label: t("dashboard.status_completed"),
+        data: regionsCompare.map((r) => r.completed),
+        backgroundColor: c.success,
+      },
+      {
+        label: t("dashboard.status_inProgress"),
+        data: regionsCompare.map((r) => r.inProgress),
+        backgroundColor: c.warning,
+      },
+      {
+        label: t("dashboard.status_rejected"),
+        data: regionsCompare.map((r) => r.rejected),
+        backgroundColor: c.danger,
+      },
+    ],
+  }), [regionsCompare, t, c.success, c.warning, c.danger]);
+
+  const topEmployees = useMemo(() => {
+    if (Array.isArray(data?.topEmployees)) {
+      return data.topEmployees;
+    }
+    return [];
+  }, [data]);
 
   const barOptions = useMemo(
     () => ({
@@ -420,18 +476,18 @@ export default function Dashboard() {
     [baseCartesianOptions, c.textMuted]
   );
 
-  const topEmployees = useMemo(() => {
-    const rows = data?.topEmployees;
-    if (Array.isArray(rows) && rows.length) return rows;
+  // const topEmployees = useMemo(() => {
+  //   const rows = data?.topEmployees;
+  //   if (Array.isArray(rows) && rows.length) return rows;
 
-    return [
-      { name: "A. Karimov", region: "Toshkent", done: 64 },
-      { name: "D. Yuldasheva", region: "Samarqand", done: 58 },
-      { name: "M. Ismoilov", region: "Farg'ona", done: 52 },
-      { name: "S. Usmonova", region: "Andijon", done: 49 },
-      { name: "J. Rahimov", region: "Buxoro", done: 44 },
-    ];
-  }, [data]);
+  //   return [
+  //     { name: "A. Karimov", region: "Toshkent", done: 64 },
+  //     { name: "D. Yuldasheva", region: "Samarqand", done: 58 },
+  //     { name: "M. Ismoilov", region: "Farg'ona", done: 52 },
+  //     { name: "S. Usmonova", region: "Andijon", done: 49 },
+  //     { name: "J. Rahimov", region: "Buxoro", done: 44 },
+  //   ];
+  // }, [data]);
 
   return (
     <Box mt={3} mb={10}>
@@ -593,9 +649,6 @@ export default function Dashboard() {
               <Text fontSize="sm" fontWeight={600}>
                 {t("dashboard.regionsCompare")}
               </Text>
-              <Badge variant="subtle" colorScheme="orange">
-                Grouped Bar
-              </Badge>
             </Flex>
             <Box sx={{ height: "300px", position: "relative" }}>
               <Bar key={i18n.language} data={regionBarData} options={barOptions} />
@@ -609,9 +662,6 @@ export default function Dashboard() {
               <Text fontSize="sm" fontWeight={600}>
                 {t("dashboard.topEmployees")}
               </Text>
-              <Badge variant="subtle" colorScheme="green">
-                Table
-              </Badge>
             </Flex>
 
             <Table size="sm" variant="simple">
@@ -634,7 +684,7 @@ export default function Dashboard() {
                       <Badge variant="subtle">{e.region}</Badge>
                     </Td>
                     <Td isNumeric>
-                      <Text fontWeight={700}>{e.done}</Text>
+                      <Text fontWeight={700}>{e.completedCount}</Text>
                     </Td>
                   </Tr>
                 ))}
