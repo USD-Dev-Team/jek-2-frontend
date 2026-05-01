@@ -29,6 +29,12 @@ const resources = {
           systemError: "Tizim xatosi"
         }
       },
+     
+      addressDelete: {
+        title: "Rostdan ham biriktirilgan manzilni o‘chirmoqchimisiz?",
+        confirm: "Ha",
+        cancel: "Yo‘q"
+      },
 
       register: {
         title: "Ro'yhatdan o'tish",
@@ -116,6 +122,7 @@ const resources = {
           andijan: "Andijon",
           bukhara: "Buxoro"
         },
+        
 
         months: {
           jan: "Yan",
@@ -152,15 +159,18 @@ const resources = {
         }
       },
 
-      nav: {
-        dashboard: "Boshqaruv paneli",
-        appeals: "Barcha murojaatlar",
-        myAppeals: "Mening murojaatlarim",
-        employees: "Hodimlar",
-        jekEmployees: "JEK hodimlari",
-        role: "Rol",
-        account: 'Akaunt'
-      },
+
+  nav: {
+    dashboard: "Boshqaruv paneli",
+    appeals: "Barcha murojaatlar",
+    myAppeals: "Mening murojaatlarim",
+    employees: "Hodimlar",
+    jekEmployees: "JEK hodimlari",
+    inspectionEmployees: "Inspeksiya hodimlari",
+    role: "Rol",
+    account: "Akaunt"
+  },
+
 
       common: {
         theme: "Ko'rinish",
@@ -183,19 +193,29 @@ const resources = {
         actions: "Amallar",
         loading: "Yuklanmoqda...",
         role: "Rol",
-        detail:'Batafsil',
+        detail: 'Batafsil',
 
         all: "Hammasi",
         day: "kun",
         notFound: "Topilmadi",
 
-        // agar biror joyda common.languages ishlatilsa ham ishlaydi
         languages: {
           uz: "O'zbekcha",
           en: "English",
           ru: "Русский"
         }
       },
+        logout: {
+
+    title: "Chiqishni tasdiqlang",
+
+    text: "Haqiqatan ham tizimdan chiqmoqchimisiz?",
+
+    confirm: "Chiqish",
+    
+    cancel: "Bekor qilish"
+
+  },
 
       appeals: {
         searchPlaceholder: "Ariza ID, ism yoki telefon...",
@@ -235,8 +255,8 @@ const resources = {
 
         notFound: "Ariza mavjud emas",
         onlyPending: "Bu yerga faqat <badge>Kutilmoqda</badge> statusli murojaatlar keladi",
-        chatHistory:'Faoliyat tarixi',
-        notMerged:'Biriktirilmagan',
+        chatHistory: 'Faoliyat tarixi',
+        notMerged: 'Biriktirilmagan',
         view: {
           status: "Holat",
           type: "Murojaat xati",
@@ -282,7 +302,6 @@ const resources = {
         rating: "Reyting",
 
         details: "Tafsilot",
-        toggle: "Faol/Nofaol",
         last10: "Oxirgi 10 ta murojaat",
 
         confirmDeactivateTitle: "Hodimni nofaol qilish",
@@ -304,10 +323,8 @@ const resources = {
         changePasswordTitle: "Hodim parolini o'zgartirish",
         newPassword: "Yangi parol...",
         confirmNewPassword: "Yangi parolni tasdiqlang...",
-
       },
 
-      // ✅ root languages (Login menu uchun)
       languages: {
         uz: "O'zbekcha",
         en: "English",
@@ -344,8 +361,14 @@ const resources = {
         }
       },
 
+      addressDelete: {
+        title: "Are you sure you want to delete the assigned address?",
+        confirm: "Yes",
+        cancel: "No"
+      },
+
       register: {
-        title: "Registeration",
+        title: "Registration",
         subtitle: "Enter the information to access the system",
 
         firstName: "First name",
@@ -431,6 +454,10 @@ const resources = {
           bukhara: "Bukhara"
         },
 
+        
+
+
+
         months: {
           jan: "Jan",
           feb: "Feb",
@@ -462,29 +489,35 @@ const resources = {
           sun: "Sun",
           low: "Low",
           high: "High",
-          countSuffix: "items",
-          account: "Account",
+          countSuffix: "items"
         }
       },
+        logout: {
+    title: "Confirm logout",
+    text: "Are you sure you want to log out?",
+    confirm: "Logout",
+    cancel: "Cancel"
+  },
 
-      nav: {
-        dashboard: "Dashboard",
-        appeals: "Appeals",
-        employees: "Employees",
-        jekEmployees: "JEK employees",
-        account: 'Account'
-      },
+  nav: {
+    dashboard: "Dashboard",
+    appeals: "All appeals",
+    account: "Account",
+    myAppeals: "My appeals",
+    employees: "Employees",
+    jekEmployees: "JEK employees",
+    inspectionEmployees: "Inspection employees",
+    role: "Role",
+
+  },
 
       common: {
-        createdAt: "Created",
-        updatedAt: "Updated",
-        role: "Role",
-        card: "Card",
-        table: "Table",
         theme: "Theme",
         logout: "Logout",
         search: "Search",
         cancel: "Cancel",
+        createdAt: "Created",
+        updatedAt: "Updated",
         confirm: "Confirm",
         yesStart: "Yes, start",
         startWork: "Start work",
@@ -493,9 +526,13 @@ const resources = {
         view: "View",
         minimal: "minimum",
         close: "Close",
+        card: "Card",
+        table: "Table",
         status: "Status",
         actions: "Actions",
         loading: "Loading...",
+        role: "Role",
+        detail: 'Details',
 
         all: "All",
         day: "day(s)",
@@ -509,14 +546,14 @@ const resources = {
       },
 
       appeals: {
-        searchPlaceholder: "ID, name or phone...",
+        searchPlaceholder: "Appeal ID, name or phone...",
         startDate: "Start date",
         endDate: "End date",
 
         statusAll: "All",
         status_pending: "Pending",
         status_in_progress: "In progress",
-        status_completed: "Completed",
+        status_completed: "Completed (JEK)",
         status_rejected: "Rejected",
         status_completed_user: "Completed (User)",
         status_rejected_user: "Rejected (User)",
@@ -533,9 +570,8 @@ const resources = {
         commentPlaceholder: "Describe the completed work (at least 20 characters)...",
 
         rejectReasonLabel: "Reject reason",
-        rejectReasonPlaceholder: "Describe the reason for rejection...",
+        rejectReasonPlaceholder: "Describe the reason for rejection in detail...",
 
-        notFound: "No requests found",
         applicant: "Applicant",
         buildingNumber: "Building number",
         apartmentNumber: "Apartment number",
@@ -544,6 +580,11 @@ const resources = {
         noPhoto: "No photo available",
         userLetter: "User request letter",
         jekNote: "JEK note",
+
+        notFound: "No requests found",
+        onlyPending: "Only <badge>Pending</badge> status appeals come here",
+        chatHistory: 'Activity history',
+        notMerged: 'Not assigned',
         view: {
           status: "Status",
           type: "Request type",
@@ -558,7 +599,7 @@ const resources = {
         area: "Area",
         notFinished: "Not finished",
         noNote: "No note",
-        photo: "Photo(User)",
+        photo: "Photo (User)",
         table: {
           applicant: "Applicant",
           createdAt: "Created at"
@@ -566,17 +607,9 @@ const resources = {
       },
 
       jekEmployees: {
-        createdAt: "Created",
-        updatedAt: "Updated",
-        addressSingle: "Assigned address",
-        addressPlural: "Assigned addresses",
-        noAddress: "No address available",
-        editProfile: "Edit information",
-        changePassword: "Change password",
-        editProfileTitle: "Edit employee information",
-        changePasswordTitle: "Change employee password",
-        newPassword: "New password...",
-        confirmNewPassword: "Confirm new password...",
+        toggle: "Active / Inactive",
+        addAddress: "Add address",
+        addAddressTitle: "Add neighborhood to employee",
         title: "JEK employees",
         searchPlaceholder: "Name, surname or phone...",
         areaPlaceholder: "Area (all)",
@@ -597,19 +630,27 @@ const resources = {
         rating: "Rating",
 
         details: "Details",
-        toggle: "Active/Inactive",
         last10: "Last 10 appeals",
 
         confirmDeactivateTitle: "Deactivate employee",
         confirmDeactivateText:
-          "Confirm deactivating the employee? The employee won’t be able to log in.",
+          "Confirm deactivating the employee? The employee won't be able to log in.",
         confirmActivateTitle: "Activate employee",
         confirmActivateText:
           "Confirm activating the employee? The employee will be able to log in.",
 
         employee: "Employee",
         noData: "No data",
-        notFound: "Employee not found"
+        notFound: "Employee not found",
+        addressSingle: "Assigned address",
+        addressPlural: "Assigned addresses",
+        noAddress: "No address available",
+        editProfile: "Edit information",
+        changePassword: "Change password",
+        editProfileTitle: "Edit employee information",
+        changePasswordTitle: "Change employee password",
+        newPassword: "New password...",
+        confirmNewPassword: "Confirm new password...",
       },
 
       languages: {
@@ -646,6 +687,12 @@ const resources = {
           roleMismatch: "Роль не совпала",
           systemError: "Системная ошибка"
         }
+      },
+      
+      addressDelete: {
+        title: "Вы действительно хотите удалить привязанный адрес?",
+        confirm: "Да",
+        cancel: "Нет"
       },
 
       register: {
@@ -721,7 +768,7 @@ const resources = {
         topEmployees: "Самые активные сотрудники (Топ 5)",
 
         table: {
-          rank: "№",
+          rank: "#",
           employee: "Сотрудник",
           region: "Регион",
           done: "Выполнено"
@@ -771,34 +818,38 @@ const resources = {
       },
 
       nav: {
-        dashboard: "Панель",
+        dashboard: "Панель управления",
         appeals: "Обращения",
+        myAppeals: "Мои обращения",
         employees: "Сотрудники",
         jekEmployees: "Сотрудники ЖЭК",
-        account: "Аккаунт",
+        inspectionEmployees: "Сотрудники инспекции",
+        role: "Роль",
+        account: "Аккаунт"
       },
 
       common: {
-        createdAt: "Создано",
-        updatedAt: "Обновлено",
-        role: "Роль",
-        card: "Карточка",
-        table: "Таблица",
         theme: "Тема",
         logout: "Выход",
         search: "Поиск",
         cancel: "Отмена",
+        createdAt: "Создано",
+        updatedAt: "Обновлено",
         confirm: "Подтвердить",
         yesStart: "Да, начать",
-        startWork: "Начать",
+        startWork: "Начать работу",
         finish: "Завершить",
         reject: "Отклонить",
         view: "Просмотр",
         minimal: "минимум",
         close: "Закрыть",
+        card: "Карточка",
+        table: "Таблица",
         status: "Статус",
         actions: "Действия",
         loading: "Загрузка...",
+        role: "Роль",
+        detail: 'Детали',
 
         all: "Все",
         day: "дн.",
@@ -811,18 +862,27 @@ const resources = {
         }
       },
 
+      
+  logout: {
+    title: "Подтвердите выход",
+    text: "Вы действительно хотите выйти из системы?",
+    confirm: "Выйти",
+    cancel: "Отмена"
+  },
+
+
       appeals: {
-        searchPlaceholder: "Заявление ID, имя или телефон...",
+        searchPlaceholder: "ID заявления, имя или телефон...",
         startDate: "Дата начала",
         endDate: "Дата окончания",
 
         statusAll: "Все",
         status_pending: "Ожидает",
         status_in_progress: "В процессе",
-        status_completed: "Выполнено",
+        status_completed: "Выполнено (ЖЭК)",
         status_rejected: "Отклонено",
-        status_completed_user: "Завершено (Пользаватель)",
-        status_rejected_user: "Отклонено (Пользаватель)",
+        status_completed_user: "Завершено (Пользователь)",
+        status_rejected_user: "Отклонено (Пользователь)",
 
         pendingAsk: "Вы берёте это обращение на себя?",
         finishTitle: "Завершение работы",
@@ -838,7 +898,19 @@ const resources = {
         rejectReasonLabel: "Причина отклонения",
         rejectReasonPlaceholder: "Подробно опишите причину отклонения...",
 
+        applicant: "Заявитель",
+        buildingNumber: "Номер здания",
+        apartmentNumber: "Номер квартиры",
+        waitingUser: "Ожидается подтверждение пользователя",
+        review: "Пересмотреть",
+        noPhoto: "Фото отсутствует",
+        userLetter: "Обращение (Пользователь)",
+        jekNote: "Комментарий (ЖЭК)",
+
         notFound: "Заявок не найдено",
+        onlyPending: "Сюда попадают только заявки со статусом <badge>Ожидает</badge>",
+        chatHistory: 'История активности',
+        notMerged: 'Не привязано',
         view: {
           status: "Статус",
           type: "Тип обращения",
@@ -853,32 +925,17 @@ const resources = {
         area: "Район",
         notFinished: "Не завершено",
         noNote: "Нет комментария",
-        photo: "Фото(Пользователть)",
-
+        photo: "Фото (Пользователь)",
         table: {
           applicant: "Заявитель",
           createdAt: "Дата создания"
-        },
-        applicant: "Заявитель",
-        buildingNumber: "Номер здания",
-        apartmentNumber: "Номер квартиры",
-        waitingUser: "Ожидается подтверждение пользователя",
-        review: "Пересмотреть",
-        noPhoto: "Фото отсутствует",
-        userLetter: "Обращение (Пользаватель)",
-        jekNote: "Комментарий (ЖЭК)",
+        }
       },
 
       jekEmployees: {
-        addressSingle: "Закреплённый адрес",
-        addressPlural: "Закреплённые адреса",
-        noAddress: "Адрес отсутствует",
-        editProfile: "Редактировать данные",
-        changePassword: "Изменить пароль",
-        editProfileTitle: "Редактирование данных сотрудника",
-        changePasswordTitle: "Изменение пароля сотрудника",
-        newPassword: "Новый пароль...",
-        confirmNewPassword: "Подтвердите новый пароль...",
+        toggle: "Активный / Неактивный",
+        addAddress: "Добавить адрес",
+        addAddressTitle: "Добавить махаллю сотруднику",
         title: "Сотрудники ЖЭК",
         searchPlaceholder: "Имя, фамилия или телефон...",
         areaPlaceholder: "Район (все)",
@@ -899,22 +956,27 @@ const resources = {
         rating: "Рейтинг",
 
         details: "Подробнее",
-        toggle: "Актив/Неактив",
         last10: "Последние 10 обращений",
-        toggle: "Активный / Неактивный",
-        addAddress: "Добавить адрес",
-        addAddressTitle: "Добавить махаллю сотруднику",
 
-        confirmDeactivateTitle: "Сделать сотрудника неактивным",
+        confirmDeactivateTitle: "Деактивировать сотрудника",
         confirmDeactivateText:
-          "Подтвердить? Сотрудник не сможет войти в систему.",
-        confirmActivateTitle: "Сделать сотрудника активным",
+          "Подтвердить деактивацию сотрудника? Сотрудник не сможет войти в систему.",
+        confirmActivateTitle: "Активировать сотрудника",
         confirmActivateText:
-          "Подтвердить? Сотрудник сможет войти в систему.",
+          "Подтвердить активацию сотрудника? Сотрудник сможет войти в систему.",
 
         employee: "Сотрудник",
         noData: "Нет данных",
-        notFound: "Сотрудник не найден"
+        notFound: "Сотрудник не найден",
+        addressSingle: "Закреплённый адрес",
+        addressPlural: "Закреплённые адреса",
+        noAddress: "Адрес отсутствует",
+        editProfile: "Редактировать данные",
+        changePassword: "Изменить пароль",
+        editProfileTitle: "Редактирование данных сотрудника",
+        changePasswordTitle: "Изменение пароля сотрудника",
+        newPassword: "Новый пароль...",
+        confirmNewPassword: "Подтвердите новый пароль...",
       },
 
       languages: {

@@ -386,92 +386,125 @@ export default function Dashboard() {
     ]
   );
 
-  return (
-    <Box mt={3} mb={10}>
-      {/* KPI */}
-      <Flex gap={3} mb={4}>
-        {statCards.map((card) => (
-          <Box key={card.id} flex={1} {...cardShell} opacity={loading ? 0.7 : 1}>
+ return (
+  <Box mt={3} mb={10}>
+    {/* KPI */}
+    <Flex
+      gap={3}
+      mb={4}
+      flexDirection={{ base: "column", sm: "row" }}
+      flexWrap="wrap"
+    >
+      {statCards.map((card) => (
+        <Box
+          key={card.id}
+          flex={{ base: "1 1 100%", sm: "1 1 calc(50% - 12px)", md: 1 }}
+          {...cardShell}
+          opacity={loading ? 0.7 : 1}
+        >
+          <Box
+            display="inline-flex"
+            alignItems="center"
+            justifyContent="center"
+            w="32px"
+            h="32px"
+            borderRadius="8px"
+            mb={3}
+            style={{ background: card.iconBg, color: card.iconColor }}
+          >
+            {card.icon}
+          </Box>
+
+          <Box
+            fontSize="11px"
+            color={c.textMuted}
+            textTransform="uppercase"
+            letterSpacing="0.05em"
+            mb={1}
+          >
+            {card.label}
+          </Box>
+
+          <Flex alignItems="baseline" gap={2}>
             <Box
-              display="inline-flex"
-              alignItems="center"
-              justifyContent="center"
-              w="32px"
-              h="32px"
-              borderRadius="8px"
-              mb={3}
-              style={{ background: card.iconBg, color: card.iconColor }}
+              as="span"
+              fontSize="26px"
+              fontWeight={600}
+              fontVariantNumeric="tabular-nums"
             >
-              {card.icon}
+              {card.value}
             </Box>
-
-            <Box
-              fontSize="11px"
-              color={c.textMuted}
-              textTransform="uppercase"
-              letterSpacing="0.05em"
-              mb={1}
-            >
-              {card.label}
-            </Box>
-
-
-            <Flex alignItems="baseline" gap={2}>
+            {card.delta ? (
               <Box
                 as="span"
-                fontSize="26px"
+                fontSize="13px"
                 fontWeight={600}
-                fontVariantNumeric="tabular-nums"
+                style={{ color: card.deltaColor }}
               >
-                {card.value}
+                {card.delta}
               </Box>
-              {card.delta ? (
-                <Box as="span" fontSize="13px" fontWeight={600} style={{ color: card.deltaColor }}>
-                  {card.delta}
-                </Box>
-              ) : null}
-            </Flex>
-          </Box>
-        ))}
-      </Flex>
-
-      {/* Charts Row 1 */}
-      <Flex gap={4} mb={4}>
-        <Box {...cardShell} w={'70%'} opacity={loading ? 0.7 : 1}>
-          <Box fontSize="xs" color={c.textMuted} fontWeight={600} mb={3}>
-            {t("dashboard.yearlyAppeals", { defaultValue: "Yearly appeals" })}
-          </Box>
-          <Box h="220px" position="relative">
-            <Line key={i18n.language} data={yearlyLineData} options={baseOptions} />
-          </Box>
+            ) : null}
+          </Flex>
         </Box>
-        <Box {...cardShell} w={'30%'} opacity={loading ? 0.7 : 1}>
-          <Box fontSize="xs" color={c.textMuted} fontWeight={600} mb={3}>
-            {t("dashboard.statusDistribution", { defaultValue: "Status distribution" })}
-          </Box>
-          <Box h="220px" position="relative">
-            <Doughnut
-              key={i18n.language}
-              data={donutData}
-              options={{
-                cutout: "72%",
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: "bottom",
-                    labels: {
-                      color: c.textMuted,
-                      font: { size: 12 },
-                      boxWidth: 10,
-                      padding: 14,
-                    },
+      ))}
+    </Flex>
+
+    {/* Charts */}
+    <Flex
+      gap={4}
+      mb={4}
+      flexDirection={{ base: "column", md: "row" }}
+    >
+      <Box
+        {...cardShell}
+        w={{ base: "100%", md: "70%" }}
+        opacity={loading ? 0.7 : 1}
+      >
+        <Box fontSize="xs" color={c.textMuted} fontWeight={600} mb={3}>
+          {t("dashboard.yearlyAppeals", { defaultValue: "Yearly appeals" })}
+        </Box>
+        <Box h={{ base: "200px", md: "220px" }} position="relative">
+          <Line
+            key={i18n.language}
+            data={yearlyLineData}
+            options={baseOptions}
+          />
+        </Box>
+      </Box>
+
+      <Box
+        {...cardShell}
+        w={{ base: "100%", md: "30%" }}
+        opacity={loading ? 0.7 : 1}
+      >
+        <Box fontSize="xs" color={c.textMuted} fontWeight={600} mb={3}>
+          {t("dashboard.statusDistribution", {
+            defaultValue: "Status distribution",
+          })}
+        </Box>
+        <Box h={{ base: "200px", md: "220px" }} position="relative">
+          <Doughnut
+            key={i18n.language}
+            data={donutData}
+            options={{
+              cutout: "72%",
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: {
+                    color: c.textMuted,
+                    font: { size: 12 },
+                    boxWidth: 10,
+                    padding: 14,
                   },
                 },
-              }}
-            />
-          </Box>
+              },
+            }}
+          />
         </Box>
-      </Flex>
-    </Box>
-  );
+      </Box>
+    </Flex>
+  </Box>
+);
 }
